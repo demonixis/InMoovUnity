@@ -9,7 +9,7 @@ using UnityEngine.Windows.Speech;
 using UnityEngine;
 #endif
 
-namespace Demonixis.InMoov.Speech
+namespace Demonixis.InMoov.Speech.Microsoft
 {
     public class MSSpeechSynthesisService : SpeechSynthesisService
     {

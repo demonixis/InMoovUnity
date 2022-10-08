@@ -1,9 +1,15 @@
 ﻿namespace Demonixis.InMoov.Speech
 {
-    public abstract class SpeechSynthesisService : ImService
+    public class SpeechSynthesisService : ImService
     {
         public override ImServices Type => ImServices.Voice;
 
-        public abstract void Speak(string message);
+        public override void Initialize() { }
+
+        public override void SetPaused(bool paused) { }
+
+        public override void Shutdown() { }
+
+        public virtual void Speak(string message) { }
     }
 }

@@ -7,7 +7,7 @@ namespace Demonixis.InMoov
         None, Voice, Ears, Chat, Vision, Servo
     }
     
-    public abstract class ImService : MonoBehaviour
+    public abstract class ImService
     {
         public abstract ImServices Type { get; }
         public abstract void Initialize();

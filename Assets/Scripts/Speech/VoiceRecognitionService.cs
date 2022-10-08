@@ -2,11 +2,17 @@
 
 namespace Demonixis.InMoov.Speech
 {
-    public abstract class VoiceRecognitionService : ImService
+    public class VoiceRecognitionService : ImService
     {
         public override ImServices Type => ImServices.Ears;
         
         public event Action<string> PhraseDetected;
+
+        public override void Initialize() { }
+
+        public override void SetPaused(bool paused) { }
+
+        public override void Shutdown() { }
 
         protected void NotifyPhraseDetected(string phrase)
         {
