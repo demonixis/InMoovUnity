@@ -1,3 +1,4 @@
+using System.IO;
 using AIMLbot;
 using UnityEngine;
 
@@ -11,14 +12,15 @@ namespace Demonixis.InMoov.Chatbots
 
         public override void Initialize()
         {
+            var globalPath = $"{Application.streamingAssetsPath}/ChatbotProject";
+            if (!Directory.Exists(globalPath))
+            {
+                Debug.LogException(
+                    new UnityException($"The path {globalPath} doesn't exists! Can't initialize the Chatbot"));
+            }
+
             _aimlBot = new Bot();
-            _aimlBot.GlobalSettings.addSetting("aimldirectory",
-                $"{Application.streamingAssetsPath}/ChatbotProject/aiml");
-            _aimlBot.GlobalSettings.addSetting("configdirectory",
-                $"{Application.streamingAssetsPath}/ChatbotProject/config");
-            _aimlBot.GlobalSettings.addSetting("logdirectory",
-                $"{Application.streamingAssetsPath}/ChatbotProject/logs");
-            _aimlBot.loadSettings();
+            _aimlBot.loadSettings(globalPath + "/config/Settings.xml");
             _aimlBot.isAcceptingUserInput = false;
             _aimlBot.loadAIMLFromFiles();
             _aimlBot.isAcceptingUserInput = true;

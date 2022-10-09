@@ -13,5 +13,7 @@ namespace Demonixis.InMoov
         public abstract void Initialize();
         public abstract void SetPaused(bool paused);
         public abstract void Shutdown();
+
+        public virtual void Update() { }
     }
 }

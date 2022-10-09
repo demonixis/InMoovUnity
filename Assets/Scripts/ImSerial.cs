@@ -24,7 +24,7 @@ namespace Demonixis.InMoov
             _serialPorts = new Dictionary<int, SerialPort>();
         }
 
-        public void TryReconnect(SerialData[] data)
+        public void TryReconnect(IEnumerable<SerialData> data)
         {
             foreach (var item in data)
                 Connect(item.CardId, item.PortName);
@@ -34,7 +34,7 @@ namespace Demonixis.InMoov
         {
             if (_serialPorts.ContainsKey(cardId)) return;
 
-            if (TryConnect(cardId, out SerialPort serialPort))
+            if (TryConnect(serialName, out SerialPort serialPort))
             {
                 _serialPorts.Add(cardId, serialPort);
             }
@@ -42,9 +42,9 @@ namespace Demonixis.InMoov
 
         public void SendData(int cardId, byte[] data)
         {
-            if (!_serialPorts == null) return;
+            if (_serialPorts == null) return;
             if (!_serialPorts.ContainsKey(cardId)) return;
-            _serialPorts[cardId].Write(data);
+            _serialPorts[cardId].Write(data, 0, data.Length);
         }
 
         private static bool TryConnect(string serialName, out SerialPort serialPort)
@@ -54,17 +54,17 @@ namespace Demonixis.InMoov
             try
             {
                 serialPort = new SerialPort(serialName, DefaultBaudRate);
-                serial.Open();
+                serialPort.Open();
                 return serialPort.IsOpen;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                if (serial != null)
+                if (serialPort != null)
                 {
-                    if (serial.IsOpen)
-                        serial.Close();
+                    if (serialPort.IsOpen)
+                        serialPort.Close();
 
-                    serial.Dispose();
+                    serialPort.Dispose();
                 }
             }
 
