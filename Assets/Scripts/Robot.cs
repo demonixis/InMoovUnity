@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Demonixis.InMoov
 {
-    public class ImRobot : MonoBehaviour
+    public class Robot : MonoBehaviour
     {
         private const string ServoMixerDataFilename = "servo.json";
         private const string SerialPortDataFilename = "serial.json";
