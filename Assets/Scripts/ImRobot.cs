@@ -1,33 +1,25 @@
 ﻿using Demonixis.InMoov.Chatbots;
 using Demonixis.InMoov.Servos;
 using Demonixis.InMoov.Speech;
-using Demonixis.InMoov.Speech.Microsoft;
 using UnityEngine;
 
 namespace Demonixis.InMoov
 {
     public class ImRobot : MonoBehaviour
     {
-        // Human Understanding
-        private ChatbotService _chatbotService;
-        private SpeechSynthesisService _speechSynthesis;
-        private VoiceRecognitionService _voiceRecognition;
+        private const string ServoMixerDataFilename = "servo.json";
+        private const string SerialPortDataFilename = "serial.json";
         
+        // Human Understanding
+        [SerializeField] private ChatbotService _chatbotService;
+        [SerializeField] private SpeechSynthesisService _speechSynthesis;
+        [SerializeField] private VoiceRecognitionService _voiceRecognition;
+
         // Animation
-        private ServoMixer _servoMixer;
+        [SerializeField] private ServoMixerService _servoMixerService;
 
         private void Start()
         {
-#if UNITY_STANDALONE_WIN
-            _voiceRecognition = new MSVoiceRecognitionService();
-            _speechSynthesis = new MSSpeechSynthesisService();
-#else
-            _voiceRecognition = new VoiceRecognitionService();
-            _speechSynthesis = new SpeechSynthesisService();
-#endif
-            _chatbotService = new ChatbotServiceProject();
-            _servoMixer = new ServoMixer();
-
             _voiceRecognition.Initialize();
             _speechSynthesis.Initialize();
             _chatbotService.Initialize();
@@ -37,8 +29,8 @@ namespace Demonixis.InMoov
                 var response = _chatbotService.GetResponse(s);
                 _speechSynthesis.Speak(string.IsNullOrEmpty(response) ? "I don't understand" : response);
             };
-            
-            _servoMixer.Initialize();
+
+            _servoMixerService.Initialize();
         }
     }
 }

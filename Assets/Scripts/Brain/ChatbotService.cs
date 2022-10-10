@@ -1,8 +1,8 @@
 ﻿namespace Demonixis.InMoov.Chatbots
 {
-    public abstract class ChatbotService : ImService
+    public abstract class ChatbotService : RobotService
     {
-        public override ImServices Type => ImServices.Chat;
+        public override RobotServices Type => RobotServices.Chat;
         
         public abstract string GetResponse(string inputSpeech);
     }

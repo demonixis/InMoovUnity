@@ -2,9 +2,9 @@
 
 namespace Demonixis.InMoov.Speech
 {
-    public class VoiceRecognitionService : ImService
+    public class VoiceRecognitionService : RobotService
     {
-        public override ImServices Type => ImServices.Ears;
+        public override RobotServices Type => RobotServices.Ears;
         
         public event Action<string> PhraseDetected;
 

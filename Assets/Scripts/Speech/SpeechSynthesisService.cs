@@ -1,8 +1,8 @@
 ﻿namespace Demonixis.InMoov.Speech
 {
-    public class SpeechSynthesisService : ImService
+    public class SpeechSynthesisService : RobotService
     {
-        public override ImServices Type => ImServices.Voice;
+        public override RobotServices Type => RobotServices.Voice;
 
         public override void Initialize() { }
 

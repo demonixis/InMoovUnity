@@ -37,6 +37,9 @@ namespace Demonixis.InMoov.Speech.Microsoft
         public static void clearSpeechQueue () {}
         public static void statusMessage (StringBuilder str, int length) {}
 #endif
+
+        public override RobotPlatform[] SupportedPlateforms => new[] {RobotPlatform.Windows};
+
         public override void Initialize()
         {
             initSpeech();

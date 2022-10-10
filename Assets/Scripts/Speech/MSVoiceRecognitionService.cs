@@ -6,6 +6,8 @@ namespace Demonixis.InMoov.Speech.Microsoft
 {
     public class MSVoiceRecognitionService : VoiceRecognitionService
     {
+        public override RobotPlatform[] SupportedPlateforms => new[] {RobotPlatform.Windows};
+        
         private DictationRecognizer _dictationRecognizer;
         private bool _paused;
         
