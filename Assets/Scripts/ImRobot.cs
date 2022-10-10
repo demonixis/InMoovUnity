@@ -1,5 +1,4 @@
-﻿using System;
-using Demonixis.InMoov.Chatbots;
+﻿using Demonixis.InMoov.Chatbots;
 using Demonixis.InMoov.Servos;
 using Demonixis.InMoov.Speech;
 using Demonixis.InMoov.Speech.Microsoft;
@@ -19,7 +18,7 @@ namespace Demonixis.InMoov
 
         private void Start()
         {
-#if UNITY_WINDOWS
+#if UNITY_STANDALONE_WIN
             _voiceRecognition = new MSVoiceRecognitionService();
             _speechSynthesis = new MSSpeechSynthesisService();
 #else
