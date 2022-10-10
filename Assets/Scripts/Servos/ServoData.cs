@@ -1,5 +1,8 @@
-﻿namespace Demonixis.InMoov.Servos
+﻿using System;
+
+namespace Demonixis.InMoov.Servos
 {
+    [Serializable]
     public struct ServoData
     {
         public bool Inverse;
@@ -11,6 +14,7 @@
         public int CardId;
     }
 
+    [Serializable]
     public enum ServoIdentifier
     {
         EyeX = 0,

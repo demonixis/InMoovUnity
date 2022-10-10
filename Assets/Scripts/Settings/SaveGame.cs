@@ -18,7 +18,7 @@ namespace Demonixis.ToolboxV2
     [Serializable]
     public abstract class SaveGame
     {
-        public static GameSaveStorageMode GetPreferredStorageModeForSettings()
+        public static GameSaveStorageMode GetPreferredStorageMode()
         {
 #if UNITY_STANDALONE || (UNITY_EDITOR && UNITY_STANDALONE)
             return GameSaveStorageMode.External;
