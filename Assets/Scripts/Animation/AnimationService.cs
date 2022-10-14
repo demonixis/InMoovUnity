@@ -1,5 +1,4 @@
 using System.Collections;
-using Demonixis.InMoov;
 using UnityEngine;
 
 namespace Demonixis.InMoov.Animations
@@ -38,8 +37,7 @@ namespace Demonixis.InMoov.Animations
         [SerializeField] private Transform _rightMiddleFinger;
         [SerializeField] private Transform _rightRingFinger;
         [SerializeField] private Transform _rightPinkyFinger;
-
-
+        
         public override RobotServices Type => RobotServices.Other;
 
         public override void Initialize()

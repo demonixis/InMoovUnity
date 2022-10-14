@@ -26,11 +26,23 @@ namespace Demonixis.InMoov.Servos
     [Serializable]
     public sealed class SerialPortManager : MonoBehaviour
     {
+        public const int PinStart = 2;
+        public const int PinEnd = 13;
         public const string SerialFilename = "serial.json";
         public const int DefaultBaudRate = 11500;
         private Dictionary<int, SerialPort> _serialPorts;
+        
+        /// <summary>
+        /// An array that contains the card Id as key
+        /// And contains an array of values
+        /// Index 0 == PinStart
+        /// Index Last = PinEnd
+        /// </summary>
+        private Dictionary<int, int[]> _dataValues;
         private bool _disposed;
 
+        public static int[] DefaultPinValuesArray => new int[PinEnd - PinStart];
+        
         public bool IsConnected(int cardId)
         {
             return _serialPorts.ContainsKey(cardId) && _serialPorts[cardId].IsOpen;
@@ -38,7 +50,9 @@ namespace Demonixis.InMoov.Servos
 
         public void Initialize()
         {
+            _dataValues = new Dictionary<int, int[]>();
             _serialPorts = new Dictionary<int, SerialPort>();
+            
             var savedData =
                 SaveGame.LoadRawData<SerialData[]>(SaveGame.GetPreferredStorageMode(), SerialFilename);
 
@@ -103,6 +117,27 @@ namespace Demonixis.InMoov.Servos
                 _serialPorts[cardId].Write($"{values[i]}");
         }
 
+        public void SendPinValues(int cardId)
+        {
+            if (_serialPorts == null) return;
+            if (!_serialPorts.ContainsKey(cardId)) return;
+
+            var values = _dataValues[cardId];
+            for (var i = 0; i < values.Length; i++)
+                _serialPorts[cardId].Write($"{values[i]}");
+        }
+
+        public void SetValueForCard(int cardId, int pinNumber, int value)
+        {
+            if (!_serialPorts.ContainsKey(cardId))
+            {
+                // TODO add a message
+                return;
+            }
+
+            _dataValues[cardId][pinNumber] = value;
+        }
+
         public bool Connect(int cardId, string serialName)
         {
             if (_serialPorts.ContainsKey(cardId)) return false;
@@ -117,20 +152,21 @@ namespace Demonixis.InMoov.Servos
                 if (serialPort.IsOpen)
                 {
                     _serialPorts.Add(cardId, serialPort);
+                    _dataValues.Add(cardId, DefaultPinValuesArray);
                     return true;
                 }
             }
             catch (Exception ex)
             {
                 Debug.LogError(ex.Message);
+            }
+            
+            if (serialPort != null)
+            {
+                if (serialPort.IsOpen)
+                    serialPort.Close();
 
-                if (serialPort != null)
-                {
-                    if (serialPort.IsOpen)
-                        serialPort.Close();
-
-                    serialPort.Dispose();
-                }
+                serialPort.Dispose();
             }
 
             return false;

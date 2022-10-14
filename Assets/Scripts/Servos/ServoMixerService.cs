@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using Demonixis.ToolboxV2;
 using UnityEngine;
@@ -14,13 +15,16 @@ namespace Demonixis.InMoov.Servos
         private ServoData[] _servoData;
         private int[] _servoValues;
         private List<int> _lockedServos;
+        private bool _running;
+
+        [SerializeField] private float _updateInterval = 1.0f / 30.0f;
 
         public override RobotServices Type => RobotServices.Servo;
 
         public override void Initialize()
         {
             base.Initialize();
-            
+
             // Initialize data
             var names = Enum.GetNames(typeof(ServoIdentifier));
             var servoCount = names.Length;
@@ -56,6 +60,10 @@ namespace Demonixis.InMoov.Servos
 
         public override void SetPaused(bool paused)
         {
+            _running = !paused;
+
+            if (_running)
+                StartCoroutine(ServoLoop());
         }
 
         public override void Shutdown()
@@ -64,7 +72,29 @@ namespace Demonixis.InMoov.Servos
             SaveGame.SaveRawData(SaveGame.GetPreferredStorageMode(), _servoValues, ServoMixerValuesFilename);
             _serialPortManager.Dispose();
         }
-        
+
+        private IEnumerator ServoLoop()
+        {
+            _running = true;
+
+            var wait = new WaitForSeconds(_updateInterval);
+
+            while (_running)
+            {
+                // Send data to arduinos
+                for (var i = 0; i < _servoData.Length; i++)
+                {
+                    var rotation = GetServoRotation(ref _servoData[i], _servoValues[i]);
+                    _serialPortManager.SetValueForCard(_servoData[i].CardId, _servoData[i].PinId, rotation);
+                }
+
+                for (var i = 0; i < 4; i++)
+                    _serialPortManager.SendPinValues(i);
+
+                yield return wait;
+            }
+        }
+
         public int GetServoValue(ServoIdentifier servoId)
         {
             return _servoValues[(int) servoId];
@@ -102,7 +132,11 @@ namespace Demonixis.InMoov.Servos
         private int GetServoRotation(ServoIdentifier servoId, int rawValue)
         {
             var servo = _servoData[(int) servoId];
+            return GetServoRotation(ref servo, rawValue);
+        }
 
+        private int GetServoRotation(ref ServoData servo, int rawValue)
+        {
             rawValue = Mathf.Max(servo.Min, rawValue);
             rawValue = Mathf.Min(servo.Max, rawValue);
 

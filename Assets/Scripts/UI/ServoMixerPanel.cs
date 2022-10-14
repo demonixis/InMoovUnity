@@ -8,8 +8,6 @@ namespace Demonixis.InMoov.UI
 {
     public class ServoMixerPanel : MonoBehaviour
     {
-        private const int PinStart = 2;
-        private const int PinEnd = 13;
         private ServoMixerService _servoMixerService;
         private ServoIdentifier _currentServo;
         private ServoData _currentData;
@@ -56,7 +54,7 @@ namespace Demonixis.InMoov.UI
                 _servoCardId.options.Add(new TMP_Dropdown.OptionData(item));
 
             _servoPinId.options.Clear();
-            for (var i = PinStart; i <= PinEnd; i++)
+            for (var i = SerialPortManager.PinStart; i <= SerialPortManager.PinEnd; i++)
                 _servoPinId.options.Add(new TMP_Dropdown.OptionData($"Pin #{i}"));
             
             // Bind events
