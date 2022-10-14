@@ -1,4 +1,5 @@
-﻿using Demonixis.InMoov.Chatbots;
+﻿using System;
+using Demonixis.InMoov.Chatbots;
 using Demonixis.InMoov.Servos;
 using Demonixis.InMoov.Speech;
 using UnityEngine;
@@ -7,9 +8,6 @@ namespace Demonixis.InMoov
 {
     public class Robot : MonoBehaviour
     {
-        private const string ServoMixerDataFilename = "servo.json";
-        private const string SerialPortDataFilename = "serial.json";
-        
         // Human Understanding
         [SerializeField] private ChatbotService _chatbotService;
         [SerializeField] private SpeechSynthesisService _speechSynthesis;
@@ -31,6 +29,16 @@ namespace Demonixis.InMoov
             };
 
             _servoMixerService.Initialize();
+        }
+
+        private void OnDestroy()
+        {
+            var services = GetComponentsInChildren<RobotService>(true);
+            foreach (var service in services)
+            {
+                if (!service.Initialized) continue;
+                service.Shutdown();
+            }
         }
     }
 }

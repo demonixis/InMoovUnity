@@ -9,23 +9,48 @@ namespace Demonixis.InMoov.Servos
     public class ServoMixerService : RobotService
     {
         public const string ServoMixerFilename = "servos.json";
+        public const string ServoMixerValuesFilename = "servos-values.json";
         private SerialPortManager _serialPortManager;
         private ServoData[] _servoData;
-        private Dictionary<int, int[]> _servoValues;
+        private int[] _servoValues;
+        private List<int> _lockedServos;
 
         public override RobotServices Type => RobotServices.Servo;
 
         public override void Initialize()
         {
-            _servoData =
-                SaveGame.LoadRawData<ServoData[]>(SaveGame.GetPreferredStorageMode(), ServoMixerFilename);
+            base.Initialize();
+            
+            // Initialize data
+            var names = Enum.GetNames(typeof(ServoIdentifier));
+            var servoCount = names.Length;
 
-            if (_servoData == null || _servoData.Length == 0)
+            _servoData = new ServoData [servoCount];
+            _servoValues = new int [servoCount];
+
+            for (var i = 0; i < servoCount; i++)
             {
-                var names = Enum.GetNames(typeof(ServoIdentifier));
-                _servoData = new ServoData [names.Length];
+                _servoData[i] = ServoData.New(names[i]);
+                _servoValues[i] = _servoData[i].Neutral;
             }
 
+            // Load saved data and apply them
+            var servoMixerData =
+                SaveGame.LoadRawData<ServoData[]>(SaveGame.GetPreferredStorageMode(), ServoMixerFilename);
+
+            var servoMixerValues =
+                SaveGame.LoadRawData<int[]>(SaveGame.GetPreferredStorageMode(), ServoMixerValuesFilename);
+
+            if (servoMixerData != null && servoMixerData.Length == servoCount)
+                _servoData = servoMixerData;
+
+            var usePreviousValues = servoMixerValues != null && servoMixerValues.Length == servoCount;
+
+            for (var i = 0; i < servoCount; i++)
+                _servoValues[i] = usePreviousValues ? servoMixerValues[i] : _servoData[i].Neutral;
+
+            _lockedServos = new List<int>();
+            _serialPortManager = FindObjectOfType<SerialPortManager>();
             _serialPortManager.Initialize();
         }
 
@@ -36,12 +61,18 @@ namespace Demonixis.InMoov.Servos
         public override void Shutdown()
         {
             SaveGame.SaveRawData(SaveGame.GetPreferredStorageMode(), _servoData, ServoMixerFilename);
+            SaveGame.SaveRawData(SaveGame.GetPreferredStorageMode(), _servoValues, ServoMixerValuesFilename);
             _serialPortManager.Dispose();
         }
-
-        public void ConnectArduino(int cardId, string serialName)
+        
+        public int GetServoValue(ServoIdentifier servoId)
         {
-            _serialPortManager.Connect(cardId, serialName);
+            return _servoValues[(int) servoId];
+        }
+
+        public void SetServoValue(ServoIdentifier servoId, int value)
+        {
+            _servoValues[(int) servoId] = value;
         }
 
         public void SetServoData(ServoIdentifier servoId, ServoData data)
@@ -49,10 +80,29 @@ namespace Demonixis.InMoov.Servos
             _servoData[(int) servoId] = data;
         }
 
+        public ServoData GetServoData(ServoIdentifier id)
+        {
+            return _servoData[(int) id];
+        }
+
+        public void LockServo(ServoIdentifier id)
+        {
+            var index = (int) id;
+            if (!_lockedServos.Contains(index))
+                _lockedServos.Add(index);
+        }
+
+        public void UnlockServo(ServoIdentifier id)
+        {
+            var index = (int) id;
+            if (_lockedServos.Contains(index))
+                _lockedServos.Remove(index);
+        }
+
         private int GetServoRotation(ServoIdentifier servoId, int rawValue)
         {
             var servo = _servoData[(int) servoId];
-            
+
             rawValue = Mathf.Max(servo.Min, rawValue);
             rawValue = Mathf.Min(servo.Max, rawValue);
 

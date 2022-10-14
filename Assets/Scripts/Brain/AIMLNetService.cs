@@ -33,6 +33,8 @@ namespace Demonixis.InMoov.Chatbots
             _aimlBot.isAcceptingUserInput = true;
             
             LoadBrain();
+            
+            base.Initialize();
         }
 
         public override void SetPaused(bool paused)
@@ -50,6 +52,7 @@ namespace Demonixis.InMoov.Chatbots
         public override void Shutdown()
         {
             SaveBrain();
+            base.Shutdown();
         }
         
         public void SaveBrain()

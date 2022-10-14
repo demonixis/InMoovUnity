@@ -13,6 +13,16 @@ namespace Demonixis.InMoov.Servos
         public string PortName;
     }
 
+    public enum ArduinoIdentifiers
+    {
+        Left = 0,
+        Right,
+        Card3,
+        Card4,
+        Card5,
+        Card6
+    }
+
     [Serializable]
     public sealed class SerialPortManager : MonoBehaviour
     {
@@ -20,6 +30,11 @@ namespace Demonixis.InMoov.Servos
         public const int DefaultBaudRate = 11500;
         private Dictionary<int, SerialPort> _serialPorts;
         private bool _disposed;
+
+        public bool IsConnected(int cardId)
+        {
+            return _serialPorts.ContainsKey(cardId) && _serialPorts[cardId].IsOpen;
+        }
 
         public void Initialize()
         {
@@ -108,7 +123,7 @@ namespace Demonixis.InMoov.Servos
             catch (Exception ex)
             {
                 Debug.LogError(ex.Message);
-                
+
                 if (serialPort != null)
                 {
                     if (serialPort.IsOpen)
@@ -119,6 +134,14 @@ namespace Demonixis.InMoov.Servos
             }
 
             return false;
+        }
+
+        public void Disconnect(int cardId)
+        {
+            if (!_serialPorts.ContainsKey(cardId)) return;
+
+            _serialPorts[cardId].Dispose();
+            _serialPorts.Remove(cardId);
         }
     }
 }

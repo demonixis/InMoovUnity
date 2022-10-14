@@ -27,8 +27,18 @@ namespace Demonixis.InMoov
         public virtual RobotPlatform[] SupportedPlateforms => new[] {RobotPlatform.All};
 
         public abstract RobotServices Type { get; }
-        public abstract void Initialize();
+        public bool Initialized { get; protected set; }
+
+        public virtual void Initialize()
+        {
+            Initialized = true;
+        }
+        
         public abstract void SetPaused(bool paused);
-        public abstract void Shutdown();
+
+        public virtual void Shutdown()
+        {
+            Initialized = false;
+        }
     }
 }

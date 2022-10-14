@@ -43,6 +43,7 @@ namespace Demonixis.InMoov.Speech.Microsoft
         public override void Initialize()
         {
             initSpeech();
+            base.Initialize();
         }
 
         public override void SetPaused(bool paused)

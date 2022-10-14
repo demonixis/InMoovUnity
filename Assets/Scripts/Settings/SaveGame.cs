@@ -3,6 +3,7 @@
 #endif
 using System;
 using System.IO;
+using Newtonsoft.Json;
 using UnityEngine;
 #if UNITY_ANDROID
 using UnityEngine.Android;
@@ -87,7 +88,7 @@ namespace Demonixis.ToolboxV2
 
         public static string SaveRawData(GameSaveStorageMode storageMode, object data, string filename, string additionalPath = null)
         {
-            var json = data is string ? (string)data : JsonUtility.ToJson(data, Application.isEditor);
+            var json = data is string ? (string)data : JsonConvert.SerializeObject(data, Formatting.Indented);
             var externalStorageSave = storageMode != GameSaveStorageMode.Internal;
 
             if (externalStorageSave)
@@ -162,7 +163,7 @@ namespace Demonixis.ToolboxV2
 
             if (!string.IsNullOrEmpty(json) && json != "{}")
             {
-                var result = JsonUtility.FromJson<T>(json);
+                var result = JsonConvert.DeserializeObject<T>(json);
                 return result;
             }
 

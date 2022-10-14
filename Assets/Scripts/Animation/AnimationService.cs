@@ -45,6 +45,7 @@ namespace Demonixis.InMoov.Animations
         public override void Initialize()
         {
             StartCoroutine(Loop());
+            base.Initialize();
         }
 
         private IEnumerator Loop()
@@ -81,6 +82,7 @@ namespace Demonixis.InMoov.Animations
         public override void Shutdown()
         {
             _running = false;
+            base.Shutdown();
         }
 
         [ContextMenu("Populate Bones")]

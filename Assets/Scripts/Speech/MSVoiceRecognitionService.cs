@@ -14,17 +14,17 @@ namespace Demonixis.InMoov.Speech.Microsoft
         public override void Initialize()
         {
             _dictationRecognizer = new DictationRecognizer();
-            _dictationRecognizer.DictationComplete += cause => Debug.Log("DR Completed");
-            _dictationRecognizer.DictationError += (error, hresult) => Debug.Log($"DR Error: {error}");
-            _dictationRecognizer.DictationHypothesis += text => Debug.Log($"DR H: {text}");
+            _dictationRecognizer.DictationComplete += cause => Debug.Log($"[DictationComplete] {cause}");
+            _dictationRecognizer.DictationError += (error, hresult) => Debug.Log($"[DictationError] {error}");
+            _dictationRecognizer.DictationHypothesis += text => Debug.Log($"[DictationHypothesis] {text}");
             _dictationRecognizer.DictationResult += (text, confidence) =>
             {
-                Debug.Log($"DR Result: {text} - {confidence}");
+                Debug.Log($"[DictationResult] {text} - {confidence}");
                 if (_paused) return;
                 NotifyPhraseDetected(text);
             };
             _dictationRecognizer.Start();
-            Debug.Log("DR Init");
+            base.Initialize();
         }
 
         public override void SetPaused(bool paused)
@@ -35,6 +35,7 @@ namespace Demonixis.InMoov.Speech.Microsoft
         public override void Shutdown()
         {
             _dictationRecognizer.Dispose();
+            base.Shutdown();
         }
     }
 }
