@@ -11,9 +11,11 @@ namespace Demonixis.InMoov.Servos
     {
         public const string ServoMixerFilename = "servos.json";
         public const string ServoMixerValuesFilename = "servos-values.json";
+        
         private SerialPortManager _serialPortManager;
         private ServoData[] _servoData;
         private int[] _servoValues;
+        private int[] _servoStates;
         private List<int> _lockedServos;
         private bool _running;
 
@@ -31,6 +33,7 @@ namespace Demonixis.InMoov.Servos
 
             _servoData = new ServoData [servoCount];
             _servoValues = new int [servoCount];
+            _servoStates = new int [servoCount];
 
             for (var i = 0; i < servoCount; i++)
             {
@@ -51,7 +54,10 @@ namespace Demonixis.InMoov.Servos
             var usePreviousValues = servoMixerValues != null && servoMixerValues.Length == servoCount;
 
             for (var i = 0; i < servoCount; i++)
+            {
                 _servoValues[i] = usePreviousValues ? servoMixerValues[i] : _servoData[i].Neutral;
+                _servoStates[i] = _servoData[i].Enabled ? 1 : 0;
+            }
 
             _lockedServos = new List<int>();
             _serialPortManager = FindObjectOfType<SerialPortManager>();
@@ -107,7 +113,9 @@ namespace Demonixis.InMoov.Servos
 
         public void SetServoData(ServoIdentifier servoId, ServoData data)
         {
-            _servoData[(int) servoId] = data;
+            var index = (int) servoId;
+            _servoData[index] = data;
+            _servoStates[index] = data.Enabled ? 1 : 0;
         }
 
         public ServoData GetServoData(ServoIdentifier id)

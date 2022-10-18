@@ -8,24 +8,27 @@ namespace Demonixis.InMoov
         Voice,
         Ears,
         Chat,
-        Vision,
+        Animation,
+        ComputerVision,
+        Navigation,
         Servo,
         Other
     }
-
-    public enum RobotPlatform
-    {
-        Windows,
-        Linux,
-        Mac,
-        Android,
-        All
-    }
-
+    
     public abstract class RobotService : MonoBehaviour
     {
-        public virtual RobotPlatform[] SupportedPlateforms => new[] {RobotPlatform.All};
+        public virtual RuntimePlatform[] SupportedPlateforms => new[]
+        {
+            RuntimePlatform.Android,
+            RuntimePlatform.LinuxEditor,
+            RuntimePlatform.LinuxPlayer,
+            RuntimePlatform.WindowsEditor,
+            RuntimePlatform.WindowsPlayer,
+            RuntimePlatform.OSXEditor,
+            RuntimePlatform.OSXPlayer
+        };
 
+        public string ServiceName => GetType().Name;
         public abstract RobotServices Type { get; }
         public bool Initialized { get; protected set; }
 
@@ -39,6 +42,18 @@ namespace Demonixis.InMoov
         public virtual void Shutdown()
         {
             Initialized = false;
+        }
+
+        public bool IsSupported()
+        {
+            var plateform = Application.platform;
+            
+            foreach (var platform in SupportedPlateforms)
+            {
+                if (platform == plateform) return true;
+            }
+
+            return false;
         }
     }
 }

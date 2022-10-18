@@ -9,7 +9,7 @@ using UnityEngine.Windows.Speech;
 using UnityEngine;
 #endif
 
-namespace Demonixis.InMoov.Speech.Microsoft
+namespace Demonixis.InMoov.Speech
 {
     public class MSSpeechSynthesisService : SpeechSynthesisService
     {
@@ -38,7 +38,11 @@ namespace Demonixis.InMoov.Speech.Microsoft
         public static void statusMessage (StringBuilder str, int length) {}
 #endif
 
-        public override RobotPlatform[] SupportedPlateforms => new[] {RobotPlatform.Windows};
+        public override RuntimePlatform[] SupportedPlateforms => new[]
+        {
+            RuntimePlatform.WindowsEditor,
+            RuntimePlatform.WindowsPlayer
+        };
 
         public override void Initialize()
         {

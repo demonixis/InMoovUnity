@@ -1,12 +1,15 @@
-﻿using Demonixis.InMoov.Speech;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Windows.Speech;
 
-namespace Demonixis.InMoov.Speech.Microsoft
+namespace Demonixis.InMoov.Speech
 {
     public class MSVoiceRecognitionService : VoiceRecognitionService
     {
-        public override RobotPlatform[] SupportedPlateforms => new[] {RobotPlatform.Windows};
+        public override RuntimePlatform[] SupportedPlateforms => new []
+        {
+            RuntimePlatform.WindowsEditor,
+            RuntimePlatform.WindowsPlayer,
+        };
         
         private DictationRecognizer _dictationRecognizer;
         private bool _paused;

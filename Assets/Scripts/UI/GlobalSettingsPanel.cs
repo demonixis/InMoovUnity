@@ -1,5 +1,4 @@
 ﻿using System;
-using Demonixis.InMoov.Settings;
 using TMPro;
 using UnityEngine;
 
@@ -11,15 +10,16 @@ namespace Demonixis.InMoov.UI
 
         private void Start()
         {
-            var names = Enum.GetNames(typeof(SupportedLanguages));
-            
+            var languages = Enum.GetNames(typeof(SystemLanguage));
+
             _languagesList.options.Clear();
-            foreach (var lang in names)
+            
+            foreach (var lang in languages)
             {
                 _languagesList.options.Add(new TMP_Dropdown.OptionData(lang));
             }
             
-            _languagesList.SetValueWithoutNotify(0);
+            _languagesList.SetValueWithoutNotify((int)SystemLanguage.English);
             _languagesList.RefreshShownValue();
         }
     }
