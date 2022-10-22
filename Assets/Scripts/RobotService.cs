@@ -15,6 +15,10 @@ namespace Demonixis.InMoov
         Other
     }
     
+    /// <summary>
+    /// Base skeleton of a robot service.
+    /// A service must have a type. By default it is supported on all platforms.
+    /// </summary>
     public abstract class RobotService : MonoBehaviour
     {
         public virtual RuntimePlatform[] SupportedPlateforms => new[]

@@ -12,6 +12,7 @@ namespace Demonixis.InMoov.Speech
         };
         
         private DictationRecognizer _dictationRecognizer;
+        private KeywordRecognizer _keywordRecognizer;
         private bool _paused;
         
         public override void Initialize()
@@ -27,7 +28,17 @@ namespace Demonixis.InMoov.Speech
                 NotifyPhraseDetected(text);
             };
             _dictationRecognizer.Start();
+
+            /*var keywords = new[] {""};
+            _keywordRecognizer = new KeywordRecognizer(keywords);
+            _keywordRecognizer.OnPhraseRecognized += KeywordRecognizerOnOnPhraseRecognized;*/
+            
             base.Initialize();
+        }
+
+        private void KeywordRecognizerOnOnPhraseRecognized(PhraseRecognizedEventArgs args)
+        {
+            throw new System.NotImplementedException();
         }
 
         public override void SetPaused(bool paused)
@@ -38,6 +49,7 @@ namespace Demonixis.InMoov.Speech
         public override void Shutdown()
         {
             _dictationRecognizer.Dispose();
+            _keywordRecognizer.Dispose();
             base.Shutdown();
         }
     }

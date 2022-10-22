@@ -43,6 +43,9 @@ namespace Demonixis.InMoov
             }
         }
 
+        /// <summary>
+        /// Retrieve an array of active services.
+        /// </summary>
         public RobotService[] Services => _currentServices?.ToArray() ?? Array.Empty<RobotService>();
 
         private void Awake()

@@ -1,11 +1,13 @@
 ﻿using System;
+using Demonixis.InMoov.Settings;
 
 namespace Demonixis.InMoov.Speech
 {
     public class VoiceRecognitionService : RobotService
     {
         public override RobotServices Type => RobotServices.Ears;
-        
+
+        public event Func<RobotVoiceKeywords, string, bool> SystemKeywordDetected; 
         public event Action<string> PhraseDetected;
         
         public override void SetPaused(bool paused) { }
