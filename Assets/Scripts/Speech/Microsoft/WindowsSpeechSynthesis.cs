@@ -11,7 +11,7 @@ using UnityEngine;
 
 namespace Demonixis.InMoov.Speech
 {
-    public class MSSpeechSynthesisService : SpeechSynthesisService
+    public class WindowsSpeechSynthesis : SpeechSynthesisService
     {
         private bool _paused;
         
