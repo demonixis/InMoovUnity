@@ -3,7 +3,7 @@ using UnityEngine.Windows.Speech;
 
 namespace Demonixis.InMoov.Speech
 {
-    public class WindowsVoiceRecognition : VoiceRecognitionService
+    public class WindowsSpeechRecognition : VoiceRecognitionService
     {
         public override RuntimePlatform[] SupportedPlateforms => new []
         {
@@ -49,7 +49,7 @@ namespace Demonixis.InMoov.Speech
         public override void Shutdown()
         {
             _dictationRecognizer.Dispose();
-            _keywordRecognizer.Dispose();
+            //_keywordRecognizer.Dispose();
             base.Shutdown();
         }
     }

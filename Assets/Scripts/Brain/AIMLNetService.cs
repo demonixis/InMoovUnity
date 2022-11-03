@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using AIMLbot;
+using Demonixis.ToolboxV2;
 using UnityEngine;
 
 namespace Demonixis.InMoov.Chatbots
@@ -17,14 +18,7 @@ namespace Demonixis.InMoov.Chatbots
             _aimlBot = new Bot();
             _user = new User(UserId, _aimlBot);
 
-            if (!Application.isEditor)
-            {
-                _pathToUserSettings = Application.streamingAssetsPath + @"\Brain-Graphmaster.xml";
-            }
-            else
-            {
-                _pathToUserSettings = Application.persistentDataPath + @"\Brain-Graphmaster.xml";
-            }
+            _pathToUserSettings = Path.Combine(SaveGame.GetSavePath("Brain"), "aiml-brain-graphmaster.xml");
             
             _aimlBot.ChangeMyPath =  Application.streamingAssetsPath;
             _aimlBot.loadSettings();

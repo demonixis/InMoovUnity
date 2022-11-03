@@ -15,6 +15,7 @@ namespace Demonixis.InMoov
         private const string ServiceListFilename = "services.json";
 
         private List<RobotService> _currentServices;
+        private ServiceList _serviceList;
 
         // Human Understanding
         private ChatbotService _chatbotService;
@@ -73,9 +74,9 @@ namespace Demonixis.InMoov
         private void InitializeServices()
         {
             var serviceList =
-                SaveGame.LoadRawData<ServiceList>(SaveGame.GetPreferredStorageMode(), ServiceListFilename);
+                SaveGame.LoadRawData<ServiceList>(SaveGame.GetPreferredStorageMode(), ServiceListFilename, "Config");
 
-            if (serviceList.IsValid())
+            if (!serviceList.IsValid())
                 serviceList = ServiceList.New();
 
             // Select service selected by the user
@@ -100,6 +101,12 @@ namespace Demonixis.InMoov
 
         private void OnDestroy()
         {
+            _serviceList.Chatbot = _chatbotService.GetType().Name;
+            _serviceList.VoiceRecognition = _voiceRecognition.GetType().Name;
+            _serviceList.SpeechSynthesis = _speechSynthesis.GetType().Name;
+            _serviceList.ServoMixer = _servoMixerService.GetType().Name;
+            SaveGame.SaveRawData(SaveGame.GetPreferredStorageMode(), _serviceList, ServiceListFilename, "Config");
+
             ClearCurrentServices();
         }
 
@@ -131,6 +138,8 @@ namespace Demonixis.InMoov
             }
 
             _currentServices.Add(selectedService);
+
+            Debug.Log($"[{typeof(T)} service: {selectedService}");
 
             return selectedService;
         }

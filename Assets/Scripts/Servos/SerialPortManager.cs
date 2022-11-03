@@ -54,7 +54,7 @@ namespace Demonixis.InMoov.Servos
             _serialPorts = new Dictionary<int, SerialPort>();
             
             var savedData =
-                SaveGame.LoadRawData<SerialData[]>(SaveGame.GetPreferredStorageMode(), SerialFilename);
+                SaveGame.LoadRawData<SerialData[]>(SaveGame.GetPreferredStorageMode(), SerialFilename, "Config");
 
             if (savedData is not {Length: > 0}) return;
 
@@ -78,7 +78,7 @@ namespace Demonixis.InMoov.Servos
             }
 
             SaveGame.SaveRawData(SaveGame.GetPreferredStorageMode(), serialData,
-                SerialFilename);
+                SerialFilename, "Config");
 
             foreach (var serial in _serialPorts)
                 serial.Value.Dispose();

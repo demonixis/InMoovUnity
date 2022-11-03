@@ -104,13 +104,15 @@ public class SpeechLink : MonoBehaviour
     private void _websocket_OnError(object sender, WebSocketSharp.ErrorEventArgs e)
     {
         Debug.Log("Error on the websocket Speech server.");
-        TryJoinWebSocketServer();
+        if (enabled)
+            TryJoinWebSocketServer();
     }
 
     private void _websocket_OnClose(object sender, WebSocketSharp.CloseEventArgs e)
     {
         Debug.Log("Websocket Speech server closed.");
-        TryJoinWebSocketServer();
+        if (enabled)
+            TryJoinWebSocketServer();
     }
 
     private void _websocket_OnOpen(object sender, System.EventArgs e)

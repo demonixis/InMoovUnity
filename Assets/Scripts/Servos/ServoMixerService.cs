@@ -43,10 +43,10 @@ namespace Demonixis.InMoov.Servos
 
             // Load saved data and apply them
             var servoMixerData =
-                SaveGame.LoadRawData<ServoData[]>(SaveGame.GetPreferredStorageMode(), ServoMixerFilename);
+                SaveGame.LoadRawData<ServoData[]>(SaveGame.GetPreferredStorageMode(), ServoMixerFilename, "Config");
 
             var servoMixerValues =
-                SaveGame.LoadRawData<int[]>(SaveGame.GetPreferredStorageMode(), ServoMixerValuesFilename);
+                SaveGame.LoadRawData<int[]>(SaveGame.GetPreferredStorageMode(), ServoMixerValuesFilename, "Config");
 
             if (servoMixerData != null && servoMixerData.Length == servoCount)
                 _servoData = servoMixerData;
@@ -74,8 +74,8 @@ namespace Demonixis.InMoov.Servos
 
         public override void Shutdown()
         {
-            SaveGame.SaveRawData(SaveGame.GetPreferredStorageMode(), _servoData, ServoMixerFilename);
-            SaveGame.SaveRawData(SaveGame.GetPreferredStorageMode(), _servoValues, ServoMixerValuesFilename);
+            SaveGame.SaveRawData(SaveGame.GetPreferredStorageMode(), _servoData, ServoMixerFilename, "Config");
+            SaveGame.SaveRawData(SaveGame.GetPreferredStorageMode(), _servoValues, ServoMixerValuesFilename, "Config");
             _serialPortManager.Dispose();
         }
 

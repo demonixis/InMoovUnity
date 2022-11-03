@@ -43,7 +43,7 @@ namespace Demonixis.InMoov.Settings
                 Chatbot = nameof(AIMLNetService),
 #if UNITY_STANDALONE_WIN
                 SpeechSynthesis = nameof(WindowsSpeechSynthesis),
-                VoiceRecognition = nameof(WindowsVoiceRecognition),
+                VoiceRecognition = nameof(WindowsSpeechRecognition),
 #else
                 SpeechSynthesis = nameof(SpeechSynthesisService),
                 VoiceRecognition = nameof(VoiceRecognitionService),
