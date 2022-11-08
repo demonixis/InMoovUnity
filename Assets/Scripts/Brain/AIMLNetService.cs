@@ -8,27 +8,75 @@ namespace Demonixis.InMoov.Chatbots
 {
     public class AIMLNetService : ChatbotService
     {
-        private const string UserId = "unity";
+        [Serializable]
+        public struct AIMLNetServiceData
+        {
+            public string User;
+            public string Language;
+
+            public bool IsValid()
+            {
+                return !string.IsNullOrEmpty(User) && !string.IsNullOrEmpty(Language);
+            }
+
+            public static AIMLNetServiceData CreateNew()
+            {
+                return new AIMLNetServiceData
+                {
+                    User = "Unity",
+                    Language = "en-US"
+                };
+            }
+        }
+
+        private const string SerialFilename = "aiml-data.json";
         private Bot _aimlBot;
         private User _user;
+        private AIMLNetServiceData _data;
         private string _pathToUserSettings;
 
         public override void Initialize()
         {
-            _aimlBot = new Bot();
-            _user = new User(UserId, _aimlBot);
+            _data = SaveGame.LoadRawData<AIMLNetServiceData>(SaveGame.GetPreferredStorageMode(), SerialFilename, "Brain");
 
-            _pathToUserSettings = Path.Combine(SaveGame.GetSavePath("Brain"), "aiml-brain-graphmaster.xml");
-            
-            _aimlBot.ChangeMyPath =  Application.streamingAssetsPath;
+            if (!_data.IsValid())
+                _data = AIMLNetServiceData.CreateNew();
+
+            InitializeBrain();
+            LoadBrain();
+
+            base.Initialize();
+        }
+
+        private void InitializeBrain()
+        {
+            _aimlBot = new Bot();
+            _user = new User(_data.User, _aimlBot);
+
+            _pathToUserSettings = Path.Combine(SaveGame.GetSavePath("Brain"), $"aiml-{_data.Language}-graphmaster.xml");
+
+            _aimlBot.ChangeMyPath = Path.Combine(Application.streamingAssetsPath, "AIML.Net", _data.Language);
             _aimlBot.loadSettings();
             _aimlBot.isAcceptingUserInput = false;
             _aimlBot.loadAIMLFromFiles();
             _aimlBot.isAcceptingUserInput = true;
-            
-            LoadBrain();
-            
-            base.Initialize();
+        }
+
+        public override void SetCulture(string culture)
+        {
+            if (!IsLanguageSupported(culture))
+            {
+                Debug.LogError($"[AIML.Net] Language {culture} is not supported.");
+                return;
+            }
+
+            _data.Language = culture;
+            Initialize();
+        }
+
+        private bool IsLanguageSupported(string lang)
+        {
+            return Directory.Exists(Path.Combine(Application.streamingAssetsPath, "AIML.Net", lang));
         }
 
         public override void SetPaused(bool paused)
@@ -45,10 +93,11 @@ namespace Demonixis.InMoov.Chatbots
 
         public override void Shutdown()
         {
+            SaveGame.SaveRawData(SaveGame.GetPreferredStorageMode(), _data, SerialFilename, "Brain");
             SaveBrain();
             base.Shutdown();
         }
-        
+
         public void SaveBrain()
         {
             try

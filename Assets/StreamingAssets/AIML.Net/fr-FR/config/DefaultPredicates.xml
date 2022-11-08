@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<root>
+  <item name="nom" value="un-named user" />
+  <item name="il" value="quelqu'un" />
+  <item name="elle" value="quelqu'un" />
+  <item name="ça" value="quelque chose" />
+  <item name="ils" value="quelque chose" />
+  <item name="age" value="inconnue" />
+  <item name="anniversaire" value="inconnue" />
+  <item name="compagne" value="inconnue" />
+  <item name="frère" value="inconnue" />
+  <item name="chat" value="inconnue" />
+  <item name="faire" value="inconnue" />
+  <item name="chien" value="inconnue" />
+  <item name="email" value="inconnue" />
+  <item name="père" value="inconnue" />
+  <item name="couleur préféré" value="inconnue" />
+  <item name="film préféré" value="inconnue" />
+  <item name="ami" value="inconnue" />
+  <item name="nom" value="inconnue" />
+  <item name="genre" value="inconnue" />
+  <item name="compagne" value="inconnue" />
+  <item name="avoir" value="inconnue" />
+  <item name="entendre" value="inconnue" />
+  <item name="marie" value="inconnue" />
+  <item name="est" value="inconnue" />
+  <item name="métier" value="inconnue" />
+  <item name="nom de famille" value="inconnue" />
+  <item name="aime" value="inconnue" />
+  <item name="localisation" value="inconnue" />
+  <item name="apparence" value="inconnue" />
+  <item name="memoire" value="inconnue" />
+  <item name="meta" value="inconnue" />
+  <item name="surnom" value="inconnue" />
+  <item name="middlename" value="inconnue" />
+  <item name="mère" value="inconnue" />
+  <item name="mot de passe" value="inconnue" />
+  <item name="personalité" value="inconnue" />
+  <item name="téléphone" value="inconnue" />
+  <item name="signe" value="inconnue" />
+  <item name="soeur" value="inconnue" />
+  <item name="eux" value="inconnue" />
+  <item name="penser" value="inconnue" />
+  <item name="veux" value="inconnue" />
+  <item name="nous" value="inconnue" />
+</root>

@@ -2,14 +2,17 @@ using MSSpeechLink;
 using Newtonsoft.Json;
 using System;
 using System.Collections;
+using System.IO;
 using System.Text;
 using UnityEngine;
 
 public class SpeechLink : MonoBehaviour
 {
     private static SpeechLink _instance;
+    private const string ProcessName = "MSSpeechLink.exe";
     private WebSocketSharp.WebSocket _websocket;
     private Coroutine _coroutine;
+    private bool _processStarted;
 
     public static SpeechLink Instance
     {
@@ -161,6 +164,15 @@ public class SpeechLink : MonoBehaviour
         _coroutine = null;
 
         if (!_websocket.IsAlive)
+        {
+            if (!_processStarted)
+            {
+                System.Diagnostics.Process.Start(Path.Combine(Application.streamingAssetsPath, "ThirdParty", "SpeechLink", ProcessName));
+                _processStarted = true;
+                yield return new WaitForSeconds(0.5f);
+            }
+
             TryJoinWebSocketServer();
+        }
     }
 }

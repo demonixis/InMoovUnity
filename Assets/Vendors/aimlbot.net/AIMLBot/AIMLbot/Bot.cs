@@ -145,7 +145,7 @@ namespace AIMLbot
         {
             get
             {
-                return new Regex(this.GlobalSettings.grabSetting("stripperregex"),RegexOptions.IgnorePatternWhitespace);
+                return new Regex(this.GlobalSettings.grabSetting("stripperregex"), RegexOptions.IgnorePatternWhitespace);
             }
         }
 
@@ -243,7 +243,7 @@ namespace AIMLbot
                 switch (sex)
                 {
                     case -1:
-                        result=Gender.Unknown;
+                        result = Gender.Unknown;
                         break;
                     case 0:
                         result = Gender.Female;
@@ -306,7 +306,7 @@ namespace AIMLbot
         /// If set to false the input from AIML files will undergo the same normalization process that
         /// user input goes through. If true the bot will assume the AIML is correct. Defaults to true.
         /// </summary>
-        public bool TrustAIML=true;
+        public bool TrustAIML = true;
 
         /// <summary>
         /// The maximum number of characters a "that" element of a path is allowed to be. Anything above
@@ -335,7 +335,7 @@ namespace AIMLbot
         /// </summary>
         public Bot()
         {
-            this.setup();  
+            this.setup();
         }
 
         #region Settings methods
@@ -372,30 +372,30 @@ namespace AIMLbot
             this.Substitutions = new SettingsDictionary(this);
             this.DefaultPredicates = new SettingsDictionary(this);
             this.CustomTags = new Dictionary<string, TagHandler>();
-            this.Graphmaster = new AIMLbot.Utils.Node(); 
+            this.Graphmaster = new AIMLbot.Utils.Node();
         }
 
         /// <summary>
         /// Loads settings based upon the default location of the Settings.xml file
         /// </summary>
 		private string MyPath = Application.streamingAssetsPath;
-		public string ChangeMyPath
-		{
-			get
-			{
-				return MyPath;
-			}
+        public string ChangeMyPath
+        {
+            get
+            {
+                return MyPath;
+            }
 
-			set
-			{
-				MyPath = value;
-			}
-		}
+            set
+            {
+                MyPath = value;
+            }
+        }
         public void loadSettings()
         {
             // try a safe default setting for the settings xml file
             string path = Path.Combine(MyPath, Path.Combine("config", "Settings.xml"));
-            this.loadSettings(path);          
+            this.loadSettings(path);
         }
 
         /// <summary>
@@ -419,7 +419,7 @@ namespace AIMLbot
             if (!this.GlobalSettings.containsSettingCalled("botmaster"))
             {
                 this.GlobalSettings.addSetting("botmaster", "Unknown");
-            } 
+            }
             if (!this.GlobalSettings.containsSettingCalled("master"))
             {
                 this.GlobalSettings.addSetting("botmaster", "Unknown");
@@ -534,7 +534,7 @@ namespace AIMLbot
             this.Substitutions.loadSettings(Path.Combine(this.PathToConfigFiles, this.GlobalSettings.grabSetting("substitutionsfile")));
 
             // Grab the splitters for this bot
-            this.loadSplitters(Path.Combine(this.PathToConfigFiles,this.GlobalSettings.grabSetting("splittersfile")));
+            this.loadSplitters(Path.Combine(this.PathToConfigFiles, this.GlobalSettings.grabSetting("splittersfile")));
         }
 
         /// <summary>
@@ -578,29 +578,29 @@ namespace AIMLbot
         }
 
         public void loadSplittersXml(XmlDocument splittersXmlDoc)
-        {           
-              //  XmlDocument splittersXmlDoc = new XmlDocument();
-              //  splittersXmlDoc.Load(pathToSplitters);
-               
+        {
+            //  XmlDocument splittersXmlDoc = new XmlDocument();
+            //  splittersXmlDoc.Load(pathToSplitters);
+
             // the XML should have an XML declaration like this:
-                // <?xml version="1.0" encoding="utf-8" ?> 
-                // followed by a <root> tag with children of the form:
-                // <item value="value"/>
-                if (splittersXmlDoc.ChildNodes.Count == 2)
+            // <?xml version="1.0" encoding="utf-8" ?> 
+            // followed by a <root> tag with children of the form:
+            // <item value="value"/>
+            if (splittersXmlDoc.ChildNodes.Count == 2)
+            {
+                if (splittersXmlDoc.LastChild.HasChildNodes)
                 {
-                    if (splittersXmlDoc.LastChild.HasChildNodes)
+                    foreach (XmlNode myNode in splittersXmlDoc.LastChild.ChildNodes)
                     {
-                        foreach (XmlNode myNode in splittersXmlDoc.LastChild.ChildNodes)
+                        if ((myNode.Name == "item") & (myNode.Attributes.Count == 1))
                         {
-                            if ((myNode.Name == "item") & (myNode.Attributes.Count == 1))
-                            {
-                                string value = myNode.Attributes["value"].Value;
-                                this.Splitters.Add(value);
-                            }
+                            string value = myNode.Attributes["value"].Value;
+                            this.Splitters.Add(value);
                         }
                     }
                 }
-            
+            }
+
 
 
             if (this.Splitters.Count == 0)
@@ -620,7 +620,7 @@ namespace AIMLbot
         /// <summary>
         /// The last message to be entered into the log (for testing purposes)
         /// </summary>
-        public string LastLogMessage=string.Empty;
+        public string LastLogMessage = string.Empty;
 
         /// <summary>
         /// Writes a (timestamped) message to the bot's log.
@@ -634,7 +634,7 @@ namespace AIMLbot
             if (this.IsLogging)
             {
                 this.LogBuffer.Add(DateTime.Now.ToString() + ": " + message + Environment.NewLine);
-                if (this.LogBuffer.Count > this.MaxLogBufferSize-1)
+                if (this.LogBuffer.Count > this.MaxLogBufferSize - 1)
                 {
                     // Write out to log file
                     DirectoryInfo logDirectory = new DirectoryInfo(this.PathToLogs);
@@ -643,8 +643,8 @@ namespace AIMLbot
                         logDirectory.Create();
                     }
 
-                    string logFileName = DateTime.Now.ToString("yyyyMMdd")+".log";
-                    FileInfo logFile = new FileInfo(Path.Combine(this.PathToLogs,logFileName));
+                    string logFileName = DateTime.Now.ToString("yyyyMMdd") + ".log";
+                    FileInfo logFile = new FileInfo(Path.Combine(this.PathToLogs, logFileName));
                     StreamWriter writer;
                     if (!logFile.Exists)
                     {
@@ -766,11 +766,11 @@ namespace AIMLbot
             // check for timeout (to avoid infinite loops)
             if (request.StartedOn.AddMilliseconds(request.bot.TimeOut) < DateTime.Now)
             {
-                request.bot.writeToLog("WARNING! Request timeout. User: " + request.user.UserID + " raw input: \"" + request.rawInput + "\" processing template: \""+query.Template+"\"");
+                request.bot.writeToLog("WARNING! Request timeout. User: " + request.user.UserID + " raw input: \"" + request.rawInput + "\" processing template: \"" + query.Template + "\"");
                 request.hasTimedOut = true;
                 return string.Empty;
             }
-                        
+
             // process the node
             string tagName = node.Name.ToLower();
             if (tagName == "template")
@@ -943,7 +943,7 @@ namespace AIMLbot
                 TagHandler customTagHandler = (TagHandler)this.CustomTags[node.Name.ToLower()];
 
                 AIMLTagHandler newCustomTag = customTagHandler.Instantiate(this.LateBindingAssemblies);
-                if(object.Equals(null,newCustomTag))
+                if (object.Equals(null, newCustomTag))
                 {
                     return null;
                 }
@@ -979,9 +979,9 @@ namespace AIMLbot
             FileInfo fi = new FileInfo(path);
             if (fi.Exists)
             {
-                #if !UNITY_WEBPLAYER && !UNITY_WEBGL
+#if !UNITY_WEBPLAYER && !UNITY_WEBGL
                 fi.Delete();
-                #endif
+#endif
             }
 
             FileStream saveFile = File.Create(path);
@@ -1002,9 +1002,9 @@ namespace AIMLbot
             loadFile.Close();
         }
 
-#endregion
+        #endregion
 
-#region Latebinding custom-tag dll handlers
+        #region Latebinding custom-tag dll handlers
 
         /// <summary>
         /// Loads any custom tag handlers found in the dll referenced in the argument
@@ -1024,7 +1024,7 @@ namespace AIMLbot
                         // We've found a custom tag handling class
                         // so store the assembly and store it away in the Dictionary<,> as a TagHandler class for 
                         // later usage
-                        
+
                         // store Assembly
                         if (!this.LateBindingAssemblies.ContainsKey(tagDLL.FullName))
                         {
@@ -1048,9 +1048,9 @@ namespace AIMLbot
                 }
             }
         }
-#endregion
+        #endregion
 
-#region Phone Home
+        #region Phone Home
         /// <summary>
         /// Attempts to send an email to the botmaster at the AdminEmail address setting with error messages
         /// resulting from a query to the bot
@@ -1060,7 +1060,7 @@ namespace AIMLbot
         public void phoneHome(string errorMessage, Request request)
         {
 #if !UNITY_WEBPLAYER && !UNITY_WEBGL
-            MailMessage msg = new MailMessage("donotreply@aimlbot.com",this.AdminEmail);
+            MailMessage msg = new MailMessage("donotreply@aimlbot.com", this.AdminEmail);
             msg.Subject = "WARNING! AIMLBot has encountered a problem...";
             string message = @"Dear Botmaster,
 
@@ -1091,13 +1091,13 @@ namespace AIMLbot
             message = message.Replace("*RAWINPUT*", request.rawInput);
             message = message.Replace("*USER*", request.user.UserID);
             StringBuilder paths = new StringBuilder();
-            foreach(string path in request.result.NormalizedPaths)
+            foreach (string path in request.result.NormalizedPaths)
             {
-                paths.Append(path+Environment.NewLine);
+                paths.Append(path + Environment.NewLine);
             }
             message = message.Replace("*PATHS*", paths.ToString());
             msg.Body = message;
-            msg.IsBodyHtml=false;
+            msg.IsBodyHtml = false;
             try
             {
                 if (msg.To.Count > 0)
@@ -1113,6 +1113,6 @@ namespace AIMLbot
 #endif
         }
 
-#endregion
+        #endregion
     }
 }
