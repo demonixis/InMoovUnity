@@ -7,13 +7,13 @@ namespace Demonixis.InMoov.Servos
     {
         public string Id;
         public bool Inverse;
-        public int Min;
-        public int Neutral;
-        public int Max;
+        public byte Min;
+        public byte Neutral;
+        public byte Max;
         public float Speed;
         public int PinId;
         public int CardId;
-        public bool Enabled;
+        public byte Enabled;
 
         public static ServoData New(string servoId)
         {
@@ -27,7 +27,7 @@ namespace Demonixis.InMoov.Servos
                 Speed = 1,
                 PinId = -1,
                 CardId = -1,
-                Enabled = false
+                Enabled = 0
             };
         }
     }

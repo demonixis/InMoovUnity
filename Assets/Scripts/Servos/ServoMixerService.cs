@@ -11,11 +11,11 @@ namespace Demonixis.InMoov.Servos
     {
         public const string ServoMixerFilename = "servos.json";
         public const string ServoMixerValuesFilename = "servos-values.json";
-        
+
         private SerialPortManager _serialPortManager;
         private ServoData[] _servoData;
-        private int[] _servoValues;
-        private int[] _servoStates;
+        private byte[] _servoValues;
+        private byte[] _servoStates;
         private List<int> _lockedServos;
         private bool _running;
 
@@ -31,9 +31,9 @@ namespace Demonixis.InMoov.Servos
             var names = Enum.GetNames(typeof(ServoIdentifier));
             var servoCount = names.Length;
 
-            _servoData = new ServoData [servoCount];
-            _servoValues = new int [servoCount];
-            _servoStates = new int [servoCount];
+            _servoData = new ServoData[servoCount];
+            _servoValues = new byte[servoCount];
+            _servoStates = new byte[servoCount];
 
             for (var i = 0; i < servoCount; i++)
             {
@@ -46,7 +46,7 @@ namespace Demonixis.InMoov.Servos
                 SaveGame.LoadRawData<ServoData[]>(SaveGame.GetPreferredStorageMode(), ServoMixerFilename, "Config");
 
             var servoMixerValues =
-                SaveGame.LoadRawData<int[]>(SaveGame.GetPreferredStorageMode(), ServoMixerValuesFilename, "Config");
+                SaveGame.LoadRawData<byte[]>(SaveGame.GetPreferredStorageMode(), ServoMixerValuesFilename, "Config");
 
             if (servoMixerData != null && servoMixerData.Length == servoCount)
                 _servoData = servoMixerData;
@@ -56,7 +56,7 @@ namespace Demonixis.InMoov.Servos
             for (var i = 0; i < servoCount; i++)
             {
                 _servoValues[i] = usePreviousValues ? servoMixerValues[i] : _servoData[i].Neutral;
-                _servoStates[i] = _servoData[i].Enabled ? 1 : 0;
+                _servoStates[i] = _servoData[i].Enabled;
             }
 
             _lockedServos = new List<int>();
@@ -91,11 +91,10 @@ namespace Demonixis.InMoov.Servos
                 for (var i = 0; i < _servoData.Length; i++)
                 {
                     var rotation = GetServoRotation(ref _servoData[i], _servoValues[i]);
-                    _serialPortManager.SetValueForCard(_servoData[i].CardId, _servoData[i].PinId, rotation);
+                    _serialPortManager.SetValueForCard(_servoData[i].CardId, _servoData[i].PinId, rotation, _servoStates[i]);
                 }
 
-                for (var i = 0; i < 4; i++)
-                    _serialPortManager.SendPinValues(i);
+                _serialPortManager.SendData();
 
                 yield return wait;
             }
@@ -103,53 +102,52 @@ namespace Demonixis.InMoov.Servos
 
         public int GetServoValue(ServoIdentifier servoId)
         {
-            return _servoValues[(int) servoId];
+            return _servoValues[(int)servoId];
         }
 
-        public void SetServoValue(ServoIdentifier servoId, int value)
+        public void SetServoValue(ServoIdentifier servoId, byte value)
         {
-            _servoValues[(int) servoId] = value;
+            _servoValues[(int)servoId] = value;
         }
 
         public void SetServoData(ServoIdentifier servoId, ServoData data)
         {
-            var index = (int) servoId;
+            var index = (int)servoId;
             _servoData[index] = data;
-            _servoStates[index] = data.Enabled ? 1 : 0;
+            _servoStates[index] = data.Enabled;
         }
 
         public ServoData GetServoData(ServoIdentifier id)
         {
-            return _servoData[(int) id];
+            return _servoData[(int)id];
         }
 
         public void LockServo(ServoIdentifier id)
         {
-            var index = (int) id;
+            var index = (int)id;
             if (!_lockedServos.Contains(index))
                 _lockedServos.Add(index);
         }
 
         public void UnlockServo(ServoIdentifier id)
         {
-            var index = (int) id;
+            var index = (int)id;
             if (_lockedServos.Contains(index))
                 _lockedServos.Remove(index);
         }
 
-        private int GetServoRotation(ServoIdentifier servoId, int rawValue)
+        private int GetServoRotation(ServoIdentifier servoId, byte rawValue)
         {
-            var servo = _servoData[(int) servoId];
+            var servo = _servoData[(int)servoId];
             return GetServoRotation(ref servo, rawValue);
         }
 
-        private int GetServoRotation(ref ServoData servo, int rawValue)
+        private byte GetServoRotation(ref ServoData servo, byte rawValue)
         {
-            rawValue = Mathf.Max(servo.Min, rawValue);
-            rawValue = Mathf.Min(servo.Max, rawValue);
+            rawValue = (byte)Mathf.Max(servo.Min, rawValue);
+            rawValue = (byte)Mathf.Min(servo.Max, rawValue);
 
-            if (servo.Inverse)
-                rawValue *= -1;
+
 
             return rawValue;
         }

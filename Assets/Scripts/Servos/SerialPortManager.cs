@@ -31,18 +31,19 @@ namespace Demonixis.InMoov.Servos
         public const string SerialFilename = "serial.json";
         public const int DefaultBaudRate = 11500;
         private Dictionary<int, SerialPort> _serialPorts;
-        
+
         /// <summary>
         /// An array that contains the card Id as key
         /// And contains an array of values
         /// Index 0 == PinStart
         /// Index Last = PinEnd
         /// </summary>
-        private Dictionary<int, int[]> _dataValues;
+        private Dictionary<int, byte[]> _dataBuffer;
+        private readonly static int DataBufferSize = (PinEnd - PinStart) * 2;
         private bool _disposed;
 
-        public static int[] DefaultPinValuesArray => new int[PinEnd - PinStart];
-        
+        public static byte[] DefaultPinValuesArray => new byte[DataBufferSize];
+
         public bool IsConnected(int cardId)
         {
             return _serialPorts.ContainsKey(cardId) && _serialPorts[cardId].IsOpen;
@@ -50,16 +51,17 @@ namespace Demonixis.InMoov.Servos
 
         public void Initialize()
         {
-            _dataValues = new Dictionary<int, int[]>();
+            _dataBuffer = new Dictionary<int, byte[]>();
             _serialPorts = new Dictionary<int, SerialPort>();
-            
+
             var savedData =
                 SaveGame.LoadRawData<SerialData[]>(SaveGame.GetPreferredStorageMode(), SerialFilename, "Config");
 
-            if (savedData is not {Length: > 0}) return;
-
-            foreach (var data in savedData)
-                Connect(data.CardId, data.PortName);
+            if (savedData.Length > 0)
+            {
+                foreach (var data in savedData)
+                    Connect(data.CardId, data.PortName);
+            }
         }
 
         public void Dispose()
@@ -99,35 +101,18 @@ namespace Demonixis.InMoov.Servos
             _serialPorts[cardId].Write(data, 0, data.Length);
         }
 
-        public void SendPrefixedIntegers(int cardId, int[] values)
+        public void SendData()
         {
             if (_serialPorts == null) return;
-            if (!_serialPorts.ContainsKey(cardId)) return;
 
-            for (var i = 0; i < values.Length; i++)
-                _serialPorts[cardId].Write($"{i}_{values[i]}");
+            foreach (var keyValue in _serialPorts)
+            {
+                if (keyValue.Value == null) continue;
+                keyValue.Value.Write(_dataBuffer[keyValue.Key], 0, _dataBuffer[keyValue.Key].Length);
+            }
         }
 
-        public void SendOrderedIntegers(int cardId, int[] values)
-        {
-            if (_serialPorts == null) return;
-            if (!_serialPorts.ContainsKey(cardId)) return;
-
-            for (var i = 0; i < values.Length; i++)
-                _serialPorts[cardId].Write($"{values[i]}");
-        }
-
-        public void SendPinValues(int cardId)
-        {
-            if (_serialPorts == null) return;
-            if (!_serialPorts.ContainsKey(cardId)) return;
-
-            var values = _dataValues[cardId];
-            for (var i = 0; i < values.Length; i++)
-                _serialPorts[cardId].Write($"{values[i]}");
-        }
-
-        public void SetValueForCard(int cardId, int pinNumber, int value)
+        public void SetValueForCard(int cardId, int pinNumber, byte value, byte enabled)
         {
             if (!_serialPorts.ContainsKey(cardId))
             {
@@ -135,7 +120,15 @@ namespace Demonixis.InMoov.Servos
                 return;
             }
 
-            _dataValues[cardId][pinNumber] = value;
+            if (pinNumber < PinStart || pinNumber > PinEnd)
+            {
+                Debug.LogError($"Pin {pinNumber} is not a valid pin number");
+                return;
+            }
+
+            var index = (pinNumber - PinStart) * 2;
+            _dataBuffer[cardId][index] = value;
+            _dataBuffer[cardId][index + 1] = enabled;
         }
 
         public bool Connect(int cardId, string serialName)
@@ -152,7 +145,7 @@ namespace Demonixis.InMoov.Servos
                 if (serialPort.IsOpen)
                 {
                     _serialPorts.Add(cardId, serialPort);
-                    _dataValues.Add(cardId, DefaultPinValuesArray);
+                    _dataBuffer.Add(cardId, DefaultPinValuesArray);
                     return true;
                 }
             }
@@ -160,7 +153,7 @@ namespace Demonixis.InMoov.Servos
             {
                 Debug.LogError(ex.Message);
             }
-            
+
             if (serialPort != null)
             {
                 if (serialPort.IsOpen)
