@@ -72,7 +72,7 @@ namespace Demonixis.InMoov.UI
             
             _servoEnabled.onValueChanged.AddListener(b =>
             {
-                _currentData.Enabled = b;
+                _currentData.Enabled = (byte)(b ? 0 : 1);
                 UpdateDataOnArduino();
             });
 
@@ -81,7 +81,7 @@ namespace Demonixis.InMoov.UI
             _servoNeutral.value = 90;
             _servoNeutral.onValueChanged.AddListener(i =>
             {
-                _currentData.Neutral = (int)i;
+                _currentData.Neutral = (byte)i;
                 UpdateDataOnArduino();
             });
             
@@ -90,7 +90,7 @@ namespace Demonixis.InMoov.UI
             _servoMin.value = 90;
             _servoMin.onValueChanged.AddListener(i =>
             {
-                _currentData.Min = (int)i;
+                _currentData.Min = (byte)i;
                 UpdateDataOnArduino();
             });
             
@@ -99,16 +99,16 @@ namespace Demonixis.InMoov.UI
             _servoMax.value = 90;
             _servoMax.onValueChanged.AddListener(i =>
             {
-                _currentData.Max = (int)i;
+                _currentData.Max = (byte)i;
                 UpdateDataOnArduino();
             });
             
-            _servoSpeed.minValue = 0;
-            _servoSpeed.maxValue = 1;
-            _servoSpeed.value = 1;
+            _servoSpeed.minValue = 10;
+            _servoSpeed.maxValue = 100;
+            _servoSpeed.value = 50;
             _servoSpeed.onValueChanged.AddListener(i =>
             {
-                _currentData.Speed = (int)i;
+                _currentData.Speed = (byte)i;
                 UpdateDataOnArduino();
             });
         }
@@ -131,7 +131,7 @@ namespace Demonixis.InMoov.UI
 
             _servoName.text = $"{id}";
             _servoCardId.SetValueWithoutNotify(data.CardId);
-            _servoEnabled.SetIsOnWithoutNotify(data.Enabled);
+            _servoEnabled.SetIsOnWithoutNotify(data.Enabled > 0);
             _servoReversed.SetIsOnWithoutNotify(data.Inverse);
             _servoNeutral.SetValueWithoutNotify(data.Neutral);
             _servoMin.SetValueWithoutNotify(data.Min);

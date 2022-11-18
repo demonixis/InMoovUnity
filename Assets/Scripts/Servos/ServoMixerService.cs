@@ -14,6 +14,7 @@ namespace Demonixis.InMoov.Servos
 
         private SerialPortManager _serialPortManager;
         private ServoData[] _servoData;
+        private SerialDataBuffer[] _serialDataBuffers;
         private byte[] _servoValues;
         private byte[] _servoStates;
         private List<int> _lockedServos;
@@ -86,16 +87,8 @@ namespace Demonixis.InMoov.Servos
             var wait = new WaitForSeconds(_updateInterval);
 
             while (_running)
-            {
-                // Send data to arduinos
-                for (var i = 0; i < _servoData.Length; i++)
-                {
-                    var rotation = GetServoRotation(ref _servoData[i], _servoValues[i]);
-                    _serialPortManager.SetValueForCard(_servoData[i].CardId, _servoData[i].PinId, rotation, _servoStates[i]);
-                }
-
-                _serialPortManager.SendData();
-
+            {   
+                // TODO
                 yield return wait;
             }
         }

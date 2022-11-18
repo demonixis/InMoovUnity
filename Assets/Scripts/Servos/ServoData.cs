@@ -10,7 +10,7 @@ namespace Demonixis.InMoov.Servos
         public byte Min;
         public byte Neutral;
         public byte Max;
-        public float Speed;
+        public byte Speed;
         public int PinId;
         public int CardId;
         public byte Enabled;

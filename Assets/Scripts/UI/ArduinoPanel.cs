@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.IO.Ports;
 using Demonixis.InMoov.Servos;
 using TMPro;
@@ -28,19 +29,37 @@ namespace Demonixis.InMoov.UI
 
             _cardList.SetValueWithoutNotify(0);
             _cardList.RefreshShownValue();
-            _cardList.onValueChanged.AddListener(i => RefreshStatus());
+            _cardList.onValueChanged.AddListener(i => RefreshCardStatus());
             
             RefreshPorts();
-            RefreshStatus();
+            RefreshCardStatus();
+            StartCoroutine(RefreshPortsCoroutine());
         }
 
-        public void RefreshStatus()
+        private void OnEnable()
+        {
+            if (_serialPort == null) return;
+            StartCoroutine(RefreshPortsCoroutine());
+        }
+
+        private void OnDisable()
+        {
+            StopAllCoroutines();
+        }
+
+        public void RefreshCardStatus()
         {
             var cardId = _cardList.value;
             var connected = _serialPort.IsConnected(cardId);
             _status.text = connected ? "Connected" : "Disconnected";
             _connectButton.interactable = !connected;
             _disconnectedButton.interactable = connected;
+        }
+
+        private IEnumerator RefreshCardStatusCoroutine()
+        {
+            yield return new WaitForSeconds(1.0f);
+            RefreshCardStatus();
         }
 
         public void RefreshPorts()
@@ -56,6 +75,16 @@ namespace Demonixis.InMoov.UI
             _portList.RefreshShownValue();
         }
 
+        private IEnumerator RefreshPortsCoroutine()
+        {
+            var wait = new WaitForSeconds(1.5f);
+            while(true)
+            {
+                RefreshPorts();
+                yield return wait;
+            }
+        }
+
         public void Connect()
         {
             if (_portList.options.Count == 0)
@@ -69,12 +98,16 @@ namespace Demonixis.InMoov.UI
             var cardId = _cardList.value;
 
             _serialPort.Connect(cardId, portName);
+
+            StartCoroutine(RefreshCardStatusCoroutine());
         }
 
         public void Disconnect()
         {
             var cardId = _cardList.value;
             _serialPort.Disconnect(cardId);
+
+            StartCoroutine(RefreshCardStatusCoroutine());
         }
     }
 }
