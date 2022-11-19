@@ -84,11 +84,18 @@ namespace Demonixis.InMoov.Chatbots
             _aimlBot.isAcceptingUserInput = !paused;
         }
 
-        public override string GetResponse(string speechInput)
+        /*public override string GetResponse(string speechInput)
         {
             var request = new Request(speechInput, _user, _aimlBot);
             var result = _aimlBot.Chat(request);
             return result.Output;
+        }*/
+
+        public override void SubmitResponse(string inputSpeech)
+        {
+            var request = new Request(inputSpeech, _user, _aimlBot);
+            var result = _aimlBot.Chat(request);
+            NotifyResponseReady(result.Output);
         }
 
         public override void Shutdown()

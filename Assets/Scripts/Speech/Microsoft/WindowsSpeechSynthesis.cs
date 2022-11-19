@@ -38,6 +38,8 @@ namespace Demonixis.InMoov.Speech
         public static void statusMessage (StringBuilder str, int length) {}
 #endif
 
+        [SerializeField] private bool _logOutput = true;
+
         public override RuntimePlatform[] SupportedPlateforms => new[]
         {
             RuntimePlatform.WindowsEditor,
@@ -58,7 +60,12 @@ namespace Demonixis.InMoov.Speech
         public override void Speak(string message)
         {
             if (!_paused)
+            {
                 addToSpeechQueue(message);
+         
+                if (_logOutput)
+                    Debug.Log(message);
+            }
         }
 
         public override void Shutdown()

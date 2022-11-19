@@ -44,6 +44,10 @@ namespace Demonixis.InMoov
             }
         }
 
+        public ChatbotService Chatbot => _chatbotService;
+        public VoiceRecognitionService VoiceRecognition => _voiceRecognition;
+        public SpeechSynthesisService SpeechSynthesis => _speechSynthesis;
+
         /// <summary>
         /// Retrieve an array of active services.
         /// </summary>
@@ -89,11 +93,14 @@ namespace Demonixis.InMoov
             _voiceRecognition.Initialize();
             _speechSynthesis.Initialize();
             _chatbotService.Initialize();
+            _chatbotService.ResponseReady += response =>
+            {
+                _speechSynthesis.Speak(string.IsNullOrEmpty(response) ? "I don't understand" : response);
+            };
 
             _voiceRecognition.PhraseDetected += s =>
             {
-                var response = _chatbotService.GetResponse(s);
-                _speechSynthesis.Speak(string.IsNullOrEmpty(response) ? "I don't understand" : response);
+                _chatbotService.SubmitResponse(s);
             };
 
             _servoMixerService.Initialize();
