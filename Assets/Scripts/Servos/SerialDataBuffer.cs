@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace Demonixis.InMoov.Servos
 {
+    [Serializable]
     public sealed class SerialDataBuffer
     {
         private readonly static int DataBufferSize = (SerialPortManager.PinEnd - SerialPortManager.PinStart) * 2;
@@ -31,6 +32,12 @@ namespace Demonixis.InMoov.Servos
         public void Send(SerialPort serialPort)
         {
             serialPort.Write(DataBuffer, 0, DataBuffer.Length);
+        }
+
+        public void ClearData()
+        {
+            for (var i = 0; i < DataBuffer.Length; i++)
+                DataBuffer[i] = 0;
         }
     }
 }

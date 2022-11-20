@@ -14,11 +14,10 @@ namespace Demonixis.InMoov.Servos
 
         private SerialPortManager _serialPortManager;
         private ServoData[] _servoData;
-        private SerialDataBuffer[] _serialDataBuffers;
-        private byte[] _servoValues;
-        private byte[] _servoStates;
+        private SerialDataBuffer[] _serialDataBuffer;
         private List<int> _lockedServos;
         private bool _running;
+        private bool _paused;
 
         [SerializeField] private float _updateInterval = 1.0f / 30.0f;
 
@@ -33,50 +32,34 @@ namespace Demonixis.InMoov.Servos
             var servoCount = names.Length;
 
             _servoData = new ServoData[servoCount];
-            _servoValues = new byte[servoCount];
-            _servoStates = new byte[servoCount];
-
             for (var i = 0; i < servoCount; i++)
-            {
                 _servoData[i] = ServoData.New(names[i]);
-                _servoValues[i] = _servoData[i].Neutral;
-            }
 
             // Load saved data and apply them
             var servoMixerData =
                 SaveGame.LoadRawData<ServoData[]>(SaveGame.GetPreferredStorageMode(), ServoMixerFilename, "Config");
 
-            var servoMixerValues =
-                SaveGame.LoadRawData<byte[]>(SaveGame.GetPreferredStorageMode(), ServoMixerValuesFilename, "Config");
-
             if (servoMixerData != null && servoMixerData.Length == servoCount)
                 _servoData = servoMixerData;
 
-            var usePreviousValues = servoMixerValues != null && servoMixerValues.Length == servoCount;
-
-            for (var i = 0; i < servoCount; i++)
-            {
-                _servoValues[i] = usePreviousValues ? servoMixerValues[i] : _servoData[i].Neutral;
-                _servoStates[i] = _servoData[i].Enabled;
-            }
+            names = Enum.GetNames(typeof(ArduinoIdentifiers));
+            _serialDataBuffer = new SerialDataBuffer[names.Length];
+            for (var i = 0; i < _serialDataBuffer.Length; i++)
+                _serialDataBuffer[i] = new SerialDataBuffer();
 
             _lockedServos = new List<int>();
-            _serialPortManager = FindObjectOfType<SerialPortManager>();
+            _serialPortManager = GetComponent<SerialPortManager>();
             _serialPortManager.Initialize();
         }
 
         public override void SetPaused(bool paused)
         {
-            _running = !paused;
-
-            if (_running)
-                StartCoroutine(ServoLoop());
+            _paused = !paused;
         }
 
         public override void Shutdown()
         {
             SaveGame.SaveRawData(SaveGame.GetPreferredStorageMode(), _servoData, ServoMixerFilename, "Config");
-            SaveGame.SaveRawData(SaveGame.GetPreferredStorageMode(), _servoValues, ServoMixerValuesFilename, "Config");
             _serialPortManager.Dispose();
         }
 
@@ -87,27 +70,48 @@ namespace Demonixis.InMoov.Servos
             var wait = new WaitForSeconds(_updateInterval);
 
             while (_running)
-            {   
-                // TODO
+            {
+                // Clear previous values.
+                for (var i = 0; i < _serialDataBuffer.Length; i++)
+                    _serialDataBuffer[i].ClearData();
+
+                // Map new values.
+                for (var i = 0; i < _servoData.Length; i++)
+                {
+                    var data = _servoData[i];
+                    var cardIndex = (int)data.CardId;
+                    var value = GetServoValue((ServoIdentifier)i);
+                    _serialDataBuffer[cardIndex].SetValue(data.PinId, data.Value, data.Enabled);
+                }
+
+                // Send values.
+                if (!_paused)
+                {
+                    for (var i = 0; i < _serialDataBuffer.Length; i++)
+                        _serialPortManager.SendData(i, _serialDataBuffer[i]);
+                }
+
                 yield return wait;
             }
         }
 
         public int GetServoValue(ServoIdentifier servoId)
         {
-            return _servoValues[(int)servoId];
+            return _servoData[(int)servoId].Value;
         }
 
         public void SetServoValue(ServoIdentifier servoId, byte value)
         {
-            _servoValues[(int)servoId] = value;
+            ref var data = ref _servoData[(int)servoId];
+            data.Value = value;
         }
 
         public void SetServoData(ServoIdentifier servoId, ServoData data)
         {
             var index = (int)servoId;
+            var previousData = _servoData[index];
+            data.Value = previousData.Value;
             _servoData[index] = data;
-            _servoStates[index] = data.Enabled;
         }
 
         public ServoData GetServoData(ServoIdentifier id)
@@ -140,7 +144,7 @@ namespace Demonixis.InMoov.Servos
             rawValue = (byte)Mathf.Max(servo.Min, rawValue);
             rawValue = (byte)Mathf.Min(servo.Max, rawValue);
 
-
+            // TODO Inverse
 
             return rawValue;
         }

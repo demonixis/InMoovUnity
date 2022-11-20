@@ -40,7 +40,6 @@ namespace Demonixis.InMoov.Servos
 
         public void Initialize()
         {
-        //    _dataBuffer = new Dictionary<int, byte[]>();
             _serialPorts = new Dictionary<int, SerialPort>();
 
             var savedData =

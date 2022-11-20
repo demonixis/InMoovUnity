@@ -14,6 +14,7 @@ namespace Demonixis.InMoov.Servos
         public int PinId;
         public int CardId;
         public byte Enabled;
+        public byte Value;
 
         public static ServoData New(string servoId)
         {
@@ -27,7 +28,8 @@ namespace Demonixis.InMoov.Servos
                 Speed = 1,
                 PinId = -1,
                 CardId = -1,
-                Enabled = 0
+                Enabled = 0,
+                Value = 90
             };
         }
     }
