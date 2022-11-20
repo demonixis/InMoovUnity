@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System;
+using System.IO.Ports;
+using UnityEngine;
 
 namespace Demonixis.InMoov.Servos
 {
@@ -24,6 +26,11 @@ namespace Demonixis.InMoov.Servos
             var index = (pinNumber - SerialPortManager.PinStart) * 2;
             DataBuffer[index] = value;
             DataBuffer[index + 1] = enabled;
+        }
+
+        public void Send(SerialPort serialPort)
+        {
+            serialPort.Write(DataBuffer, 0, DataBuffer.Length);
         }
     }
 }

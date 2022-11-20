@@ -13,6 +13,11 @@ public class BrainPanel : MonoBehaviour
     {
         yield return new WaitForEndOfFrame();
 
+        Robot.Instance.VoiceRecognition.PhraseDetected += s =>
+        {
+            AppendTextTo(_botInputContainer, s, false);
+        };
+
         Robot.Instance.Chatbot.ResponseReady += s =>
         {
             AppendTextTo(_botInputContainer, s, true);
@@ -32,5 +37,6 @@ public class BrainPanel : MonoBehaviour
         var txt = go.GetComponent<TextMeshProUGUI>();
         txt.text = text;
         txt.alignment = justifyRight ? TextAlignmentOptions.MidlineRight : TextAlignmentOptions.MidlineLeft;
+        txt.color = justifyRight ? Color.green : Color.cyan;
     }
 }

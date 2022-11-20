@@ -77,14 +77,6 @@ namespace Demonixis.InMoov.Servos
             _disposed = true;
         }
 
-        public void SendBytes(int cardId, byte[] data)
-        {
-            if (_serialPorts == null) return;
-            if (!_serialPorts.ContainsKey(cardId)) return;
-
-            _serialPorts[cardId].Write(data, 0, data.Length);
-        }
-
         public void SendData(int cardId, SerialDataBuffer buffer)
         {
             if (_serialPorts == null || !_serialPorts.ContainsKey(cardId)) return;
@@ -92,7 +84,7 @@ namespace Demonixis.InMoov.Servos
             var serialPort = _serialPorts[cardId];
             if (serialPort == null) return;
 
-            serialPort.Write(buffer.DataBuffer, 0, buffer.DataBuffer.Length);
+            buffer.Send(serialPort);
         }
 
         public bool Connect(int cardId, string serialName)
