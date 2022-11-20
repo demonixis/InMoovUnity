@@ -7,7 +7,6 @@ public class BrainPanel : MonoBehaviour
 {
     [SerializeField] private TMP_InputField _manualBotInput;
     [SerializeField] private Transform _botInputContainer;
-    [SerializeField] private Transform _botOutputContainer;
     [SerializeField] private GameObject _botTextPrefab;
 
     private IEnumerator Start()
@@ -16,22 +15,22 @@ public class BrainPanel : MonoBehaviour
 
         Robot.Instance.Chatbot.ResponseReady += s =>
         {
-            AppendTextTo(_botOutputContainer, s);
+            AppendTextTo(_botInputContainer, s, true);
         };
 
         _manualBotInput.onSubmit.AddListener(s =>
         {
+            AppendTextTo(_botInputContainer, s, false);
             Robot.Instance.Chatbot.SubmitResponse(s);
             _manualBotInput.SetTextWithoutNotify(string.Empty);
-
-            AppendTextTo(_botInputContainer, s);
         });
     }
 
-    private void AppendTextTo(Transform parent, string text)
+    private void AppendTextTo(Transform parent, string text, bool justifyRight)
     {
         var go = Instantiate(_botTextPrefab, parent);
         var txt = go.GetComponent<TextMeshProUGUI>();
         txt.text = text;
+        txt.alignment = justifyRight ? TextAlignmentOptions.MidlineRight : TextAlignmentOptions.MidlineLeft;
     }
 }
