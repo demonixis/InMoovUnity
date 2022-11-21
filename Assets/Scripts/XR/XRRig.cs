@@ -12,6 +12,10 @@ namespace Demonixis.InMoov
         [SerializeField] private AudioListener _audioListener;
         [SerializeField] private Transform[] _handOffsets;
         [SerializeField] private bool _startActive;
+        [SerializeField] private bool _isRobot;
+
+        public bool IsRobot => _isRobot;
+        public bool IsActive => _camera.enabled;
 
         private void Awake()
         {
@@ -37,6 +41,16 @@ namespace Demonixis.InMoov
 
             foreach (var trackedPoseDriver in _trackedPoseDrivers)
                 trackedPoseDriver.enabled = active;
+
+            if (_isRobot)
+            {
+                // TODO enable stereo
+                // TODO Store preferred camera name for left and right eyes
+                var webcamDisplay = GetComponentInChildren<WebCamDisplayer>();
+                webcamDisplay.SetActive(active, 0);
+
+                // TODO enable inverse kinematic
+            }
         }
     }
 }

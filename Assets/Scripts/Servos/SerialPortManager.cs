@@ -34,6 +34,10 @@ namespace Demonixis.InMoov.Servos
         private Dictionary<int, SerialPort> _serialPorts;
         private bool _disposed;
 
+#if UNITY_EDITOR
+        [SerializeField] private bool _logFirstTrame = true;
+#endif
+
         public bool IsConnected(int cardId)
         {
             return _serialPorts.ContainsKey(cardId) && _serialPorts[cardId].IsOpen;
@@ -80,7 +84,7 @@ namespace Demonixis.InMoov.Servos
         public void SendData(int cardId, SerialDataBuffer buffer)
         {
 #if UNITY_EDITOR
-            if (cardId == 0)
+            if (_logFirstTrame && cardId == 0)
                 Debug.Log($"{cardId}_{buffer}");
 #endif
 

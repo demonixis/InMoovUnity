@@ -1857,6 +1857,22 @@ PrefabInstance:
     serializedVersion: 2
     m_TransformParent: {fileID: 3954903645992572216}
     m_Modifications:
+    - target: {fileID: 1708470411625979615, guid: 34326611ff423104a991bbaa78ae967d, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1708470411625979615, guid: 34326611ff423104a991bbaa78ae967d, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1708470411625979615, guid: 34326611ff423104a991bbaa78ae967d, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1708470411625979615, guid: 34326611ff423104a991bbaa78ae967d, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3632205821425353837, guid: 34326611ff423104a991bbaa78ae967d, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
       value: 1

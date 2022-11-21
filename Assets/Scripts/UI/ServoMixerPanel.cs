@@ -13,7 +13,7 @@ namespace Demonixis.InMoov.UI
         private ServoIdentifier _currentServo;
         private ServoData _currentData;
 
-        [Header("Servo List"), SerializeField] private Transform _servoList;
+        [Header("Servo List"), SerializeField] private RectTransform _servoList;
 
         [SerializeField] private GameObject _servoItemPrefab;
 
