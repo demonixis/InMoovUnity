@@ -11,7 +11,7 @@ namespace Demonixis.InMoov.Servos
         public byte Neutral;
         public byte Max;
         public byte Speed;
-        public int PinId;
+        public byte PinId;
         public int CardId;
         public byte Enabled;
         public byte Value;
@@ -26,8 +26,8 @@ namespace Demonixis.InMoov.Servos
                 Max = 180,
                 Neutral = 90,
                 Speed = 1,
-                PinId = -1,
-                CardId = -1,
+                PinId = SerialPortManager.PinStart,
+                CardId = (int)ArduinoIdentifiers.None,
                 Enabled = 0,
                 Value = 90
             };

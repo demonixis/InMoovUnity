@@ -2,6 +2,7 @@
 using Demonixis.InMoov.Servos;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 namespace Demonixis.InMoov.UI
@@ -31,6 +32,7 @@ namespace Demonixis.InMoov.UI
 
         private void Start()
         {
+            _currentData = ServoData.New(string.Empty);
             _servoMixerService = FindObjectOfType<ServoMixerService>();
 
             foreach (Transform child in _servoList)
@@ -56,66 +58,73 @@ namespace Demonixis.InMoov.UI
             _servoPinId.options.Clear();
             for (var i = SerialPortManager.PinStart; i <= SerialPortManager.PinEnd; i++)
                 _servoPinId.options.Add(new TMP_Dropdown.OptionData($"Pin #{i}"));
-            
+
             // Bind events
+            _servoPinId.value = _currentData.PinId;
+            _servoPinId.RefreshShownValue();
             _servoPinId.onValueChanged.AddListener(i =>
             {
-                _currentData.PinId = _servoPinId.value + 2;
+                _currentData.PinId = (byte)(_servoPinId.value + SerialPortManager.PinStart);
                 UpdateDataOnArduino();
             });
-            
+
+            _servoCardId.value = _currentData.CardId;
+            _servoCardId.RefreshShownValue();
             _servoCardId.onValueChanged.AddListener(i =>
             {
                 _currentData.CardId = i;
                 UpdateDataOnArduino();
             });
-            
+
+            _servoEnabled.isOn = _currentData.Enabled > 0;
             _servoEnabled.onValueChanged.AddListener(b =>
             {
-                _currentData.Enabled = (byte)(b ? 0 : 1);
+                _currentData.Enabled = (byte)(b ? 1 : 0);
                 UpdateDataOnArduino();
             });
 
-            _servoNeutral.minValue = 0;
-            _servoNeutral.maxValue = 180;
-            _servoNeutral.value = 90;
-            _servoNeutral.onValueChanged.AddListener(i =>
+            SetupSlider(_servoNeutral, 0, 180, _currentData.Neutral, i =>
             {
                 _currentData.Neutral = (byte)i;
                 UpdateDataOnArduino();
             });
-            
-            _servoMin.minValue = 0;
-            _servoMin.maxValue = 180;
-            _servoMin.value = 90;
-            _servoMin.onValueChanged.AddListener(i =>
+
+            SetupSlider(_servoMin, 0, 180, _currentData.Min, i =>
             {
                 _currentData.Min = (byte)i;
                 UpdateDataOnArduino();
             });
-            
-            _servoMax.minValue = 0;
-            _servoMax.maxValue = 180;
-            _servoMax.value = 90;
-            _servoMax.onValueChanged.AddListener(i =>
+
+            SetupSlider(_servoMax, 0, 180, _currentData.Max, i =>
             {
                 _currentData.Max = (byte)i;
                 UpdateDataOnArduino();
             });
-            
-            _servoSpeed.minValue = 10;
-            _servoSpeed.maxValue = 100;
-            _servoSpeed.value = 50;
-            _servoSpeed.onValueChanged.AddListener(i =>
+
+            SetupSlider(_servoSpeed, 10, 100, _currentData.Speed, i =>
             {
                 _currentData.Speed = (byte)i;
                 UpdateDataOnArduino();
             });
+
+            SetupSlider(_servoValue, 0, 180, _currentData.Value, i =>
+            {
+                _currentData.Value = (byte)i;
+                UpdateDataOnArduino();
+            });
+        }
+
+        private void SetupSlider(Slider slider, float min, float max, float value, UnityAction<float> onValueChanged)
+        {
+            slider.minValue = 0;
+            slider.maxValue = 180;
+            slider.value = 90;
+            _servoValue.onValueChanged.AddListener(onValueChanged);
         }
 
         private void UpdateDataOnArduino()
         {
-            _servoMixerService.SetServoData(_currentServo, _currentData);
+            _servoMixerService.SetServoData(_currentServo, ref _currentData);
         }
 
         private void OnServoClicked(ServoIdentifier id)
@@ -137,6 +146,7 @@ namespace Demonixis.InMoov.UI
             _servoMin.SetValueWithoutNotify(data.Min);
             _servoMax.SetValueWithoutNotify(data.Max);
             _servoSpeed.SetValueWithoutNotify(data.Speed);
+            _servoValue.SetValueWithoutNotify(data.Value);
 
             var pinValue = FindPinValueFromPinId(data.PinId);
             _servoPinId.SetValueWithoutNotify(pinValue);

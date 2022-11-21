@@ -39,5 +39,10 @@ namespace Demonixis.InMoov.Servos
             for (var i = 0; i < DataBuffer.Length; i++)
                 DataBuffer[i] = 0;
         }
+
+        public override string ToString()
+        {
+            return String.Join(":", DataBuffer);
+        }
     }
 }

@@ -20,7 +20,8 @@ namespace Demonixis.InMoov.Servos
         Card3,
         Card4,
         Card5,
-        Card6
+        Card6,
+        None
     }
 
     [Serializable]
@@ -45,7 +46,7 @@ namespace Demonixis.InMoov.Servos
             var savedData =
                 SaveGame.LoadRawData<SerialData[]>(SaveGame.GetPreferredStorageMode(), SerialFilename, "Config");
 
-            if (savedData.Length > 0)
+            if (savedData != null && savedData.Length > 0)
             {
                 foreach (var data in savedData)
                     Connect(data.CardId, data.PortName);
@@ -78,6 +79,11 @@ namespace Demonixis.InMoov.Servos
 
         public void SendData(int cardId, SerialDataBuffer buffer)
         {
+#if UNITY_EDITOR
+            if (cardId == 0)
+                Debug.Log($"{cardId}_{buffer}");
+#endif
+
             if (_serialPorts == null || !_serialPorts.ContainsKey(cardId)) return;
 
             var serialPort = _serialPorts[cardId];
