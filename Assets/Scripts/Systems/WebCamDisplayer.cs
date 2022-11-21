@@ -11,6 +11,8 @@ namespace Demonixis.InMoov
 
         public void SetActive(bool active, int cameraIndex)
         {
+            if (_webCamTexture == null) return;
+
             if (!active)
             {
                 _webCamTexture.Stop();

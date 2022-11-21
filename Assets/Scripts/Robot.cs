@@ -47,6 +47,7 @@ namespace Demonixis.InMoov
         public ChatbotService Chatbot => _chatbotService;
         public VoiceRecognitionService VoiceRecognition => _voiceRecognition;
         public SpeechSynthesisService SpeechSynthesis => _speechSynthesis;
+        public ServoMixerService ServoMixer => _servoMixerService;
 
         /// <summary>
         /// Retrieve an array of active services.

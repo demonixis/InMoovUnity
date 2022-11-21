@@ -102,23 +102,26 @@ namespace Demonixis.InMoov.Servos
             return _servoData[(int)servoId].Value;
         }
 
-        public void SetServoValue(ServoIdentifier servoId, byte rawValue)
+        public void SetServoValue(ServoIdentifier servoId, float rawValue)
         {
             ref var data = ref _servoData[(int)servoId];
 
-            rawValue = (byte)Mathf.Max(data.Min, rawValue);
-            rawValue = (byte)Mathf.Min(data.Max, rawValue);
+            var value = ServoConverter.UnityRotationToServo(rawValue, data.ScaleValueTo180 > 0);
+            
+            // Apply servo data
+            value = (byte)Mathf.Max(data.Min, value);
+            value = (byte)Mathf.Min(data.Max, value);
 
-            // TODO
+            // Reverse
+            if (data.Inverse)
+                value = (byte)(180 - value);
 
-            data.Value = rawValue;
+            data.Value = value;
         }
 
         public void SetServoData(ServoIdentifier servoId, ref ServoData data)
         {
             var index = (int)servoId;
-            var previousData = _servoData[index];
-                        
             _servoData[index] = data;
         }
 

@@ -15,6 +15,7 @@ namespace Demonixis.InMoov.Servos
         public int CardId;
         public byte Enabled;
         public byte Value;
+        public byte ScaleValueTo180;
 
         public static ServoData New(string servoId)
         {
@@ -29,7 +30,8 @@ namespace Demonixis.InMoov.Servos
                 PinId = SerialPortManager.PinStart,
                 CardId = (int)ArduinoIdentifiers.None,
                 Enabled = 0,
-                Value = 90
+                Value = 90,
+                ScaleValueTo180 = 0
             };
         }
     }
