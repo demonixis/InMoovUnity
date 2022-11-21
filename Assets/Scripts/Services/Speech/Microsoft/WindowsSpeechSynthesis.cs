@@ -3,10 +3,11 @@
 #endif
 
 using System.Text;
+using UnityEngine;
+
 #if MS_SPEECH_SYNTHESIS
 using System.Runtime.InteropServices;
 using UnityEngine.Windows.Speech;
-using UnityEngine;
 #endif
 
 namespace Demonixis.InMoov.Speech
