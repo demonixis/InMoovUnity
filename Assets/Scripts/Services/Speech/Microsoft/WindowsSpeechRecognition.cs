@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.Windows.Speech;
 
-namespace Demonixis.InMoov.Speech
+namespace  Demonixis.InMoov.Services.Speech
 {
     public class WindowsSpeechRecognition : VoiceRecognitionService
     {

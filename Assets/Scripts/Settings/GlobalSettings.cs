@@ -1,10 +1,9 @@
 ﻿using System;
-using Demonixis.InMoov.Animations;
 using Demonixis.InMoov.Chatbots;
 using Demonixis.InMoov.ComputerVision;
 using Demonixis.InMoov.Navigation;
+using Demonixis.InMoov.Services.Speech;
 using Demonixis.InMoov.Servos;
-using Demonixis.InMoov.Speech;
 using UnityEngine;
 
 namespace Demonixis.InMoov.Settings
@@ -24,14 +23,17 @@ namespace Demonixis.InMoov.Settings
     [Serializable]
     public struct ServiceList
     {
-        public string Chatbot;
+        [Header("Services")] public string Chatbot;
         public string SpeechSynthesis;
         public string VoiceRecognition;
-        public string Animation;
         public string Navigation;
         public string EyeCamera;
         public string SpatialMapping;
         public string ServoMixer;
+
+        [Header("Settings")] public byte LeftEyeCameraIndex;
+        public byte RightEyeCameraIndex;
+        public float VRStereoOffset;
 
         public bool IsValid() => !string.IsNullOrEmpty(Chatbot) && !string.IsNullOrEmpty(SpeechSynthesis) &&
                                  !string.IsNullOrEmpty(VoiceRecognition);
@@ -40,6 +42,7 @@ namespace Demonixis.InMoov.Settings
         {
             return new ServiceList
             {
+                // Services
                 Chatbot = nameof(AIMLNetService),
 #if UNITY_STANDALONE_WIN
                 SpeechSynthesis = nameof(WindowsSpeechSynthesis),
@@ -48,7 +51,6 @@ namespace Demonixis.InMoov.Settings
                 SpeechSynthesis = nameof(SpeechSynthesisService),
                 VoiceRecognition = nameof(VoiceRecognitionService),
 #endif
-                Animation = nameof(MecanimAnimationService),
                 Navigation = nameof(NavigationService),
                 EyeCamera = nameof(EyeCamera),
                 SpatialMapping = nameof(DepthMappingService),

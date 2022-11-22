@@ -9,7 +9,7 @@ using UnityEngine;
 using UnityEngine.Android;
 #endif
 
-namespace Demonixis.ToolboxV2
+namespace Demonixis.InMoov.Settings
 {
     public enum GameSaveStorageMode
     {

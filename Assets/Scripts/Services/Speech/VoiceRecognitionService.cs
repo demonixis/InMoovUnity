@@ -1,7 +1,7 @@
 ﻿using System;
 using Demonixis.InMoov.Settings;
 
-namespace Demonixis.InMoov.Speech
+namespace  Demonixis.InMoov.Services.Speech
 {
     public class VoiceRecognitionService : RobotService
     {

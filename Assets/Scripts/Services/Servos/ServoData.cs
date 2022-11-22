@@ -42,6 +42,7 @@ namespace Demonixis.InMoov.Servos
         // Head
         EyeX = 0,
         EyeY,
+        Jaw,
         HeadYaw,
         HeadPitch,
         HeadRoll,
@@ -50,16 +51,13 @@ namespace Demonixis.InMoov.Servos
         PelvisYaw,
         PelvisPitch,
         PelvisRoll,
-        
-        // Left Shoulder
+
+        // Left Shoulder + Arm
         LeftShoulderYaw,
         LeftShoulderPitch,
         LeftShoulderRoll,
-        
-        // Right Arm
-
-        // Left forearm
-        LeftHandTwist,
+        LeftArm,
+        LeftWrist,
         
         // Left Hand
         LeftFingerThumb,
@@ -68,15 +66,12 @@ namespace Demonixis.InMoov.Servos
         LeftFingerRing,
         LeftFingerPinky,
         
-        // Right Shoulder
+        // Right Shoulder + Arm
         RightShoulderYaw,
         RightShoulderPitch,
         RightShoulderRoll,
-
-        // Right Arm
-        
-        // Right forearm
-        RightHandTwist,
+        RightArm,
+        RightWrist,
 
         // Right Hand
         RightFingerThumb,
