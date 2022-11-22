@@ -1,4 +1,4 @@
-﻿namespace Demonixis.InMoov.Settings
+﻿namespace Demonixis.InMoov.Services.Speech
 {
     public enum RobotVoiceKeywords
     {

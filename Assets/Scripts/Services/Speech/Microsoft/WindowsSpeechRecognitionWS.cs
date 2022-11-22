@@ -1,9 +1,4 @@
-using Demonixis.InMoov.Speech;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-namespace Demonixis.InMoov.Speech
+namespace  Demonixis.InMoov.Services.Speech
 {
     public class WindowsSpeechRecognitionWS : VoiceRecognitionService
     {

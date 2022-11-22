@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using Demonixis.InMoov.Chatbots;
+using Demonixis.InMoov.Services.Speech;
 using Demonixis.InMoov.Servos;
 using Demonixis.InMoov.Settings;
-using Demonixis.InMoov.Speech;
-using Demonixis.ToolboxV2;
 using UnityEngine;
 
 namespace Demonixis.InMoov
@@ -16,6 +15,7 @@ namespace Demonixis.InMoov
 
         private List<RobotService> _currentServices;
         private ServiceList _serviceList;
+        private List<Action> _waitingStartCallbacks;
 
         // Human Understanding
         private ChatbotService _chatbotService;
@@ -53,15 +53,36 @@ namespace Demonixis.InMoov
         /// Retrieve an array of active services.
         /// </summary>
         public RobotService[] Services => _currentServices?.ToArray() ?? Array.Empty<RobotService>();
+        public bool Running { get; private set; }
+
+        public event Action<Robot> Initialized;
+        public event Action<RobotService, RobotService> ServiceChanged;
 
         private void Awake()
         {
             _currentServices = new List<RobotService>();
+            _waitingStartCallbacks = new List<Action>();
         }
 
         private void Start()
         {
+            // TODO in prevision of deferred load.
             InitializeServices();
+            
+            Running = true;
+            Initialized?.Invoke(this);
+
+            if (_waitingStartCallbacks.Count <= 0) return;
+            foreach (var callback in _waitingStartCallbacks)
+                callback?.Invoke();
+        }
+
+        public void OnStarted(Action callback)
+        {
+            if (Running)
+                callback?.Invoke();
+            else
+                _waitingStartCallbacks.Add(callback);
         }
 
         /// <summary>
@@ -71,6 +92,27 @@ namespace Demonixis.InMoov
         {
             ClearCurrentServices();
             InitializeServices();
+        }
+
+        public T GetServiceOfType<T>() where T : RobotService
+        {
+            var type = typeof(T);
+            foreach (var current in Services)
+            {
+                if (current.GetType() == type)
+                    return (T)current;
+            }
+
+            Debug.Log($"Service {type} was not found. It's not really possible...");
+            return null;
+        }
+
+        public void ChangeService<T>(T service) where T : RobotService
+        {
+            // FIXME
+            T old = default(T);
+            T newService = default(T);
+            ServiceChanged?.Invoke(old, newService);
         }
 
         /// <summary>

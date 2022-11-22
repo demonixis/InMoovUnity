@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO.Ports;
-using Demonixis.ToolboxV2;
+using Demonixis.InMoov.Settings;
 using UnityEngine;
 
 namespace Demonixis.InMoov.Servos

@@ -1,6 +1,4 @@
-﻿using System.Numerics;
-
-namespace Demonixis.InMoov.Navigation
+﻿namespace Demonixis.InMoov.Navigation
 {
     public class NavigationService : RobotService
     {

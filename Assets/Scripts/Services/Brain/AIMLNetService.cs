@@ -1,7 +1,7 @@
 using System;
 using System.IO;
 using AIMLbot;
-using Demonixis.ToolboxV2;
+using Demonixis.InMoov.Settings;
 using UnityEngine;
 
 namespace Demonixis.InMoov.Chatbots
@@ -83,13 +83,6 @@ namespace Demonixis.InMoov.Chatbots
         {
             _aimlBot.isAcceptingUserInput = !paused;
         }
-
-        /*public override string GetResponse(string speechInput)
-        {
-            var request = new Request(speechInput, _user, _aimlBot);
-            var result = _aimlBot.Chat(request);
-            return result.Output;
-        }*/
 
         public override void SubmitResponse(string inputSpeech)
         {

@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 using UnityEngine.Windows.Speech;
 #endif
 
-namespace Demonixis.InMoov.Speech
+namespace  Demonixis.InMoov.Services.Speech
 {
     public class WindowsSpeechSynthesis : SpeechSynthesisService
     {

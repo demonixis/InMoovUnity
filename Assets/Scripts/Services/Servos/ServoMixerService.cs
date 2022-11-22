@@ -1,8 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Demonixis.InMoov.Settings;
 using Demonixis.InMoov.Utils;
-using Demonixis.ToolboxV2;
 using UnityEngine;
 
 namespace Demonixis.InMoov.Servos
@@ -102,7 +102,7 @@ namespace Demonixis.InMoov.Servos
             return _servoData[(int)servoId].Value;
         }
 
-        public void SetServoValue(ServoIdentifier servoId, float rawValue)
+        public void SetServoValueInEuler(ServoIdentifier servoId, float rawValue)
         {
             ref var data = ref _servoData[(int)servoId];
 
@@ -117,6 +117,30 @@ namespace Demonixis.InMoov.Servos
                 value = (byte)(180 - value);
 
             data.Value = value;
+        }
+
+        public void SetServoValueInServo(ServoIdentifier servoId, byte value)
+        {
+            ref var data = ref _servoData[(int)servoId];
+            
+            // Apply servo data
+            value = (byte)Mathf.Max(data.Min, value);
+            value = (byte)Mathf.Min(data.Max, value);
+
+            // Reverse
+            if (data.Inverse)
+                value = (byte)(180 - value);
+            
+            data.Value = value;
+        }
+
+        public void SetServosToNeutral()
+        {
+            for (var i = 0; i < _servoData.Length; i++)
+            {
+                ref var data = ref _servoData[i];
+                data.Value = data.Neutral;
+            }
         }
 
         public void SetServoData(ServoIdentifier servoId, ref ServoData data)

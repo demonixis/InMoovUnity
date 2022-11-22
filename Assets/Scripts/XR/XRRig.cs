@@ -12,15 +12,22 @@ namespace Demonixis.InMoov
         private ServoMixerService _servoMixerService;
         private TrackedPoseDriver[] _trackedPoseDrivers;
 
-        [SerializeField] private Camera _camera;
+        [SerializeField] private Camera _headCamera;
+        [SerializeField] private Camera _leftCamera;
+        [SerializeField] private Camera _rightCamera;
         [SerializeField] private AudioListener _audioListener;
         [SerializeField] private Transform[] _handOffsets;
+        
+        [Header("Replication")]
         [SerializeField] private float _sendInterval = 1.0f / 60.0f;
+        
+        [Header("Misc")]
         [SerializeField] private bool _startActive;
         [SerializeField] private bool _isRobot;
 
         public bool IsRobot => _isRobot;
-        public bool IsActive => _camera.enabled;
+        public bool IsActive => _headCamera.enabled || _leftCamera.enabled;
+        public bool IsUsingDualCamera => !_headCamera.enabled && _leftCamera.enabled;
 
         private void Awake()
         {
@@ -47,11 +54,11 @@ namespace Demonixis.InMoov
         {
             while (true)
             {
-                var camRot = _camera.transform.eulerAngles;
+                var camRot = _headCamera.transform.eulerAngles;
 
-                _servoMixerService.SetServoValue(ServoIdentifier.HeadYaw, (byte)camRot.y);
-                _servoMixerService.SetServoValue(ServoIdentifier.HeadPitch, (byte)camRot.x);
-                _servoMixerService.SetServoValue(ServoIdentifier.HeadRoll, (byte)camRot.z);
+                _servoMixerService.SetServoValueInEuler(ServoIdentifier.HeadYaw, (byte) camRot.y);
+                _servoMixerService.SetServoValueInEuler(ServoIdentifier.HeadPitch, (byte) camRot.x);
+                _servoMixerService.SetServoValueInEuler(ServoIdentifier.HeadRoll, (byte) camRot.z);
 
                 yield return CoroutineFactory.WaitForSeconds(_sendInterval);
             }
@@ -59,21 +66,20 @@ namespace Demonixis.InMoov
 
         public void SetActive(bool active)
         {
-            _camera.enabled = active;
+            _headCamera.enabled = active;
             _audioListener.enabled = active;
 
             foreach (var trackedPoseDriver in _trackedPoseDrivers)
                 trackedPoseDriver.enabled = active;
 
-            if (_isRobot)
-            {
-                // TODO enable stereo
-                // TODO Store preferred camera name for left and right eyes
-                var webcamDisplay = GetComponentInChildren<WebCamDisplayer>();
-                webcamDisplay.SetActive(active, 0);
+            if (!_isRobot) return;
+            
+            // TODO enable stereo
+            // TODO Store preferred camera name for left and right eyes
+            var webcamDisplay = GetComponentInChildren<WebCamDisplayer>();
+            webcamDisplay.SetActive(active, 0);
 
-                // TODO enable inverse kinematic
-            }
+            // TODO enable inverse kinematic
         }
     }
 }

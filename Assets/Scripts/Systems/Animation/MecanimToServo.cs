@@ -1,11 +1,13 @@
 using System.Collections;
+using Demonixis.InMoov.Servos;
+using Demonixis.InMoov.Utils;
 using UnityEngine;
 
-namespace Demonixis.InMoov.Animations
+namespace Demonixis.InMoov.Systems
 {
-    public class MecanimAnimationService : AnimationService
+    public class MecanimToServo : RobotSystem
     {
-        private bool _running;
+        private ServoMixerService _servoMixerService;
 
         [Header("Config")] [SerializeField] private float _updateInterval = 1.0f / 30.0f;
 
@@ -38,49 +40,91 @@ namespace Demonixis.InMoov.Animations
         [SerializeField] private Transform _rightRingFinger;
         [SerializeField] private Transform _rightPinkyFinger;
 
-        public override RobotServices Type => RobotServices.Other;
+        protected override void Start()
+        {
+            _servoMixerService = Robot.Instance.GetServiceOfType<ServoMixerService>();
+            base.Start();
+        }
 
         public override void Initialize()
         {
             StartCoroutine(Loop());
-            base.Initialize();
+        }
+
+        public override void Dispose()
+        {
+            StopAllCoroutines();
         }
 
         private IEnumerator Loop()
         {
-            _running = true;
+            Running = true;
 
-            var interval = new WaitForSeconds(_updateInterval);
-
-            while (_running)
+            while (Running)
             {
-                var neckRotation = ClampedVector0to180(_neck.rotation.eulerAngles);
+                // Head
+                var head = _head.rotation.eulerAngles;
+                _servoMixerService.SetServoValueInEuler(ServoIdentifier.HeadYaw, head.y);
 
+                // Neck
+                var neck = _neck.rotation.eulerAngles;
+                _servoMixerService.SetServoValueInEuler(ServoIdentifier.HeadPitch, neck.x);
+                _servoMixerService.SetServoValueInEuler(ServoIdentifier.HeadRoll, neck.z);
 
-                yield return interval;
+                // Pelvis
+                var hips = _hip.rotation.eulerAngles;
+                _servoMixerService.SetServoValueInEuler(ServoIdentifier.PelvisYaw, hips.y);
+                _servoMixerService.SetServoValueInEuler(ServoIdentifier.PelvisPitch, hips.x);
+                _servoMixerService.SetServoValueInEuler(ServoIdentifier.PelvisRoll, hips.z);
+
+                // Left Side
+                var upperArm = _leftUpperArm.eulerAngles;
+                var lowerArm = _leftForeArm.eulerAngles;
+                var wrist = _leftWrist.eulerAngles;
+
+                _servoMixerService.SetServoValueInEuler(ServoIdentifier.LeftShoulderYaw, upperArm.y);
+                _servoMixerService.SetServoValueInEuler(ServoIdentifier.LeftShoulderPitch, upperArm.x);
+                _servoMixerService.SetServoValueInEuler(ServoIdentifier.LeftShoulderRoll, upperArm.z);
+                _servoMixerService.SetServoValueInEuler(ServoIdentifier.LeftArm, lowerArm.x);
+                _servoMixerService.SetServoValueInEuler(ServoIdentifier.LeftWrist, wrist.z);
+
+                // Left Hand
+                var thumb = _leftThumbFinger.eulerAngles;
+                var indexFinger = _leftIndexFinger.eulerAngles;
+                var middleFinger = _leftMiddleFinger.eulerAngles;
+                var ringFinger = _leftRingFinger.eulerAngles;
+                var pinkyFinger = _leftPinkyFinger.eulerAngles;
+                _servoMixerService.SetServoValueInEuler(ServoIdentifier.LeftFingerThumb, thumb.x);
+                _servoMixerService.SetServoValueInEuler(ServoIdentifier.LeftFingerIndex, indexFinger.x);
+                _servoMixerService.SetServoValueInEuler(ServoIdentifier.LeftFingerMiddle, middleFinger.x);
+                _servoMixerService.SetServoValueInEuler(ServoIdentifier.LeftFingerRing, ringFinger.x);
+                _servoMixerService.SetServoValueInEuler(ServoIdentifier.LeftFingerPinky, pinkyFinger.x);
+
+                // Right Side
+                upperArm = _rightUpperArm.eulerAngles;
+                lowerArm = _rightForeArm.eulerAngles;
+                wrist = _rightWrist.eulerAngles;
+
+                _servoMixerService.SetServoValueInEuler(ServoIdentifier.RightShoulderYaw, upperArm.y);
+                _servoMixerService.SetServoValueInEuler(ServoIdentifier.RightShoulderPitch, upperArm.x);
+                _servoMixerService.SetServoValueInEuler(ServoIdentifier.RightShoulderRoll, upperArm.z);
+                _servoMixerService.SetServoValueInEuler(ServoIdentifier.RightArm, lowerArm.x);
+                _servoMixerService.SetServoValueInEuler(ServoIdentifier.RightWrist, wrist.z);
+
+                // Right Hand
+                thumb = _rightThumbFinger.eulerAngles;
+                indexFinger = _rightIndexFinger.eulerAngles;
+                middleFinger = _rightMiddleFinger.eulerAngles;
+                ringFinger = _rightRingFinger.eulerAngles;
+                pinkyFinger = _rightPinkyFinger.eulerAngles;
+                _servoMixerService.SetServoValueInEuler(ServoIdentifier.RightFingerThumb, thumb.x);
+                _servoMixerService.SetServoValueInEuler(ServoIdentifier.RightFingerIndex, indexFinger.x);
+                _servoMixerService.SetServoValueInEuler(ServoIdentifier.RightFingerMiddle, middleFinger.x);
+                _servoMixerService.SetServoValueInEuler(ServoIdentifier.RightFingerRing, ringFinger.x);
+                _servoMixerService.SetServoValueInEuler(ServoIdentifier.RightFingerPinky, pinkyFinger.x);
+
+                yield return CoroutineFactory.WaitForSeconds(_updateInterval);
             }
-        }
-
-        private static Vector3 ClampedVector0to180(Vector3 target)
-        {
-            target.x = (target.x % 360.0f) / 2.0f;
-            target.y = (target.y % 360.0f) / 2.0f;
-            target.z = (target.z % 360.0f) / 2.0f;
-            return target;
-        }
-
-        public override void SetPaused(bool paused)
-        {
-            _running = !paused;
-
-            if (!paused)
-                StartCoroutine(Loop());
-        }
-
-        public override void Shutdown()
-        {
-            _running = false;
-            base.Shutdown();
         }
 
         [ContextMenu("Populate Bones")]
@@ -105,7 +149,7 @@ namespace Demonixis.InMoov.Animations
                     _neck = tr;
                 else if (Contains(trName, "head"))
                     _head = tr;
-                
+
                 // Left Arm
                 else if (Contains(trName, "left", "shoulder"))
                     _leftShoulder = tr;
@@ -115,7 +159,7 @@ namespace Demonixis.InMoov.Animations
                     _leftForeArm = tr;
                 else if (Contains(trName, "left", "wrist"))
                     _leftWrist = tr;
-                
+
                 // Left Hand
                 else if (Contains(trName, "left", "thumb"))
                     _leftThumbFinger = tr;
@@ -127,7 +171,7 @@ namespace Demonixis.InMoov.Animations
                     _leftRingFinger = tr;
                 else if (Contains(trName, "left", "finger", "pinky"))
                     _leftPinkyFinger = tr;
-                
+
                 // right Arm
                 else if (Contains(trName, "right", "shoulder"))
                     _rightShoulder = tr;
@@ -137,7 +181,7 @@ namespace Demonixis.InMoov.Animations
                     _rightForeArm = tr;
                 else if (Contains(trName, "right", "wrist"))
                     _rightWrist = tr;
-                
+
                 // right Hand
                 else if (Contains(trName, "right", "thumb"))
                     _rightThumbFinger = tr;

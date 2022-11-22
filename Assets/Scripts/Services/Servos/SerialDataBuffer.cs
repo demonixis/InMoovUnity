@@ -7,7 +7,7 @@ namespace Demonixis.InMoov.Servos
     [Serializable]
     public sealed class SerialDataBuffer
     {
-        private readonly static int DataBufferSize = (SerialPortManager.PinEnd - SerialPortManager.PinStart) * 2;
+        private static readonly int DataBufferSize = (SerialPortManager.PinEnd - SerialPortManager.PinStart) * 2;
 
         public byte[] DataBuffer { get; private set; }
 
@@ -42,7 +42,7 @@ namespace Demonixis.InMoov.Servos
 
         public override string ToString()
         {
-            return String.Join(":", DataBuffer);
+            return string.Join(":", DataBuffer);
         }
     }
 }
