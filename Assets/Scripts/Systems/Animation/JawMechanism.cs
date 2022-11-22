@@ -2,17 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class JawMechanism : MonoBehaviour
+namespace Demonixis.InMoov.Systems
 {
-    // Start is called before the first frame update
-    void Start()
+    public class JawMechanism : MonoBehaviour
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }
