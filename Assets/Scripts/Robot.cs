@@ -106,8 +106,8 @@ namespace Demonixis.InMoov
             var type = typeof(T);
             foreach (var current in Services)
             {
-                if (current.GetType() == type)
-                    return (T)current;
+                if (current is T service)
+                    return service;
             }
 
             Debug.Log($"Service {type} was not found. It's not really possible...");

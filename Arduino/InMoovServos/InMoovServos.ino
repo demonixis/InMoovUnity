@@ -26,6 +26,8 @@ void setup()
   {
     servos[i].attach(i + PinStart);
     values[i] = 90; // Neutral
+    servoActivation[i] = 1;
+    lastServoActivation[i] = 1;
   }
 }
 
@@ -63,7 +65,7 @@ void loop()
     }
 
     // Apply the value if enabled.
-    if (servoActivation[i])
+    //if (servoActivation[i])
       servos[i].write(values[i]);
   }
 }

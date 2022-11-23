@@ -116,9 +116,9 @@ namespace Demonixis.InMoov.UI
 
         private void SetupSlider(Slider slider, float min, float max, float value, UnityAction<float> onValueChanged)
         {
-            slider.minValue = 0;
-            slider.maxValue = 180;
-            slider.value = 90;
+            slider.minValue = min;
+            slider.maxValue = max;
+            slider.value = value;
             _servoValue.onValueChanged.AddListener(onValueChanged);
         }
 

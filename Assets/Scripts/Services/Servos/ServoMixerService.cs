@@ -109,12 +109,12 @@ namespace Demonixis.InMoov.Servos
             var value = ServoConverter.UnityRotationToServo(rawValue, data.ScaleValueTo180 > 0);
             
             // Apply servo data
-            value = (byte)Mathf.Max(data.Min, value);
+            /*value = (byte)Mathf.Max(data.Min, value);
             value = (byte)Mathf.Min(data.Max, value);
 
             // Reverse
             if (data.Inverse)
-                value = (byte)(180 - value);
+                value = (byte)(180 - value);*/
 
             data.Value = value;
         }
@@ -124,12 +124,12 @@ namespace Demonixis.InMoov.Servos
             ref var data = ref _servoData[(int)servoId];
             
             // Apply servo data
-            value = (byte)Mathf.Max(data.Min, value);
+            /*value = (byte)Mathf.Max(data.Min, value);
             value = (byte)Mathf.Min(data.Max, value);
 
             // Reverse
             if (data.Inverse)
-                value = (byte)(180 - value);
+                value = (byte)(180 - value);*/
             
             data.Value = value;
         }

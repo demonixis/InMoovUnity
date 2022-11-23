@@ -3,6 +3,7 @@ using Demonixis.InMoov.Utils;
 using Demonixis.ToolboxV2.XR;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Animations.Rigging;
 using UnityEngine.SpatialTracking;
 
 namespace Demonixis.InMoov
@@ -36,6 +37,8 @@ namespace Demonixis.InMoov
 
         private IEnumerator Start()
         {
+            yield return null;
+         
             XRManager.SetTrackingOriginMode(UnityEngine.XR.TrackingOriginModeFlags.Device, true);
             SetActive(_startActive);
 
@@ -45,20 +48,18 @@ namespace Demonixis.InMoov
                     offset.localEulerAngles = new Vector3(60, 0, 0);
             }
 
-            yield return null;
-
-            _servoMixerService = Robot.Instance.ServoMixer;
+            _servoMixerService = Robot.Instance.GetServiceOfType<ServoMixerService>();
         }
 
         private IEnumerator PawnControllerOverride()
         {
             while (true)
             {
-                var camRot = _headCamera.transform.eulerAngles;
+                var camRot = _headCamera.transform.localEulerAngles;
 
-                _servoMixerService.SetServoValueInEuler(ServoIdentifier.HeadYaw, (byte) camRot.y);
-                _servoMixerService.SetServoValueInEuler(ServoIdentifier.HeadPitch, (byte) camRot.x);
-                _servoMixerService.SetServoValueInEuler(ServoIdentifier.HeadRoll, (byte) camRot.z);
+                _servoMixerService.SetServoValueInEuler(ServoIdentifier.HeadYaw, camRot.y);
+                _servoMixerService.SetServoValueInEuler(ServoIdentifier.HeadPitch, camRot.x);
+                _servoMixerService.SetServoValueInEuler(ServoIdentifier.HeadRoll, camRot.z);
 
                 yield return CoroutineFactory.WaitForSeconds(_sendInterval);
             }
@@ -80,6 +81,14 @@ namespace Demonixis.InMoov
             webcamDisplay.SetActive(active, 0);
 
             // TODO enable inverse kinematic
+            var rig = transform.root.GetComponentInChildren<Rig>();
+            if (rig != null)
+                rig.weight = active ? 1 : 0;
+            
+            if (active)
+                StartCoroutine(PawnControllerOverride());
+            else
+                StopAllCoroutines();
         }
     }
 }

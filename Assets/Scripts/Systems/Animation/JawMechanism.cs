@@ -21,16 +21,6 @@ namespace Demonixis.InMoov.Systems
             base.Start();
         }
 
-        private void OnEnable()
-        {
-            InternalInitialize();
-        }
-
-        private void OnDisable()
-        {
-            InternalShutdown();
-        }
-
         public override void Initialize()
         {
             InternalInitialize();
@@ -43,7 +33,7 @@ namespace Demonixis.InMoov.Systems
 
         private void InternalInitialize()
         {
-            if (_initialized || !Running) return;
+            if (_initialized) return;
 
             var robot = Robot.Instance;
             var chatbot = robot.GetServiceOfType<ChatbotService>();
@@ -55,7 +45,7 @@ namespace Demonixis.InMoov.Systems
 
         private void InternalShutdown()
         {
-            if (!_initialized || !Running) return;
+            if (!_initialized) return;
 
             var robot = Robot.Instance;
             var chatbot = robot.GetServiceOfType<ChatbotService>();
@@ -91,12 +81,11 @@ namespace Demonixis.InMoov.Systems
 
             _servoMixerService.SetServoValueInServo(ServoIdentifier.Jaw, data.Neutral);
 
-            while (elapsedTime > time)
+            while (elapsedTime < time)
             {
                 yield return StartCoroutine(OpenJaw(data));
                 yield return StartCoroutine(CloseJaw(data));
                 elapsedTime += Time.deltaTime;
-                yield return null;
             }
         }
 
@@ -112,6 +101,7 @@ namespace Demonixis.InMoov.Systems
             {
                 currentValue = (byte) Mathf.Lerp(currentValue, targetValue, elapsedTime / targetValue);
                 elapsedTime += Time.deltaTime;
+               // Debug.Log($"Opening: {currentValue}");
                 _servoMixerService.SetServoValueInServo(ServoIdentifier.Jaw, currentValue);
                 yield return null;
             }
@@ -131,6 +121,7 @@ namespace Demonixis.InMoov.Systems
             {
                 currentValue = (byte) Mathf.InverseLerp(currentValue, targetValue, elapsedTime / targetValue);
                 elapsedTime += Time.deltaTime;
+              //  Debug.Log($"Closing: {currentValue}");
                 _servoMixerService.SetServoValueInServo(ServoIdentifier.Jaw, currentValue);
                 yield return null;
             }
