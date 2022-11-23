@@ -30,7 +30,7 @@ namespace Demonixis.InMoov.Servos
         public const int PinStart = 2;
         public const int PinEnd = 13;
         public const string SerialFilename = "serial.json";
-        public const int DefaultBaudRate = 11500;
+        public const int DefaultBaudRate = 115200;
         private Dictionary<int, SerialPort> _serialPorts;
         private bool _disposed;
 
@@ -103,6 +103,16 @@ namespace Demonixis.InMoov.Servos
             }
         }
 
+        private void Update()
+        {
+            if (_serialPorts == null) return;
+            foreach (var sp in _serialPorts)
+            {
+                if (sp.Value == null) continue;
+                Debug.Log(sp.Value.ReadExisting());
+            }
+        }
+
         public bool Connect(int cardId, string serialName)
         {
             if (_serialPorts.ContainsKey(cardId)) return false;
@@ -116,6 +126,8 @@ namespace Demonixis.InMoov.Servos
 
                 if (serialPort.IsOpen)
                 {
+                    serialPort.ErrorReceived += (sender, e) => Debug.Log($"Error {e}");
+                    serialPort.DataReceived += (sender, e) =>Debug.Log($"Data Received: {e}");
                     _serialPorts.Add(cardId, serialPort);
                     return true;
                 }

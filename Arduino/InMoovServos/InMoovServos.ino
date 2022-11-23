@@ -1,7 +1,7 @@
 #include <Servo.h>
 
 // You can change that for another board
-const int PinStart = 3;
+const int PinStart = 2;
 const int PinEnd = 13;
 const int ServoCount = PinEnd - PinStart;
 
@@ -33,13 +33,15 @@ void loop()
 {
   // Read data from the Unity App, see the header for the trame
   int dataCount = Serial.available();
+
   if (dataCount == MessageSize)
   {
     int i = 0;
-    if (Serial.available() > 0)
+    while (Serial.available() > 0)
     {
         values[i] = Serial.read();
         servoActivation[i] = Serial.read();
+        i++;
     }
 
     Serial.print("Data Received!");
