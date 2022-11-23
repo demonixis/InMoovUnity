@@ -60,13 +60,13 @@ namespace Demonixis.InMoov
 
         private void Awake()
         {
-			if (_instance != null && _instance != this)
-			{
-				enable = false;
-				Debug.LogWarning($"Double instance detected {name}");
-				return;
-			}
-			
+            if (_instance != null && _instance != this)
+            {
+                enabled = false;
+                Debug.LogWarning($"Double instance detected {name}");
+                return;
+            }
+
             _currentServices = new List<RobotService>();
             _waitingStartCallbacks = new List<Action>();
         }
@@ -75,7 +75,7 @@ namespace Demonixis.InMoov
         {
             // TODO in prevision of deferred load.
             InitializeServices();
-            
+
             Running = true;
             Initialized?.Invoke(this);
 

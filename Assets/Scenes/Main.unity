@@ -956,6 +956,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a5e7a10f2f985143bef61722071dc3c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _autoStart: 0
   _updateInterval: 0.033333335
   _rig: {fileID: 1376369252}
   _head: {fileID: 1376369273}
@@ -991,6 +992,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3fc3faf248ef4d7fa58b27667dd28a42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _autoStart: 0
+  _servoActions: []
+  _frequency: 2
 --- !u!114 &1281199285
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1003,6 +1007,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da1bcfb0aab04064c96ce5a16e50a2c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _autoStart: 0
+  _jawOpenSpeed: 0.5
+  _jawCloseSpeed: 0.35
+  _jawAmplitude: 10
+  _wordsPerMinute: 100
 --- !u!1 &1322867179
 GameObject:
   m_ObjectHideFlags: 0
@@ -1636,7 +1645,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cdfad83f630864f3ab888ed7f0bc1ad5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _logFirstTrame: 1
+  _logFirstTrame: 0
 --- !u!1 &1933734189
 GameObject:
   m_ObjectHideFlags: 0

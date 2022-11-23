@@ -43,7 +43,7 @@ namespace Demonixis.InMoov.Systems
 
         private void InternalInitialize()
         {
-            if (_initialized) return;
+            if (_initialized || !Running) return;
 
             var robot = Robot.Instance;
             var chatbot = robot.GetServiceOfType<ChatbotService>();
@@ -55,7 +55,7 @@ namespace Demonixis.InMoov.Systems
 
         private void InternalShutdown()
         {
-            if (!_initialized) return;
+            if (!_initialized || !Running) return;
 
             var robot = Robot.Instance;
             var chatbot = robot.GetServiceOfType<ChatbotService>();

@@ -21,6 +21,7 @@ int lastServoActivation[ServoCount];
 
 void setup() 
 {
+  Serial.begin(115200);
   for (int i = 0; i < ServoCount; i++)
   {
     servos[i].attach(i + PinStart);

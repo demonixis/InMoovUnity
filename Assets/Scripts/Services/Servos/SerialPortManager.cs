@@ -93,7 +93,14 @@ namespace Demonixis.InMoov.Servos
             var serialPort = _serialPorts[cardId];
             if (serialPort == null) return;
 
-            buffer.Send(serialPort);
+            try
+            {
+                buffer.Send(serialPort);
+            }
+            catch (Exception ex)
+            {
+                Debug.Log(ex.Message);
+            }
         }
 
         public bool Connect(int cardId, string serialName)
