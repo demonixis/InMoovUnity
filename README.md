@@ -33,19 +33,19 @@ Note that every InMoov robot are not the same, here are the specifications of mi
 - Intel RealSense instead of Kinect
 
 That doesn't mean you can't use the new Neck because the servos are exposed, but some things can be missed.
-I don't have the nervo board so I don't know if it'll work or not. If you don't use an Arduino nano, you'll have to change the PinStart/PinEnd values in SerialPortManager. I'll add more control on Arduino card later.
+I don't have the nervo board so I don't know if it'll work or not. If you don't use an Arduino nano, you'll have to change the `PinStart` and `PinEnd` values in `SerialPortManager`. I'll add more control on Arduino card later.
 
 ## Quick start
 First, you've to install the Unity Editor 2022.2.x, it's probably working with lower and higher versions, but I only support latest 2022.x version.
 
-Then flash your Arduino board with the code located into the Arduino folder. If you don't use an Arduino Nano, change the PinStart/End in both the Arduino source file and in the Unity project (SerialPortManager).
+Then flash your Arduino board with the code located into the Arduino folder. If you don't use an Arduino Nano, change the PinStart/End in both the Arduino source file and in the Unity project (`SerialPortManager`).
 Run the Unity Editor, select the MainScene and hit the play button. You can now start the setup of your Arduino Cards.
 
 ### Settings
-There are many settings stored into My Documents/My Games/InMoov in the JSON format. You can use a simple text editor to change what you want.
+There are many settings stored into `My Documents/My Games/InMoov` in the `JSON` format. You can use a simple text editor to change what you want.
 
 ### Troubleshooting
-The first thing to do is to remove the InMoov folder located in My Documents/My Games/. You can also open an issue on the github page.
+The first thing to do is to remove the InMoov folder located in `My Documents/My Games/`. You can also open an issue on the github page.
 
 ## Architecture
 There are two concepts in InMoov Unity, services and systems. You can write your own service or system and override existing ones.
