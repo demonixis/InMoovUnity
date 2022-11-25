@@ -1,3 +1,4 @@
+using System;
 using Demonixis.InMoov.Servos;
 using Demonixis.InMoov.Utils;
 using Demonixis.ToolboxV2.XR;
@@ -65,6 +66,11 @@ namespace Demonixis.InMoov
             }
         }
 
+        private void OnDestroy()
+        {
+            XRManager.TryShutdown();
+        }
+
         public void SetActive(bool active)
         {
             _headCamera.enabled = active;
@@ -74,6 +80,11 @@ namespace Demonixis.InMoov
                 trackedPoseDriver.enabled = active;
 
             if (!_isRobot) return;
+            
+            if (enabled)
+                XRManager.TryInitialize();
+            else
+                XRManager.TryShutdown();
             
             // TODO enable stereo
             // TODO Store preferred camera name for left and right eyes
