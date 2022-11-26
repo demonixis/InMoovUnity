@@ -2,7 +2,11 @@
 
 // You can change that for another board
 const int PinStart = 2;
+#if defined(ARDUINO_AVR_MEGA2560)
+const int PinEnd = 53;
+#else
 const int PinEnd = 13;
+#endif
 const int ServoCount = PinEnd - PinStart;
 const int ServoMin = 0;
 const int ServoNeutral = 90;
@@ -27,7 +31,6 @@ void setup() {
   Serial.begin(DefaultBaudRate);
 
   for (int i = 0; i < ServoCount; i++) {
-    //servos[i].attach(i + PinStart);
     values[i] = ServoNeutral;  // Neutral
     servoActivation[i] = 0;
     lastServoActivation[i] = 0;
