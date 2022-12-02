@@ -1,5 +1,4 @@
 ﻿using System;
-using Demonixis.InMoov.Settings;
 
 namespace  Demonixis.InMoov.Services.Speech
 {
