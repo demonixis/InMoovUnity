@@ -6,6 +6,16 @@ namespace Demonixis.InMoov.Services.Speech
     [RequireComponent(typeof(VoskListener))]
     public class VoskVoiceRecognitionService : VoiceRecognitionService
     {
+        public override RuntimePlatform[] SupportedPlateforms => new[]
+        {
+            RuntimePlatform.LinuxEditor,
+            RuntimePlatform.LinuxPlayer,
+            RuntimePlatform.WindowsEditor,
+            RuntimePlatform.WindowsPlayer,
+            RuntimePlatform.OSXEditor,
+            RuntimePlatform.OSXPlayer
+        };
+
         public override void Initialize()
         {
             base.Initialize();
