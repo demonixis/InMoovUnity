@@ -25,19 +25,38 @@ namespace Demonixis.InMoov.Servos
         None
     }
 
+    public struct SerialPortProxy
+    {
+        public SerialPort Serial;
+        public bool Mega2560;
+
+        public bool IsOpen => Serial?.IsOpen ?? false;
+        public string PortName => Serial?.PortName ?? string.Empty;
+        
+        public void Dispose()
+        {
+            if (Serial == null) return;
+            Serial.Dispose();
+        }
+    }
+
     [Serializable]
     public sealed class SerialPortManager : MonoBehaviour
     {
         public const int PinStart = 2;
-        public const int PinEnd = 13;
+        public const int PinEndNonMega = 13;
+        public const int PinEnd = 53;
         public const string SerialFilename = "serial.json";
         public const int DefaultBaudRate = 115200;
-        private Dictionary<int, SerialPort> _serialPorts;
+        private Dictionary<int, SerialPortProxy> _serialPorts;
         private bool _disposed;
 
 #if UNITY_EDITOR
         [SerializeField] private bool _logFirstTrame = true;
 #endif
+
+        public static int BufferLengthNonMega => PinEndNonMega - PinStart;
+        public static int BufferLength => PinEnd - PinStart;
 
         public bool IsConnected(int cardId)
         {
@@ -46,7 +65,7 @@ namespace Demonixis.InMoov.Servos
 
         public void Initialize()
         {
-            _serialPorts = new Dictionary<int, SerialPort>();
+            _serialPorts = new Dictionary<int, SerialPortProxy>();
 
             var savedData =
                 SaveGame.LoadRawData<SerialData[]>(SaveGame.GetPreferredStorageMode(), SerialFilename, "Config");
@@ -54,7 +73,7 @@ namespace Demonixis.InMoov.Servos
             if (savedData != null && savedData.Length > 0)
             {
                 foreach (var data in savedData)
-                    Connect(data.CardId, data.PortName);
+                    Connect(data.CardId, data.PortName, data.Mega2560);
             }
         }
 
@@ -92,11 +111,11 @@ namespace Demonixis.InMoov.Servos
             if (_serialPorts == null || !_serialPorts.ContainsKey(cardId)) return;
 
             var serialPort = _serialPorts[cardId];
-            if (serialPort == null) return;
+            if (serialPort.Serial == null) return;
 
             try
             {
-                buffer.Send(serialPort);
+                serialPort.Serial.Write(buffer.DataBuffer, 0, serialPort.Mega2560 ? SerialPortManager.BufferLength : SerialPortManager.BufferLengthNonMega);
             }
             catch (Exception ex)
             {
@@ -109,12 +128,12 @@ namespace Demonixis.InMoov.Servos
             if (_serialPorts == null) return;
             foreach (var sp in _serialPorts)
             {
-                if (sp.Value == null) continue;
-                Debug.Log(sp.Value.ReadExisting());
+                if (sp.Value.Serial == null) continue;
+                Debug.Log(sp.Value.Serial.ReadExisting());
             }
         }
 
-        public bool Connect(int cardId, string serialName)
+        public bool Connect(int cardId, string serialName, bool mega2560)
         {
             if (_serialPorts.ContainsKey(cardId)) return false;
 
@@ -129,7 +148,11 @@ namespace Demonixis.InMoov.Servos
                 {
                     serialPort.ErrorReceived += (sender, e) => Debug.Log($"Error {e}");
                     serialPort.DataReceived += (sender, e) => Debug.Log($"Data Received: {e}");
-                    _serialPorts.Add(cardId, serialPort);
+                    _serialPorts.Add(cardId, new SerialPortProxy
+                    {
+                        Serial = serialPort,
+                        Mega2560 = mega2560
+                    });
                     return true;
                 }
             }

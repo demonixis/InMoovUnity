@@ -15,6 +15,7 @@ namespace Demonixis.InMoov.UI
         [SerializeField] private TextMeshProUGUI _status;
         [SerializeField] private TMP_Dropdown _portList;
         [SerializeField] private TMP_Dropdown _cardList;
+        [SerializeField] private TMP_Dropdown _cardType;
         [SerializeField] private Button _connectButton;
         [SerializeField] private Button _disconnectedButton;
 
@@ -30,6 +31,11 @@ namespace Demonixis.InMoov.UI
             _cardList.SetValueWithoutNotify(0);
             _cardList.RefreshShownValue();
             _cardList.onValueChanged.AddListener(i => RefreshCardStatus());
+
+            _cardType.SetValueWithoutNotify(0);
+            _cardType.options.Clear();
+            _cardType.options.Add(new TMP_Dropdown.OptionData("Arduino Uno/Nano"));
+            _cardType.options.Add(new TMP_Dropdown.OptionData("Arduino Mega 2560"));
 
             RefreshPorts();
             RefreshCardStatus();
@@ -97,7 +103,7 @@ namespace Demonixis.InMoov.UI
             var portName = _portList.options[_portList.value].text;
             var cardId = _cardList.value;
 
-            _serialPort.Connect(cardId, portName);
+            _serialPort.Connect(cardId, portName, _cardType.value == 1);
 
             StartCoroutine(RefreshCardStatusCoroutine());
         }

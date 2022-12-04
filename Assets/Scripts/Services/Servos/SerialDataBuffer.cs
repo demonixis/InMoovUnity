@@ -7,7 +7,7 @@ namespace Demonixis.InMoov.Servos
     [Serializable]
     public sealed class SerialDataBuffer
     {
-        private static readonly int DataBufferSize = (SerialPortManager.PinEnd - SerialPortManager.PinStart) * 2;
+        private static readonly int DataBufferSize = SerialPortManager.BufferLength * 2;
 
         public byte[] DataBuffer { get; private set; }
 
@@ -29,9 +29,9 @@ namespace Demonixis.InMoov.Servos
             DataBuffer[index + 1] = enabled;
         }
 
-        public void Send(SerialPort serialPort)
+        public void Send(SerialPort serialPort, bool isMega)
         {
-            serialPort.Write(DataBuffer, 0, DataBuffer.Length);
+            serialPort.Write(DataBuffer, 0, isMega ? SerialPortManager.BufferLength : SerialPortManager.BufferLengthNonMega);
         }
 
         public void ClearData()
