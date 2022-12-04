@@ -11,6 +11,7 @@ namespace Demonixis.InMoov.Servos
     {
         public int CardId;
         public string PortName;
+        public bool Mega2560;
     }
 
     public enum ArduinoIdentifiers
