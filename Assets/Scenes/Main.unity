@@ -1819,7 +1819,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cdfad83f630864f3ab888ed7f0bc1ad5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _logFirstTrame: 1
+  _logFirstTrame: 0
 --- !u!1 &1933734189
 GameObject:
   m_ObjectHideFlags: 0

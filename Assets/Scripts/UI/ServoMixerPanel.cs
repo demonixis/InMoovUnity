@@ -29,6 +29,8 @@ namespace Demonixis.InMoov.UI
         [SerializeField] private Slider _servoMax;
         [SerializeField] private Slider _servoSpeed;
         [SerializeField] private Slider _servoValue;
+        [SerializeField] private TMP_Dropdown _mixedServo;
+        [SerializeField] private TMP_Dropdown _mixages;
 
         private void Start()
         {
@@ -40,6 +42,8 @@ namespace Demonixis.InMoov.UI
 
             var names = Enum.GetNames(typeof(ServoIdentifier));
 
+            _mixedServo.options.Clear();
+
             for (var i = 0; i < names.Length; i++)
             {
                 var item = Instantiate(_servoItemPrefab, _servoList);
@@ -48,7 +52,14 @@ namespace Demonixis.InMoov.UI
                 var servoItem = item.AddComponent<ServoMixerItem>();
                 servoItem.Setup((ServoIdentifier)i);
                 servoItem.Clicked += OnServoClicked;
+
+                _mixedServo.options.Add(new TMP_Dropdown.OptionData(names[i]));
             }
+
+            names = Enum.GetNames(typeof(ServoMixageType));
+            _mixages.options.Clear();
+            foreach (var item in names)
+                _mixages.options.Add(new TMP_Dropdown.OptionData(item));
 
             names = Enum.GetNames(typeof(ArduinoIdentifiers));
             _servoCardId.options.Clear();
@@ -60,7 +71,23 @@ namespace Demonixis.InMoov.UI
                 _servoPinId.options.Add(new TMP_Dropdown.OptionData($"Pin #{i}"));
 
             // Bind events
-            _servoPinId.value = _currentData.PinId;
+            _mixedServo.SetValueWithoutNotify((int)_currentData.MixedServo);
+            _mixedServo.RefreshShownValue();
+            _mixedServo.onValueChanged.AddListener(i =>
+            {
+                _currentData.MixedServo = (ServoIdentifier)i;
+                UpdateDataOnArduino();
+            });
+
+            _mixages.SetValueWithoutNotify((int)_currentData.MixageType);
+            _mixages.RefreshShownValue();
+            _mixages.onValueChanged.AddListener(i =>
+            {
+                _currentData.MixageType = (ServoMixageType)i;
+                UpdateDataOnArduino();
+            });
+
+            _servoPinId.SetValueWithoutNotify((int)_currentData.PinId);
             _servoPinId.RefreshShownValue();
             _servoPinId.onValueChanged.AddListener(i =>
             {
@@ -68,7 +95,7 @@ namespace Demonixis.InMoov.UI
                 UpdateDataOnArduino();
             });
 
-            _servoCardId.value = _currentData.CardId;
+            _servoCardId.SetValueWithoutNotify((int)_currentData.CardId);
             _servoCardId.RefreshShownValue();
             _servoCardId.onValueChanged.AddListener(i =>
             {
@@ -76,7 +103,7 @@ namespace Demonixis.InMoov.UI
                 UpdateDataOnArduino();
             });
 
-            _servoEnabled.isOn = _currentData.Enabled > 0;
+            _servoEnabled.SetIsOnWithoutNotify(_currentData.Enabled > 0);
             _servoEnabled.onValueChanged.AddListener(b =>
             {
                 _currentData.Enabled = (byte)(b ? 1 : 0);
@@ -125,8 +152,6 @@ namespace Demonixis.InMoov.UI
         private void UpdateDataOnArduino()
         {
             _servoMixerService.SetServoData(_currentServo, ref _currentData);
-            Debug.Log("Updating");
-            Debug.Log(_currentData);
         }
 
         private void OnServoClicked(ServoIdentifier id)
@@ -139,9 +164,6 @@ namespace Demonixis.InMoov.UI
         {
             _currentServo = id;
             _currentData = data;
-
-            Debug.Log($"Display Data");
-            Debug.Log(data);
 
             _servoName.text = $"{id}";
             _servoCardId.SetValueWithoutNotify(data.CardId);
