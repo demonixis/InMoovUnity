@@ -26,6 +26,11 @@ namespace Demonixis.InMoov.Servos
         public ServoIdentifier MixedServo;
         public ServoMixageType MixageType;
 
+        public override string ToString()
+        {
+            return $"{Id} - Min: {Min} / Max: {Max} / Neutral: {Neutral} / Invert: {Inverse} / Card: {CardId} / Pin: {PinId}";
+        }
+
         public static ServoData New(ServoIdentifier servoId)
         {
             return new ServoData

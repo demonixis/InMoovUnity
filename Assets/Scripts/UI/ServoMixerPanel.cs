@@ -118,13 +118,15 @@ namespace Demonixis.InMoov.UI
         {
             slider.minValue = min;
             slider.maxValue = max;
-            slider.value = value;
-            _servoValue.onValueChanged.AddListener(onValueChanged);
+            slider.SetValueWithoutNotify(value);
+            slider.onValueChanged.AddListener(onValueChanged);
         }
 
         private void UpdateDataOnArduino()
         {
             _servoMixerService.SetServoData(_currentServo, ref _currentData);
+            Debug.Log("Updating");
+            Debug.Log(_currentData);
         }
 
         private void OnServoClicked(ServoIdentifier id)
@@ -137,6 +139,9 @@ namespace Demonixis.InMoov.UI
         {
             _currentServo = id;
             _currentData = data;
+
+            Debug.Log($"Display Data");
+            Debug.Log(data);
 
             _servoName.text = $"{id}";
             _servoCardId.SetValueWithoutNotify(data.CardId);
