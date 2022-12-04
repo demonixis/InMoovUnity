@@ -1,5 +1,11 @@
-﻿using UnityEngine;
+﻿#if UNITY_STANDALONE_WIN || UNITY_EDITOR_WIN
+#define MS_SPEECH_SYNTHESIS
+#endif
+
+using UnityEngine;
+#if MS_SPEECH_SYNTHESIS
 using UnityEngine.Windows.Speech;
+#endif
 
 namespace Demonixis.InMoov.Services.Speech
 {
@@ -11,12 +17,14 @@ namespace Demonixis.InMoov.Services.Speech
             RuntimePlatform.WindowsPlayer,
         };
 
+#if MS_SPEECH_SYNTHESIS
         private DictationRecognizer _dictationRecognizer;
-        private KeywordRecognizer _keywordRecognizer;
+#endif
         private bool _paused;
 
         public override void Initialize()
         {
+#if MS_SPEECH_SYNTHESIS
             _dictationRecognizer = new DictationRecognizer();
             _dictationRecognizer.DictationComplete += cause => Debug.Log($"[DictationComplete] {cause}");
             _dictationRecognizer.DictationError += (error, hresult) => Debug.Log($"[DictationError] {error}");
@@ -28,17 +36,8 @@ namespace Demonixis.InMoov.Services.Speech
                 NotifyPhraseDetected(text);
             };
             _dictationRecognizer.Start();
-
-            /*var keywords = new[] {""};
-            _keywordRecognizer = new KeywordRecognizer(keywords);
-            _keywordRecognizer.OnPhraseRecognized += KeywordRecognizerOnOnPhraseRecognized;*/
-
+#endif
             base.Initialize();
-        }
-
-        private void KeywordRecognizerOnOnPhraseRecognized(PhraseRecognizedEventArgs args)
-        {
-            throw new System.NotImplementedException();
         }
 
         public override void SetPaused(bool paused)
@@ -48,8 +47,9 @@ namespace Demonixis.InMoov.Services.Speech
 
         public override void Shutdown()
         {
+#if MS_SPEECH_SYNTHESIS
             _dictationRecognizer.Dispose();
-            //_keywordRecognizer.Dispose();
+#endif
             base.Shutdown();
         }
     }
