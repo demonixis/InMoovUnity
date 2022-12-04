@@ -60,7 +60,7 @@ namespace Demonixis.InMoov
 
                 _servoMixerService.SetServoValueInEuler(ServoIdentifier.HeadYaw, camRot.y);
                 _servoMixerService.SetServoValueInEuler(ServoIdentifier.HeadPitch, camRot.x);
-                _servoMixerService.SetServoValueInEuler(ServoIdentifier.HeadRoll, camRot.z);
+                _servoMixerService.SetServoValueInEuler(ServoIdentifier.HeadRollPrimary, camRot.z);
 
                 yield return CoroutineFactory.WaitForSeconds(_sendInterval);
             }

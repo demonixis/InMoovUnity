@@ -2,10 +2,17 @@
 
 namespace Demonixis.InMoov.Servos
 {
+    public enum ServoMixageType
+    {
+        None = 0,
+        SameValue,
+        InverseValue,
+    }
+
     [Serializable]
     public struct ServoData
     {
-        public string Id;
+        public ServoIdentifier Id;
         public bool Inverse;
         public byte Min;
         public byte Neutral;
@@ -16,8 +23,10 @@ namespace Demonixis.InMoov.Servos
         public byte Enabled;
         public byte Value;
         public byte ScaleValueTo180;
+        public ServoIdentifier MixedServo;
+        public ServoMixageType MixageType;
 
-        public static ServoData New(string servoId)
+        public static ServoData New(ServoIdentifier servoId)
         {
             return new ServoData
             {
@@ -39,18 +48,22 @@ namespace Demonixis.InMoov.Servos
     [Serializable]
     public enum ServoIdentifier
     {
+        None,
+
         // Head
         EyeX = 0,
         EyeY,
         Jaw,
         HeadYaw,
         HeadPitch,
-        HeadRoll,
+        HeadRollPrimary,
+        HeadRollSecondary,
 
         // Torso + Stomach
         PelvisYaw,
         PelvisPitch,
-        PelvisRoll,
+        PelvisRollPrimary,
+        PelvisRollSecondary,
 
         // Left Shoulder + Arm
         LeftShoulderYaw,
@@ -58,14 +71,14 @@ namespace Demonixis.InMoov.Servos
         LeftShoulderRoll,
         LeftArm,
         LeftWrist,
-        
+
         // Left Hand
         LeftFingerThumb,
         LeftFingerIndex,
         LeftFingerMiddle,
         LeftFingerRing,
         LeftFingerPinky,
-        
+
         // Right Shoulder + Arm
         RightShoulderYaw,
         RightShoulderPitch,
@@ -78,6 +91,6 @@ namespace Demonixis.InMoov.Servos
         RightFingerIndex,
         RightFingerMiddle,
         RightFingerRing,
-        RightFingerPinky,
+        RightFingerPinky
     }
 }

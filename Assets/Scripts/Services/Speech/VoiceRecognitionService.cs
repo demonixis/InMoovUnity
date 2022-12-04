@@ -6,7 +6,6 @@ namespace  Demonixis.InMoov.Services.Speech
     {
         public override RobotServices Type => RobotServices.Ears;
 
-        public event Func<RobotVoiceKeywords, string, bool> SystemKeywordDetected; 
         public event Action<string> PhraseDetected;
         
         public override void SetPaused(bool paused) { }

@@ -35,8 +35,11 @@ namespace Demonixis.InMoov.Settings
         public byte RightEyeCameraIndex;
         public float VRStereoOffset;
 
-        public bool IsValid() => !string.IsNullOrEmpty(Chatbot) && !string.IsNullOrEmpty(SpeechSynthesis) &&
-                                 !string.IsNullOrEmpty(VoiceRecognition);
+        public bool IsValid() =>
+            !string.IsNullOrEmpty(Chatbot) &&
+            !string.IsNullOrEmpty(SpeechSynthesis) &&
+            !string.IsNullOrEmpty(VoiceRecognition) && 
+            !string.IsNullOrEmpty(ServoMixer);
 
         public static ServiceList New()
         {
@@ -44,12 +47,11 @@ namespace Demonixis.InMoov.Settings
             {
                 // Services
                 Chatbot = nameof(AIMLNetService),
+                VoiceRecognition = nameof(VoskVoiceRecognitionService),
 #if UNITY_STANDALONE_WIN
                 SpeechSynthesis = nameof(WindowsSpeechSynthesis),
-                VoiceRecognition = nameof(WindowsSpeechRecognition),
 #else
                 SpeechSynthesis = nameof(SpeechSynthesisService),
-                VoiceRecognition = nameof(VoiceRecognitionService),
 #endif
                 Navigation = nameof(NavigationService),
                 EyeCamera = nameof(EyeCamera),

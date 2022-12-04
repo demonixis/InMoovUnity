@@ -32,7 +32,7 @@ namespace Demonixis.InMoov.UI
 
         private void Start()
         {
-            _currentData = ServoData.New(string.Empty);
+            _currentData = ServoData.New(ServoIdentifier.None);
             _servoMixerService = FindObjectOfType<ServoMixerService>();
 
             foreach (Transform child in _servoList)

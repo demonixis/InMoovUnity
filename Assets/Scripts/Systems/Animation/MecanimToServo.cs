@@ -69,13 +69,13 @@ namespace Demonixis.InMoov.Systems
                 // Neck
                 var neck = _neck.rotation.eulerAngles;
                 _servoMixerService.SetServoValueInEuler(ServoIdentifier.HeadPitch, neck.x);
-                _servoMixerService.SetServoValueInEuler(ServoIdentifier.HeadRoll, neck.z);
+                _servoMixerService.SetServoValueInEuler(ServoIdentifier.HeadRollPrimary, neck.z);
 
                 // Pelvis
                 var hips = _hip.rotation.eulerAngles;
                 _servoMixerService.SetServoValueInEuler(ServoIdentifier.PelvisYaw, hips.y);
                 _servoMixerService.SetServoValueInEuler(ServoIdentifier.PelvisPitch, hips.x);
-                _servoMixerService.SetServoValueInEuler(ServoIdentifier.PelvisRoll, hips.z);
+                _servoMixerService.SetServoValueInEuler(ServoIdentifier.PelvisRollPrimary, hips.z);
 
                 // Left Side
                 var upperArm = _leftUpperArm.eulerAngles;

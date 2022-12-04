@@ -15,6 +15,7 @@ namespace Demonixis.InMoov.Servos
 
         private SerialPortManager _serialPortManager;
         private ServoData[] _servoData;
+        private List<ServoMixage> _servoMix;
         private SerialDataBuffer[] _serialDataBuffer;
         private List<int> _lockedServos;
         private bool _running;
@@ -34,7 +35,7 @@ namespace Demonixis.InMoov.Servos
 
             _servoData = new ServoData[servoCount];
             for (var i = 0; i < servoCount; i++)
-                _servoData[i] = ServoData.New(names[i]);
+                _servoData[i] = ServoData.New((ServoIdentifier)i);
 
             // Load saved data and apply them
             var servoMixerData =
@@ -83,7 +84,17 @@ namespace Demonixis.InMoov.Servos
                     var cardIndex = (int)data.CardId;
 
                     if (cardIndex >= 0)
+                    {
+                        if (data.MixageType != ServoMixageType.None)
+                        {
+                            if (data.MixageType == ServoMixageType.SameValue)
+                                SetServoValueInServo(data.MixedServo, data.Value);
+                            else if (data.MixageType == ServoMixageType.InverseValue)
+                                SetServoValueInServo(data.MixedServo, (byte)(180 - data.Value));
+                        }
+
                         _serialDataBuffer[cardIndex].SetValue(data.PinId, data.Value, data.Enabled);
+                    }
                 }
 
                 // Send values.
@@ -109,12 +120,12 @@ namespace Demonixis.InMoov.Servos
             var value = ServoConverter.UnityRotationToServo(rawValue, data.ScaleValueTo180 > 0);
             
             // Apply servo data
-            /*value = (byte)Mathf.Max(data.Min, value);
-            value = (byte)Mathf.Min(data.Max, value);
+            //value = (byte)Mathf.Max(data.Min, value);
+            //value = (byte)Mathf.Min(data.Max, value);
 
             // Reverse
             if (data.Inverse)
-                value = (byte)(180 - value);*/
+                value = (byte)(180 - value);
 
             data.Value = value;
         }
@@ -124,12 +135,12 @@ namespace Demonixis.InMoov.Servos
             ref var data = ref _servoData[(int)servoId];
             
             // Apply servo data
-            /*value = (byte)Mathf.Max(data.Min, value);
-            value = (byte)Mathf.Min(data.Max, value);
+            //value = (byte)Mathf.Max(data.Min, value);
+            //value = (byte)Mathf.Min(data.Max, value);
 
             // Reverse
             if (data.Inverse)
-                value = (byte)(180 - value);*/
+                value = (byte)(180 - value);
             
             data.Value = value;
         }
