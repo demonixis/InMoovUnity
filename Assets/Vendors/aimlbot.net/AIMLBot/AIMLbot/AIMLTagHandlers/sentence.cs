@@ -1,7 +1,7 @@
 using System;
-using System.Xml;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Xml;
 
 namespace AIMLbot.AIMLTagHandlers
 {
@@ -38,7 +38,7 @@ namespace AIMLbot.AIMLTagHandlers
 
         protected override string ProcessChange()
         {
-            if(this.templateNode.Name.ToLower()=="sentence")
+            if (this.templateNode.Name.ToLower() == "sentence")
             {
                 if (this.templateNode.InnerText.Length > 0)
                 {

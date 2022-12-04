@@ -1,6 +1,6 @@
-using System.Collections;
 using Demonixis.InMoov.Chatbots;
 using Demonixis.InMoov.Servos;
+using System.Collections;
 using UnityEngine;
 
 namespace Demonixis.InMoov.Systems
@@ -65,10 +65,10 @@ namespace Demonixis.InMoov.Systems
         {
             if (oldService is not ChatbotService) return;
 
-            var oldChatbot = (ChatbotService) oldService;
+            var oldChatbot = (ChatbotService)oldService;
             oldChatbot.ResponseReady -= OnChatBotResponse;
 
-            var newChatbot = (ChatbotService) newService;
+            var newChatbot = (ChatbotService)newService;
             newChatbot.ResponseReady += OnChatBotResponse;
         }
 
@@ -93,15 +93,15 @@ namespace Demonixis.InMoov.Systems
         {
             var elapsedTime = 0.0f;
             var currentValue = data.Neutral;
-            var targetValue = (byte) (currentValue + _jawAmplitude);
+            var targetValue = (byte)(currentValue + _jawAmplitude);
 
             _servoMixerService.SetServoValueInServo(ServoIdentifier.Jaw, currentValue);
 
             while (elapsedTime < _jawOpenSpeed)
             {
-                currentValue = (byte) Mathf.Lerp(currentValue, targetValue, elapsedTime / targetValue);
+                currentValue = (byte)Mathf.Lerp(currentValue, targetValue, elapsedTime / targetValue);
                 elapsedTime += Time.deltaTime;
-               // Debug.Log($"Opening: {currentValue}");
+                // Debug.Log($"Opening: {currentValue}");
                 _servoMixerService.SetServoValueInServo(ServoIdentifier.Jaw, currentValue);
                 yield return null;
             }
@@ -112,16 +112,16 @@ namespace Demonixis.InMoov.Systems
         private IEnumerator CloseJaw(ServoData data)
         {
             var elapsedTime = 0.0f;
-            var currentValue = (byte) (data.Neutral + _jawAmplitude);
+            var currentValue = (byte)(data.Neutral + _jawAmplitude);
             var targetValue = data.Neutral;
 
             _servoMixerService.SetServoValueInServo(ServoIdentifier.Jaw, currentValue);
 
             while (elapsedTime < _jawCloseSpeed)
             {
-                currentValue = (byte) Mathf.InverseLerp(currentValue, targetValue, elapsedTime / targetValue);
+                currentValue = (byte)Mathf.InverseLerp(currentValue, targetValue, elapsedTime / targetValue);
                 elapsedTime += Time.deltaTime;
-              //  Debug.Log($"Closing: {currentValue}");
+                //  Debug.Log($"Closing: {currentValue}");
                 _servoMixerService.SetServoValueInServo(ServoIdentifier.Jaw, currentValue);
                 yield return null;
             }

@@ -14,7 +14,7 @@ namespace Demonixis.InMoov
         Servo,
         Other
     }
-    
+
     /// <summary>
     /// Base skeleton of a robot service.
     /// A service must have a type. By default it is supported on all platforms.
@@ -40,7 +40,7 @@ namespace Demonixis.InMoov
         {
             Initialized = true;
         }
-        
+
         public abstract void SetPaused(bool paused);
 
         public virtual void Shutdown()
@@ -51,7 +51,7 @@ namespace Demonixis.InMoov
         public bool IsSupported()
         {
             var plateform = Application.platform;
-            
+
             foreach (var platform in SupportedPlateforms)
             {
                 if (platform == plateform) return true;

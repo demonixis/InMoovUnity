@@ -1,15 +1,13 @@
-using System;
-using System.Text;
 using System.Xml;
 
-namespace AIMLbot.Utils 
+namespace AIMLbot.Utils
 {
     /// <summary>
     /// The template for all classes that handle the AIML tags found within template nodes of a
     /// category.
     /// </summary>
     abstract public class AIMLTagHandler : TextTransformer
-    { 
+    {
         /// <summary>
         /// Ctor
         /// </summary>
@@ -19,12 +17,12 @@ namespace AIMLbot.Utils
         /// <param name="request">The request itself</param>
         /// <param name="result">The result to be passed back to the user</param>
         /// <param name="templateNode">The node to be processed</param>
-        public AIMLTagHandler   (   AIMLbot.Bot bot, 
-                                    AIMLbot.User user, 
+        public AIMLTagHandler(AIMLbot.Bot bot,
+                                    AIMLbot.User user,
                                     AIMLbot.Utils.SubQuery query,
-                                    AIMLbot.Request request, 
-                                    AIMLbot.Result result, 
-                                    XmlNode templateNode) :base(bot,templateNode.OuterXml)
+                                    AIMLbot.Request request,
+                                    AIMLbot.Result result,
+                                    XmlNode templateNode) : base(bot, templateNode.OuterXml)
         {
             this.user = user;
             this.query = query;

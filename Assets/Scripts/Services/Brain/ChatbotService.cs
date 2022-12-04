@@ -9,7 +9,7 @@ namespace Demonixis.InMoov.Chatbots
         public event Action<string> ResponseReady;
 
         public abstract void SetCulture(string culture);
-        
+
         public abstract void SubmitResponse(string inputSpeech);
 
         public void NotifyResponseReady(string response)

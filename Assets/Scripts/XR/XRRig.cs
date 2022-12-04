@@ -1,4 +1,3 @@
-using System;
 using Demonixis.InMoov.Servos;
 using Demonixis.InMoov.Utils;
 using Demonixis.ToolboxV2.XR;
@@ -19,10 +18,10 @@ namespace Demonixis.InMoov
         [SerializeField] private Camera _rightCamera;
         [SerializeField] private AudioListener _audioListener;
         [SerializeField] private Transform[] _handOffsets;
-        
+
         [Header("Replication")]
         [SerializeField] private float _sendInterval = 1.0f / 60.0f;
-        
+
         [Header("Misc")]
         [SerializeField] private bool _startActive;
         [SerializeField] private bool _isRobot;
@@ -39,7 +38,7 @@ namespace Demonixis.InMoov
         private IEnumerator Start()
         {
             yield return null;
-         
+
             XRManager.SetTrackingOriginMode(UnityEngine.XR.TrackingOriginModeFlags.Device, true);
             SetActive(_startActive);
 
@@ -80,12 +79,12 @@ namespace Demonixis.InMoov
                 trackedPoseDriver.enabled = active;
 
             if (!_isRobot) return;
-            
+
             if (enabled)
                 XRManager.TryInitialize();
             else
                 XRManager.TryShutdown();
-            
+
             // TODO enable stereo
             // TODO Store preferred camera name for left and right eyes
             var webcamDisplay = GetComponentInChildren<WebCamDisplayer>();
@@ -95,7 +94,7 @@ namespace Demonixis.InMoov
             var rig = transform.root.GetComponentInChildren<Rig>();
             if (rig != null)
                 rig.weight = active ? 1 : 0;
-            
+
             if (active)
                 StartCoroutine(PawnControllerOverride());
             else

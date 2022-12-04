@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Reflection;
 
 namespace AIMLbot.Utils
@@ -34,7 +33,7 @@ namespace AIMLbot.Utils
         {
             if (Assemblies.ContainsKey(this.AssemblyName))
             {
-                Assembly tagDLL = (Assembly)Assemblies[this.AssemblyName]; 
+                Assembly tagDLL = (Assembly)Assemblies[this.AssemblyName];
                 Type[] tagDLLTypes = tagDLL.GetTypes();
                 return (AIMLTagHandler)tagDLL.CreateInstance(this.ClassName);
             }

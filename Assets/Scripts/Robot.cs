@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using Demonixis.InMoov.Chatbots;
+﻿using Demonixis.InMoov.Chatbots;
 using Demonixis.InMoov.Services.Speech;
 using Demonixis.InMoov.Servos;
 using Demonixis.InMoov.Settings;
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Demonixis.InMoov

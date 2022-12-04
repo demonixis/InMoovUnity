@@ -1,7 +1,7 @@
-using System;
-using System.IO;
 using AIMLbot;
 using Demonixis.InMoov.Settings;
+using System;
+using System.IO;
 using UnityEngine;
 
 namespace Demonixis.InMoov.Chatbots

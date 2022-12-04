@@ -10,7 +10,7 @@
             if (rotation > 180)
                 rotation = 360 - rotation;
 
-            return (byte) rotation;
+            return (byte)rotation;
         }
     }
 }

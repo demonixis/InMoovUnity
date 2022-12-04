@@ -13,12 +13,12 @@ namespace Demonixis.InMoov.UI
             var languages = Enum.GetNames(typeof(SystemLanguage));
 
             _languagesList.options.Clear();
-            
+
             foreach (var lang in languages)
             {
                 _languagesList.options.Add(new TMP_Dropdown.OptionData(lang));
             }
-            
+
             _languagesList.SetValueWithoutNotify((int)SystemLanguage.English);
             _languagesList.RefreshShownValue();
         }

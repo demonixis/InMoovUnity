@@ -1,5 +1,4 @@
 using System;
-using System.Text;
 using System.Xml;
 
 namespace AIMLbot.AIMLTagHandlers
@@ -77,7 +76,7 @@ namespace AIMLbot.AIMLTagHandlers
                 }
                 else
                 {
-                    this.bot.writeToLog("A star tag tried to reference an empty InputStar collection when processing the input: "+this.request.rawInput);
+                    this.bot.writeToLog("A star tag tried to reference an empty InputStar collection when processing the input: " + this.request.rawInput);
                 }
             }
             return string.Empty;

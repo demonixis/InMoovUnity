@@ -1,6 +1,5 @@
 ﻿using AIMLbot;
 using System;
-using System.IO;
 using UnityEngine;
 
 

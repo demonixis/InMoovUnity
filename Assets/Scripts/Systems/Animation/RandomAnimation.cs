@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections;
-using Demonixis.InMoov.Servos;
+﻿using Demonixis.InMoov.Servos;
 using Demonixis.InMoov.Utils;
+using System;
+using System.Collections;
 using UnityEngine;
 using UnityRandom = UnityEngine.Random;
 
@@ -34,7 +34,7 @@ namespace Demonixis.InMoov.Systems
                 get => _index;
             }
 
-            public byte NextValue => (byte) (Sequence != null ? Sequence[Cursor] : 0);
+            public byte NextValue => (byte)(Sequence != null ? Sequence[Cursor] : 0);
         }
 
         private ServoMixerService _servoMixerService;
@@ -47,7 +47,7 @@ namespace Demonixis.InMoov.Systems
             _servoMixerService = Robot.Instance.GetServiceOfType<ServoMixerService>();
             base.Start();
         }
-        
+
         public override void Initialize()
         {
             StartCoroutine(Loop());
@@ -67,7 +67,7 @@ namespace Demonixis.InMoov.Systems
                 foreach (var action in _servoActions)
                 {
                     var value = action.RandomRange
-                        ? (byte) UnityRandom.Range(action.Min, action.Max)
+                        ? (byte)UnityRandom.Range(action.Min, action.Max)
                         : action.NextValue;
 
                     _servoMixerService.SetServoValueInServo(action.Servo, value);

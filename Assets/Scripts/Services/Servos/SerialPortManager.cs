@@ -1,7 +1,7 @@
+using Demonixis.InMoov.Settings;
 using System;
 using System.Collections.Generic;
 using System.IO.Ports;
-using Demonixis.InMoov.Settings;
 using UnityEngine;
 
 namespace Demonixis.InMoov.Servos
@@ -127,7 +127,7 @@ namespace Demonixis.InMoov.Servos
                 if (serialPort.IsOpen)
                 {
                     serialPort.ErrorReceived += (sender, e) => Debug.Log($"Error {e}");
-                    serialPort.DataReceived += (sender, e) =>Debug.Log($"Data Received: {e}");
+                    serialPort.DataReceived += (sender, e) => Debug.Log($"Data Received: {e}");
                     _serialPorts.Add(cardId, serialPort);
                     return true;
                 }

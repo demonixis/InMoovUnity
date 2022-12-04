@@ -1,6 +1,4 @@
-using System;
 using System.Xml;
-using System.Text;
 
 namespace AIMLbot.AIMLTagHandlers
 {
@@ -40,7 +38,7 @@ namespace AIMLbot.AIMLTagHandlers
                 star recursiveStar = new star(this.bot, this.user, this.query, this.request, this.result, starNode);
                 string starContent = recursiveStar.Transform();
 
-                XmlNode sraiNode = AIMLbot.Utils.AIMLTagHandler.getNode("<srai>"+starContent+"</srai>");
+                XmlNode sraiNode = AIMLbot.Utils.AIMLTagHandler.getNode("<srai>" + starContent + "</srai>");
                 srai sraiHandler = new srai(this.bot, this.user, this.query, this.request, this.result, sraiNode);
                 return sraiHandler.Transform();
             }

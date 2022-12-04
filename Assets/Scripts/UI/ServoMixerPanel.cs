@@ -1,5 +1,5 @@
-﻿using System;
-using Demonixis.InMoov.Servos;
+﻿using Demonixis.InMoov.Servos;
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
@@ -46,7 +46,7 @@ namespace Demonixis.InMoov.UI
                 ResetTransform(item.transform);
 
                 var servoItem = item.AddComponent<ServoMixerItem>();
-                servoItem.Setup((ServoIdentifier) i);
+                servoItem.Setup((ServoIdentifier)i);
                 servoItem.Clicked += OnServoClicked;
             }
 
@@ -151,7 +151,7 @@ namespace Demonixis.InMoov.UI
             var pinValue = FindPinValueFromPinId(data.PinId);
             _servoPinId.SetValueWithoutNotify(pinValue);
             _servoPinId.RefreshShownValue();
-            
+
             _servoCardId.SetValueWithoutNotify(data.CardId);
             _servoCardId.RefreshShownValue();
         }

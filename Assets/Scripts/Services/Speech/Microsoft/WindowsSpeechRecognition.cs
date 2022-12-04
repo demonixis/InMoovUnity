@@ -1,20 +1,20 @@
 ﻿using UnityEngine;
 using UnityEngine.Windows.Speech;
 
-namespace  Demonixis.InMoov.Services.Speech
+namespace Demonixis.InMoov.Services.Speech
 {
     public class WindowsSpeechRecognition : VoiceRecognitionService
     {
-        public override RuntimePlatform[] SupportedPlateforms => new []
+        public override RuntimePlatform[] SupportedPlateforms => new[]
         {
             RuntimePlatform.WindowsEditor,
             RuntimePlatform.WindowsPlayer,
         };
-        
+
         private DictationRecognizer _dictationRecognizer;
         private KeywordRecognizer _keywordRecognizer;
         private bool _paused;
-        
+
         public override void Initialize()
         {
             _dictationRecognizer = new DictationRecognizer();
@@ -32,7 +32,7 @@ namespace  Demonixis.InMoov.Services.Speech
             /*var keywords = new[] {""};
             _keywordRecognizer = new KeywordRecognizer(keywords);
             _keywordRecognizer.OnPhraseRecognized += KeywordRecognizerOnOnPhraseRecognized;*/
-            
+
             base.Initialize();
         }
 

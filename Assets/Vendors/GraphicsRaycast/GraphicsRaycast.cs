@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.Rendering;
+﻿using UnityEngine;
 
 public static class GraphicsRaycast
 {
@@ -152,8 +149,8 @@ public static class GraphicsRaycast
         UnityEditor.Handles.DrawAAPolyLine(Texture2D.whiteTexture, 3 * size, new Vector3[] { hit.point, hit.point + (hit.normal * 0.66f * size) });
         UnityEditor.Handles.DrawSolidDisc(hit.point, hit.normal, 0.05f * size);
 
-        if(hit.normal != Vector3.zero)
-        UnityEditor.Handles.ArrowHandleCap(0, hit.point, Quaternion.LookRotation(hit.normal, Vector3.up), 0.66f * size, EventType.Repaint);
+        if (hit.normal != Vector3.zero)
+            UnityEditor.Handles.ArrowHandleCap(0, hit.point, Quaternion.LookRotation(hit.normal, Vector3.up), 0.66f * size, EventType.Repaint);
 #endif
     }
 }

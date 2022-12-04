@@ -1,9 +1,9 @@
 ﻿#define USE_MYGAMES_FOLDER
 #if STEAMWORKS_ENABLED
 #endif
+using Newtonsoft.Json;
 using System;
 using System.IO;
-using Newtonsoft.Json;
 using UnityEngine;
 #if UNITY_ANDROID
 using UnityEngine.Android;

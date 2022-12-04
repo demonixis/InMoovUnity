@@ -1,7 +1,7 @@
-﻿using System;
+﻿using Demonixis.InMoov.Servos;
+using System;
 using System.Collections;
 using System.IO.Ports;
-using Demonixis.InMoov.Servos;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -17,7 +17,7 @@ namespace Demonixis.InMoov.UI
         [SerializeField] private TMP_Dropdown _cardList;
         [SerializeField] private Button _connectButton;
         [SerializeField] private Button _disconnectedButton;
-        
+
         private void Start()
         {
             _serialPort = FindObjectOfType<SerialPortManager>();
@@ -30,7 +30,7 @@ namespace Demonixis.InMoov.UI
             _cardList.SetValueWithoutNotify(0);
             _cardList.RefreshShownValue();
             _cardList.onValueChanged.AddListener(i => RefreshCardStatus());
-            
+
             RefreshPorts();
             RefreshCardStatus();
             StartCoroutine(RefreshPortsCoroutine());
@@ -78,7 +78,7 @@ namespace Demonixis.InMoov.UI
         private IEnumerator RefreshPortsCoroutine()
         {
             var wait = new WaitForSeconds(1.5f);
-            while(true)
+            while (true)
             {
                 RefreshPorts();
                 yield return wait;

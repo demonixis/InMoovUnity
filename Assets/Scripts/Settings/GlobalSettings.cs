@@ -1,9 +1,9 @@
-﻿using System;
-using Demonixis.InMoov.Chatbots;
+﻿using Demonixis.InMoov.Chatbots;
 using Demonixis.InMoov.ComputerVision;
 using Demonixis.InMoov.Navigation;
 using Demonixis.InMoov.Services.Speech;
 using Demonixis.InMoov.Servos;
+using System;
 using UnityEngine;
 
 namespace Demonixis.InMoov.Settings
@@ -38,7 +38,7 @@ namespace Demonixis.InMoov.Settings
         public bool IsValid() =>
             !string.IsNullOrEmpty(Chatbot) &&
             !string.IsNullOrEmpty(SpeechSynthesis) &&
-            !string.IsNullOrEmpty(VoiceRecognition) && 
+            !string.IsNullOrEmpty(VoiceRecognition) &&
             !string.IsNullOrEmpty(ServoMixer);
 
         public static ServiceList New()

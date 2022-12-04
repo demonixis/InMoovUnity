@@ -7,15 +7,14 @@ using UnityEngine;
 
 #if MS_SPEECH_SYNTHESIS
 using System.Runtime.InteropServices;
-using UnityEngine.Windows.Speech;
 #endif
 
-namespace  Demonixis.InMoov.Services.Speech
+namespace Demonixis.InMoov.Services.Speech
 {
     public class WindowsSpeechSynthesis : SpeechSynthesisService
     {
         private bool _paused;
-        
+
 #if MS_SPEECH_SYNTHESIS
         [DllImport("WindowsVoice")]
         public static extern void initSpeech();
@@ -63,7 +62,7 @@ namespace  Demonixis.InMoov.Services.Speech
             if (!_paused)
             {
                 addToSpeechQueue(message);
-         
+
                 if (_logOutput)
                     Debug.Log(message);
             }

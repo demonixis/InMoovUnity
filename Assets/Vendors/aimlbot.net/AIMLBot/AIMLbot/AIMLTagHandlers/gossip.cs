@@ -1,6 +1,4 @@
-using System;
 using System.Xml;
-using System.Text;
 
 namespace AIMLbot.AIMLTagHandlers
 {
@@ -40,7 +38,7 @@ namespace AIMLbot.AIMLTagHandlers
                 // gossip is merely logged by the bot and written to log files
                 if (this.templateNode.InnerText.Length > 0)
                 {
-                    this.bot.writeToLog("GOSSIP from user: "+this.user.UserID+", '"+this.templateNode.InnerText+"'");
+                    this.bot.writeToLog("GOSSIP from user: " + this.user.UserID + ", '" + this.templateNode.InnerText + "'");
                 }
             }
             return string.Empty;

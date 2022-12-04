@@ -1,9 +1,7 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System.Collections.Generic;
 //
 using System.Xml;
-using System.Collections.Generic;
-
+using UnityEngine;
 using UnityEngine.UI;
 /*
 
@@ -83,7 +81,8 @@ public class ChatWindowExampleMobileWeb : MonoBehaviour
                 xmlDoc.LoadXml(aimlFile.text);
                 aimlXmlDocumentListFileName.Add(aimlFile.name);
                 aimlXmlDocumentList.Add(xmlDoc);
-            }catch(System.Exception e)
+            }
+            catch (System.Exception e)
             {
                 Debug.LogWarning(e.ToString());
             }

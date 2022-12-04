@@ -42,7 +42,7 @@ namespace AIMLbot.Utils
         /// <summary>
         /// The word that identifies this node to it's parent node
         /// </summary>
-        public string word=string.Empty;
+        public string word = string.Empty;
 
         #endregion
 
@@ -130,7 +130,7 @@ namespace AIMLbot.Utils
 
             // check if this is the end of a branch in the GraphMaster 
             // return the cCategory for this node
-            if (this.children.Count==0)
+            if (this.children.Count == 0)
             {
                 if (path.Length > 0)
                 {
@@ -165,14 +165,14 @@ namespace AIMLbot.Utils
 
                 // add the next word to the wildcard match 
                 StringBuilder newWildcard = new StringBuilder();
-                this.storeWildCard(splitPath[0],newWildcard);
-                
+                this.storeWildCard(splitPath[0], newWildcard);
+
                 // move down into the identified branch of the GraphMaster structure
                 string result = childNode.evaluate(newPath, query, request, matchstate, newWildcard);
 
                 // and if we get a result from the branch process the wildcard matches and return 
                 // the result
-                if (result.Length>0)
+                if (result.Length > 0)
                 {
                     if (newWildcard.Length > 0)
                     {
@@ -219,7 +219,7 @@ namespace AIMLbot.Utils
                 // move down into the identified branch of the GraphMaster structure using the new
                 // matchstate
                 StringBuilder newWildcard = new StringBuilder();
-                string result = childNode.evaluate(newPath, query, request, newMatchstate,newWildcard);
+                string result = childNode.evaluate(newPath, query, request, newMatchstate, newWildcard);
                 // and if we get a result from the child return it
                 if (result.Length > 0)
                 {

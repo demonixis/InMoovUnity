@@ -1,7 +1,3 @@
-using System;
-using System.Text.RegularExpressions;
-using System.Text;
-
 namespace AIMLbot.Normalize
 {
     /// <summary>
@@ -14,7 +10,7 @@ namespace AIMLbot.Normalize
         { }
 
         public StripIllegalCharacters(AIMLbot.Bot bot)
-            : base(bot) 
+            : base(bot)
         { }
 
         protected override string ProcessChange()

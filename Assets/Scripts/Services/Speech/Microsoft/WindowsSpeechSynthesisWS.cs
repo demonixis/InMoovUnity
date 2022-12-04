@@ -1,4 +1,4 @@
-﻿namespace  Demonixis.InMoov.Services.Speech
+﻿namespace Demonixis.InMoov.Services.Speech
 {
     public class WindowsSpeechSynthesisWS : SpeechSynthesisService
     {

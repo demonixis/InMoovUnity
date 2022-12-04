@@ -1,5 +1,3 @@
-using System;
-
 namespace AIMLbot.Utils
 {
     /// <summary>
@@ -29,8 +27,8 @@ namespace AIMLbot.Utils
         /// </summary>
         public string InputString
         {
-            get{return this.inputString;}
-            set{this.inputString=value;}
+            get { return this.inputString; }
+            set { this.inputString = value; }
         }
 
         /// <summary>
@@ -38,7 +36,7 @@ namespace AIMLbot.Utils
         /// </summary>
         public string OutputString
         {
-            get{return this.Transform();}
+            get { return this.Transform(); }
         }
         #endregion
 

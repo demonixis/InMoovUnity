@@ -1,5 +1,3 @@
-using System;
-
 namespace AIMLbot.Utils
 {
     /// <summary>

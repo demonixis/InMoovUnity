@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace AIMLbot
 {
@@ -26,7 +25,7 @@ namespace AIMLbot
         /// </summary>
         public string UserID
         {
-            get{return this.id;}
+            get { return this.id; }
         }
 
         /// <summary>
@@ -34,9 +33,9 @@ namespace AIMLbot
         /// </summary>
         private List<Result> Results = new List<Result>();
 
-		/// <summary>
-		/// the value of the "topic" predicate
-		/// </summary>
+        /// <summary>
+        /// the value of the "topic" predicate
+        /// </summary>
         public string Topic
         {
             get
@@ -45,9 +44,9 @@ namespace AIMLbot
             }
         }
 
-		/// <summary>
-		/// the predicates associated with this particular user
-		/// </summary>
+        /// <summary>
+        /// the predicates associated with this particular user
+        /// </summary>
         public AIMLbot.Utils.SettingsDictionary Predicates;
 
         /// <summary>
@@ -68,17 +67,17 @@ namespace AIMLbot
             }
         }
 
-		#endregion
-		
-		#region Methods
+        #endregion
+
+        #region Methods
 
         /// <summary>
         /// Ctor
         /// </summary>
         /// <param name="UserID">The GUID of the user</param>
         /// <param name="bot">the bot the user is connected to</param>
-		public User(string UserID, AIMLbot.Bot bot)
-		{
+        public User(string UserID, AIMLbot.Bot bot)
+        {
             if (UserID.Length > 0)
             {
                 this.id = UserID;
@@ -91,7 +90,7 @@ namespace AIMLbot
             {
                 throw new Exception("The UserID cannot be empty");
             }
-		}
+        }
 
         /// <summary>
         /// Returns the string to use for the next that part of a subsequent path
@@ -115,7 +114,7 @@ namespace AIMLbot
         /// <returns>the first sentence of the last output from the bot</returns>
         public string getThat()
         {
-            return this.getThat(0,0);
+            return this.getThat(0, 0);
         }
 
         /// <summary>

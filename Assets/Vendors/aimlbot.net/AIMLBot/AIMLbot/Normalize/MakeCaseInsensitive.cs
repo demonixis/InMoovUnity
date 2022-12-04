@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
-
 namespace AIMLbot.Normalize
 {
     /// <summary>
@@ -12,7 +8,7 @@ namespace AIMLbot.Normalize
         public MakeCaseInsensitive(AIMLbot.Bot bot, string inputString) : base(bot, inputString)
         { }
 
-        public MakeCaseInsensitive(AIMLbot.Bot bot) : base(bot) 
+        public MakeCaseInsensitive(AIMLbot.Bot bot) : base(bot)
         { }
 
         protected override string ProcessChange()

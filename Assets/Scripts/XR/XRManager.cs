@@ -8,12 +8,12 @@
 #define OPENXR_SUPPORTED
 #endif
 
+using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR;
-using System.Collections.Generic;
 using UnityEngine.XR.Management;
-using System;
 
 namespace Demonixis.ToolboxV2.XR
 {

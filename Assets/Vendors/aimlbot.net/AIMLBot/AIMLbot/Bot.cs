@@ -11,7 +11,6 @@ using System.Reflection;
 using System.Net.Mail;
 #endif
 using UnityEngine;
-using System.Collections;
 
 using AIMLbot.Utils;
 

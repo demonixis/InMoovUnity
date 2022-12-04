@@ -1,7 +1,5 @@
-using System;
-using System.Xml;
-using System.Text;
 using System.Text.RegularExpressions;
+using System.Xml;
 
 namespace AIMLbot.AIMLTagHandlers
 {
@@ -212,7 +210,7 @@ namespace AIMLbot.AIMLTagHandlers
                                 if ((name.Length > 0) & (value.Length > 0))
                                 {
                                     string actualValue = this.user.Predicates.grabSetting(name);
-                                    Regex matcher = new Regex(value.Replace(" ", "\\s").Replace("*","[\\sA-Z0-9]+"), RegexOptions.IgnoreCase);
+                                    Regex matcher = new Regex(value.Replace(" ", "\\s").Replace("*", "[\\sA-Z0-9]+"), RegexOptions.IgnoreCase);
                                     if (matcher.IsMatch(actualValue))
                                     {
                                         return childLINode.InnerXml;

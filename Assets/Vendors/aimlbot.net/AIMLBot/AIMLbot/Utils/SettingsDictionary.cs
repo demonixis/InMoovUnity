@@ -1,8 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Xml;
-using System.IO;
 using AIMLbot.Normalize;
+using System.Collections.Generic;
+using System.IO;
+using System.Xml;
 
 namespace AIMLbot.Utils
 {
@@ -58,7 +57,7 @@ namespace AIMLbot.Utils
                     XmlNode item = result.CreateNode(XmlNodeType.Element, "item", "");
                     XmlAttribute name = result.CreateAttribute("name");
                     name.Value = key;
-                    XmlAttribute value = result.CreateAttribute( "value");
+                    XmlAttribute value = result.CreateAttribute("value");
                     value.Value = (string)this.settingsHash[key];
                     item.Attributes.Append(name);
                     item.Attributes.Append(value);

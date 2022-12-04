@@ -103,7 +103,7 @@ namespace Demonixis.InMoov.Services.Speech
 
         private void StopWebSocketConnection()
         {
-            if (_websocket is {IsAlive: true})
+            if (_websocket is { IsAlive: true })
                 _websocket.Close();
         }
 
@@ -143,10 +143,10 @@ namespace Demonixis.InMoov.Services.Speech
                     break;
 
                 case MessageType.ListVoices:
-                {
-                    var voices = data.Message.Split('|');
-                    VoicesReceived?.Invoke(voices);
-                }
+                    {
+                        var voices = data.Message.Split('|');
+                        VoicesReceived?.Invoke(voices);
+                    }
                     break;
             }
         }
