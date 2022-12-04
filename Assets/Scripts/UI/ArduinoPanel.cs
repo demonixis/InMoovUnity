@@ -37,7 +37,7 @@ namespace Demonixis.InMoov.UI
             _cardType.options.Add(new TMP_Dropdown.OptionData("Arduino Uno/Nano"));
             _cardType.options.Add(new TMP_Dropdown.OptionData("Arduino Mega 2560"));
 
-            RefreshPorts();
+            RefreshPorts(true);
             RefreshCardStatus();
             StartCoroutine(RefreshPortsCoroutine());
         }
@@ -68,9 +68,11 @@ namespace Demonixis.InMoov.UI
             RefreshCardStatus();
         }
 
-        public void RefreshPorts()
+        public void RefreshPorts(bool force)
         {
             var ports = SerialPort.GetPortNames();
+
+            if (!force && ports.Length == _portList.options.Count) return;
 
             _portList.options.Clear();
 
@@ -86,7 +88,7 @@ namespace Demonixis.InMoov.UI
             var wait = new WaitForSeconds(1.5f);
             while (true)
             {
-                RefreshPorts();
+                RefreshPorts(false);
                 yield return wait;
             }
         }

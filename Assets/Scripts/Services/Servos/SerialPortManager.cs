@@ -32,7 +32,7 @@ namespace Demonixis.InMoov.Servos
 
         public bool IsOpen => Serial?.IsOpen ?? false;
         public string PortName => Serial?.PortName ?? string.Empty;
-        
+
         public void Dispose()
         {
             if (Serial == null) return;
@@ -115,7 +115,8 @@ namespace Demonixis.InMoov.Servos
 
             try
             {
-                serialPort.Serial.Write(buffer.DataBuffer, 0, serialPort.Mega2560 ? SerialPortManager.BufferLength : SerialPortManager.BufferLengthNonMega);
+                var bufferSize = (serialPort.Mega2560 ? SerialPortManager.BufferLength : SerialPortManager.BufferLengthNonMega) * 2;
+                serialPort.Serial.Write(buffer.DataBuffer, 0, bufferSize);
             }
             catch (Exception ex)
             {
@@ -126,10 +127,14 @@ namespace Demonixis.InMoov.Servos
         private void Update()
         {
             if (_serialPorts == null) return;
+
             foreach (var sp in _serialPorts)
             {
                 if (sp.Value.Serial == null) continue;
-                Debug.Log(sp.Value.Serial.ReadExisting());
+
+                var result = sp.Value.Serial.ReadExisting();
+                if (!string.IsNullOrEmpty(result))
+                    Debug.Log(result);
             }
         }
 
