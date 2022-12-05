@@ -67,7 +67,7 @@ namespace Demonixis.InMoov.UI
                 _servoCardId.options.Add(new TMP_Dropdown.OptionData(item));
 
             _servoPinId.options.Clear();
-            for (var i = SerialPortManager.PinStart; i <= SerialPortManager.PinEnd; i++)
+            for (var i = SerialPortManager.PinStart; i <= SerialPortManager.PinEndMega; i++)
                 _servoPinId.options.Add(new TMP_Dropdown.OptionData($"Pin #{i}"));
 
             // Bind events

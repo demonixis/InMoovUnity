@@ -11,7 +11,6 @@ namespace Demonixis.InMoov.Servos
     public class ServoMixerService : RobotService
     {
         public const string ServoMixerFilename = "servos.json";
-        public const string ServoMixerValuesFilename = "servos-values.json";
 
         private SerialPortManager _serialPortManager;
         private ServoData[] _servoData;
@@ -82,18 +81,22 @@ namespace Demonixis.InMoov.Servos
                     var data = _servoData[i];
                     var cardIndex = (int)data.CardId;
 
-                    if (cardIndex >= 0)
+                    if (cardIndex < 0) continue;
+                    
+                    if (data.MixageType != ServoMixageType.None)
                     {
-                        if (data.MixageType != ServoMixageType.None)
+                        switch (data.MixageType)
                         {
-                            if (data.MixageType == ServoMixageType.SameValue)
-                                SetServoValueInServo(data.MixedServo, data.Value);
-                            else if (data.MixageType == ServoMixageType.InverseValue)
-                                SetServoValueInServo(data.MixedServo, (byte)(180 - data.Value));
+                            case ServoMixageType.SameValue:
+                                SetRawServoValue(data.MixedServo, data.Value);
+                                break;
+                            case ServoMixageType.InverseValue:
+                                SetRawServoValue(data.MixedServo, (byte)(180 - data.Value));
+                                break;
                         }
-
-                        _serialDataBuffer[cardIndex].SetValue(data.PinId, data.Value, data.Enabled);
                     }
+
+                    _serialDataBuffer[cardIndex].SetValue(data.PinId, data.Value, data.Enabled);
                 }
 
                 // Send values.
@@ -119,12 +122,11 @@ namespace Demonixis.InMoov.Servos
             var value = ServoConverter.UnityRotationToServo(rawValue, data.ScaleValueTo180 > 0);
 
             // Apply servo data
-            //value = (byte)Mathf.Max(data.Min, value);
-            //value = (byte)Mathf.Min(data.Max, value);
+            ClampServoValue(data.Min, data.Max, ref value);
 
             // Reverse
             if (data.Inverse)
-                value = (byte)(180 - value);
+                InvertServoValue(ref value);
 
             data.Value = value;
         }
@@ -134,14 +136,32 @@ namespace Demonixis.InMoov.Servos
             ref var data = ref _servoData[(int)servoId];
 
             // Apply servo data
-            //value = (byte)Mathf.Max(data.Min, value);
-            //value = (byte)Mathf.Min(data.Max, value);
+            ClampServoValue(data.Min, data.Max, ref value);
 
             // Reverse
             if (data.Inverse)
-                value = (byte)(180 - value);
+                InvertServoValue(ref value);
 
             data.Value = value;
+        }
+
+        public void SetRawServoValue(ServoIdentifier servoId, byte value)
+        {
+            ref var data = ref _servoData[(int)servoId];
+            ClampServoValue(data.Min, data.Max, ref value);
+            data.Value = value;
+        }
+
+        private void ClampServoValue(byte min, byte max, ref byte value)
+        {
+            value = (byte)Mathf.Max(min, value);
+            value = (byte)Mathf.Min(max, value);
+        }
+        
+        private void InvertServoValue(ref byte value)
+        {
+            var inverted = 180 - value;
+            value = (byte)inverted;
         }
 
         public void SetServosToNeutral()

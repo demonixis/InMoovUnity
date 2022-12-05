@@ -11,7 +11,7 @@ const int ServoCount = PinEnd - PinStart;
 const int ServoMin = 0;
 const int ServoNeutral = 90;
 const int ServoMax = 180;
-const int DefaultBaudRate = 115200;
+const int DefaultBaudRate = 9600;
 
 // The trame is
 // Servo 0 (Pin2) => Value [0; 180], Enabled [0; 1]
@@ -41,28 +41,36 @@ void loop() {
   // Read data from the Unity App, see the header for the trame
   int dataCount = Serial.available();
 
-  if (dataCount == MessageSize) {
-    int i = 0;
-    while (Serial.available() > 0) {
-      values[i] = Serial.read();
-      servoActivation[i] = Serial.read();
-      i++;
-    }
+  if (dataCount > 0) {
+    Serial.print("SerialDataAvailable: ");
+    Serial.print(dataCount);
+    Serial.println();
+  }
 
-    // Apply values to the servos
-    for (int i = 0; i < ServoCount; i++) {
-      // Check if we need to enable or disable the servo
-      if (servoActivation[i] != lastServoActivation[i]) {
-        if (servoActivation[i] > 0) {
-          servos[i].attach(i + PinStart);
-        } else {
-          servos[i].detach();
-        }
-        lastServoActivation[i] = servoActivation[i];
+  if (dataCount != MessageSize) {
+    return;
+  }
+
+  int i = 0;
+  while (Serial.available() > 0) {
+    values[i] = Serial.read();
+    servoActivation[i] = Serial.read();
+    i++;
+  }
+
+  // Apply values to the servos
+  for (int i = 0; i < ServoCount; i++) {
+    // Check if we need to enable or disable the servo
+    if (servoActivation[i] != lastServoActivation[i]) {
+      if (servoActivation[i] > 0) {
+        servos[i].attach(i + PinStart);
+      } else {
+        servos[i].detach();
       }
-
-      // Apply the value if enabled.
-      servos[i].write(values[i]);
+      lastServoActivation[i] = servoActivation[i];
     }
+
+    // Apply the value if enabled.
+    servos[i].write(values[i]);
   }
 }
