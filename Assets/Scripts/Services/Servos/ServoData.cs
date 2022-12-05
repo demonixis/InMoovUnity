@@ -20,7 +20,7 @@ namespace Demonixis.InMoov.Servos
         public byte Speed;
         public byte PinId;
         public int CardId;
-        public byte Enabled;
+        public bool Enabled;
         public byte Value;
         public byte ScaleValueTo180;
         public ServoIdentifier MixedServo;
@@ -43,19 +43,18 @@ namespace Demonixis.InMoov.Servos
                 Speed = 1,
                 PinId = SerialPortManager.PinStart,
                 CardId = (int)ArduinoIdentifiers.None,
-                Enabled = 0,
+                Enabled = false,
                 Value = 90,
-                ScaleValueTo180 = 0
+                ScaleValueTo180 = 0,
+                MixedServo = ServoIdentifier.None,
+                MixageType =  ServoMixageType.None
             };
         }
     }
 
     [Serializable]
     public enum ServoIdentifier
-    {
-        None,
-
-        // Head
+    { // Head
         EyeX = 0,
         EyeY,
         Jaw,
@@ -96,6 +95,9 @@ namespace Demonixis.InMoov.Servos
         RightFingerIndex,
         RightFingerMiddle,
         RightFingerRing,
-        RightFingerPinky
+        RightFingerPinky,
+        
+        // Misc
+        None
     }
 }

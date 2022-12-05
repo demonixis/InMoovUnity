@@ -103,10 +103,10 @@ namespace Demonixis.InMoov.UI
                 UpdateDataOnArduino();
             });
 
-            _servoEnabled.SetIsOnWithoutNotify(_currentData.Enabled > 0);
+            _servoEnabled.SetIsOnWithoutNotify(_currentData.Enabled);
             _servoEnabled.onValueChanged.AddListener(b =>
             {
-                _currentData.Enabled = (byte)(b ? 1 : 0);
+                _currentData.Enabled = b;
                 UpdateDataOnArduino();
             });
 
@@ -167,7 +167,7 @@ namespace Demonixis.InMoov.UI
 
             _servoName.text = $"{id}";
             _servoCardId.SetValueWithoutNotify(data.CardId);
-            _servoEnabled.SetIsOnWithoutNotify(data.Enabled > 0);
+            _servoEnabled.SetIsOnWithoutNotify(data.Enabled);
             _servoReversed.SetIsOnWithoutNotify(data.Inverse);
             _servoNeutral.SetValueWithoutNotify(data.Neutral);
             _servoMin.SetValueWithoutNotify(data.Min);
@@ -181,6 +181,9 @@ namespace Demonixis.InMoov.UI
 
             _servoCardId.SetValueWithoutNotify(data.CardId);
             _servoCardId.RefreshShownValue();
+            
+            _mixages.SetValueWithoutNotify((int)data.MixageType);
+            _mixedServo.SetValueWithoutNotify((int)data.MixedServo);
         }
 
         private int FindPinValueFromPinId(int pinId)

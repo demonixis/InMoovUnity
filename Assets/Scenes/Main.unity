@@ -1806,7 +1806,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b87a191065465264ab1a65051beb20ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _updateInterval: 1
+  _updateInterval: 0.1
 --- !u!114 &1909845599
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1820,6 +1820,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _logFirstTrame: 0
+  _logArduino: 0
 --- !u!1 &1933734189
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO.Ports;
 using UnityEngine;
 
 namespace Demonixis.InMoov.Servos
@@ -7,14 +6,15 @@ namespace Demonixis.InMoov.Servos
     [Serializable]
     public sealed class SerialDataBuffer
     {
+        public const int ArduinoMaxBufferSize = 64;
         public byte[] DataBuffer { get; private set; }
 
         public SerialDataBuffer()
         {
-            DataBuffer = new byte[SerialPortManager.BufferLengthMega];
+            DataBuffer = new byte[ArduinoMaxBufferSize];
         }
 
-        public void SetValue(int pinNumber, byte value, byte enabled)
+        public void SetValue(int pinNumber, byte value, bool enabled)
         {
             if (pinNumber < SerialPortManager.PinStart || pinNumber > SerialPortManager.PinEndMega)
             {
@@ -22,15 +22,14 @@ namespace Demonixis.InMoov.Servos
                 return;
             }
 
-            var index = (pinNumber - SerialPortManager.PinStart) * 2;
-            DataBuffer[index] = value;
-            DataBuffer[index + 1] = enabled;
+            var index = pinNumber - SerialPortManager.PinStart;
+            DataBuffer[index] = enabled ? value : byte.MaxValue;
         }
 
         public void ClearData()
         {
             for (var i = 0; i < DataBuffer.Length; i++)
-                DataBuffer[i] = 0;
+                DataBuffer[i] = byte.MaxValue;
         }
 
         public override string ToString()

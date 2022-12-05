@@ -58,8 +58,6 @@ namespace Demonixis.InMoov.Servos
 
         public static int MaximumServoCount => PinEnd - PinStart;
         public static int MaximumServoCountMega => PinEndMega - PinStart;
-        public static int BufferLength => MaximumServoCount * 2;
-        public static int BufferLengthMega => MaximumServoCountMega * 2;
 
         public bool IsConnected(int cardId)
         {
@@ -122,7 +120,7 @@ namespace Demonixis.InMoov.Servos
 
             try
             {
-                var bufferSize = serialPort.IsMega2560 ? BufferLengthMega : BufferLength;
+                var bufferSize = serialPort.IsMega2560 ? MaximumServoCountMega : MaximumServoCount;
                 serialPort.Serial.Write(buffer.DataBuffer, 0, bufferSize);
             }
             catch (Exception ex)

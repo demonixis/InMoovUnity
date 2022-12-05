@@ -83,7 +83,7 @@ namespace Demonixis.InMoov.Servos
 
                     if (cardIndex < 0) continue;
                     
-                    if (data.MixageType != ServoMixageType.None)
+                    if (data.Enabled && data.MixageType != ServoMixageType.None)
                     {
                         switch (data.MixageType)
                         {

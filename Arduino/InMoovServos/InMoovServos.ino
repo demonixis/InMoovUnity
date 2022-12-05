@@ -14,10 +14,8 @@ const int ServoMax = 180;
 const int DefaultBaudRate = 9600;
 
 // The trame is
-// Servo 0 (Pin2) => Value [0; 180], Enabled [0; 1]
+// Servo 0 (Pin2) => Value [0; 180], Disable if value is upper to ServoMax
 // byteArray[index] => Value [0; 180]
-// byteArray[index + 1] => Enabled Enabled [0; 1]
-const int MessageSize = ServoCount * 2;
 
 // Servos
 Servo servos[ServoCount];
@@ -42,19 +40,18 @@ void loop() {
   int dataCount = Serial.available();
 
   if (dataCount > 0) {
-    Serial.print("SerialDataAvailable: ");
     Serial.print(dataCount);
     Serial.println();
   }
 
-  if (dataCount != MessageSize) {
+  if (dataCount != ServoCount) {
     return;
   }
 
   int i = 0;
   while (Serial.available() > 0) {
     values[i] = Serial.read();
-    servoActivation[i] = Serial.read();
+    servoActivation[i] = values[i] <= ServoMax ? 1 : 0;
     i++;
   }
 
