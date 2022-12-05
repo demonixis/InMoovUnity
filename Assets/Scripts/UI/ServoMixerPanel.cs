@@ -109,6 +109,13 @@ namespace Demonixis.InMoov.UI
                 _currentData.Enabled = b;
                 UpdateDataOnArduino();
             });
+            
+            _servoReversed.SetIsOnWithoutNotify(_currentData.Inverse);
+            _servoReversed.onValueChanged.AddListener(b =>
+            {
+                _currentData.Inverse = b;
+                UpdateDataOnArduino();
+            });
 
             SetupSlider(_servoNeutral, 0, 180, _currentData.Neutral, i =>
             {

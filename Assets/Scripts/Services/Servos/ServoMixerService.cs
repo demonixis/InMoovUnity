@@ -95,6 +95,10 @@ namespace Demonixis.InMoov.Servos
                                 break;
                         }
                     }
+                    
+                    ClampServoValue(data.Min, data.Max, ref data.Value);
+                    if (data.Inverse)
+                        InvertServoValue(ref data.Value);
 
                     _serialDataBuffer[cardIndex].SetValue(data.PinId, data.Value, data.Enabled);
                 }
@@ -136,11 +140,11 @@ namespace Demonixis.InMoov.Servos
             ref var data = ref _servoData[(int)servoId];
 
             // Apply servo data
-            ClampServoValue(data.Min, data.Max, ref value);
+            //ClampServoValue(data.Min, data.Max, ref value);
 
             // Reverse
-            if (data.Inverse)
-                InvertServoValue(ref value);
+            //if (data.Inverse)
+                //InvertServoValue(ref value);
 
             data.Value = value;
         }
@@ -148,7 +152,7 @@ namespace Demonixis.InMoov.Servos
         public void SetRawServoValue(ServoIdentifier servoId, byte value)
         {
             ref var data = ref _servoData[(int)servoId];
-            ClampServoValue(data.Min, data.Max, ref value);
+            //ClampServoValue(data.Min, data.Max, ref value);
             data.Value = value;
         }
 
