@@ -35,14 +35,18 @@ namespace Demonixis.InMoov
         public string ServiceName => GetType().Name;
         public abstract RobotServices Type { get; }
         public bool Initialized { get; protected set; }
+        public bool IsPaused { get; protected set; }
 
         public virtual void Initialize()
         {
             Initialized = true;
         }
 
-        public abstract void SetPaused(bool paused);
-
+        public virtual void SetPaused(bool paused)
+        {
+            IsPaused = paused;
+        }
+        
         public virtual void Shutdown()
         {
             Initialized = false;
