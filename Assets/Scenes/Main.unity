@@ -1255,20 +1255,45 @@ MonoBehaviour:
   _servoActions:
   - Servo: 3
     RandomRange: 1
-    Min: 0
-    Max: 180
+    Min: 85
+    Max: 95
     Sequence: 
   - Servo: 4
     RandomRange: 1
-    Min: 0
+    Min: 85
+    Max: 95
+    Sequence: 
+  - Servo: 11
+    RandomRange: 1
+    Min: 80
+    Max: 110
+    Sequence: 
+  - Servo: 12
+    RandomRange: 1
+    Min: 50
+    Max: 150
+    Sequence: 
+  - Servo: 23
+    RandomRange: 1
+    Min: 50
+    Max: 150
+    Sequence: 
+  - Servo: 14
+    RandomRange: 1
+    Min: 50
     Max: 180
     Sequence: 
-  - Servo: 5
+  - Servo: 0
     RandomRange: 1
     Min: 0
     Max: 180
     Sequence: 
-  _frequency: 0.5
+  - Servo: 1
+    RandomRange: 1
+    Min: 0
+    Max: 180
+    Sequence: 
+  _frequency: 4
 --- !u!114 &1281199285
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1281,11 +1306,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da1bcfb0aab04064c96ce5a16e50a2c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _autoStart: 0
-  _jawOpenSpeed: 0.5
-  _jawCloseSpeed: 0.35
-  _jawAmplitude: 10
-  _wordsPerMinute: 100
+  _autoStart: 1
+  _jawOpenTime: 0.25
+  _jawCloseTime: 0.15
+  _jawAmplitude: 25
+  _wordsPerMinute: 40
 --- !u!1 &1322867179
 GameObject:
   m_ObjectHideFlags: 0
