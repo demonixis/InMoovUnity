@@ -13,7 +13,7 @@ namespace AIMLbot.Utils
     {
         #region Attributes
         /// <summary>
-        /// Instance of the input string
+        /// GetInstance of the input string
         /// </summary>
         protected string inputString;
 

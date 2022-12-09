@@ -54,10 +54,17 @@ namespace Demonixis.InMoov.Servos
 
     [Serializable]
     public enum ServoIdentifier
-    { // Head
+    {   
+        // Eyes
         EyeX = 0,
         EyeY,
+        //EyelidLeft,
+        //EyeLidRight,
+        
+        // Jaw
         Jaw,
+        
+        // Head
         HeadYaw,
         HeadPitch,
         HeadRollPrimary,
@@ -96,7 +103,7 @@ namespace Demonixis.InMoov.Servos
         RightFingerMiddle,
         RightFingerRing,
         RightFingerPinky,
-        
+
         // Misc
         None
     }

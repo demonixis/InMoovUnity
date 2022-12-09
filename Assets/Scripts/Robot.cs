@@ -188,6 +188,8 @@ namespace Demonixis.InMoov
 
             SaveGame.SaveRawData(SaveGame.GetPreferredStorageMode(), activeSystems.ToArray(), SystemListFilename,
                 "Config");
+
+            GlobalSettings.Save();
         }
 
         /// <summary>

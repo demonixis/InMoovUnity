@@ -11,13 +11,46 @@ namespace Demonixis.InMoov.Settings
     [Serializable]
     public class GlobalSettings
     {
-        private SystemLanguage[] SupportedLanguages = new[]
+        private const string GlobalSettingsFilename = "global-settings.json";
+        private static GlobalSettings _instance;
+
+        private static readonly SystemLanguage[] SupportedLanguages =
         {
             SystemLanguage.French,
             SystemLanguage.English
         };
 
         public SystemLanguage Language;
+
+        [Header("Settings")] public byte LeftEyeCameraIndex;
+        public byte RightEyeCameraIndex;
+        public float VRStereoOffset;
+
+        [Header("Keys")] public string VoiceRSSKey;
+
+        public GlobalSettings()
+        {
+            Language = SystemLanguage.English;
+        }
+
+        public static GlobalSettings GetInstance()
+        {
+            if (_instance == null)
+            {
+                _instance = SaveGame.LoadRawData<GlobalSettings>(SaveGame.GetPreferredStorageMode(),
+                    GlobalSettingsFilename, "Config");
+
+                if (_instance == null)
+                    _instance = new GlobalSettings();
+            }
+
+            return _instance;
+        }
+
+        public static void Save()
+        {
+            SaveGame.SaveRawData(SaveGame.GetPreferredStorageMode(), GetInstance(), GlobalSettingsFilename, "Config");
+        }
     }
 
     [Serializable]
@@ -27,13 +60,8 @@ namespace Demonixis.InMoov.Settings
         public string SpeechSynthesis;
         public string VoiceRecognition;
         public string Navigation;
-        public string EyeCamera;
-        public string SpatialMapping;
+        public string ComputerVision;
         public string ServoMixer;
-
-        [Header("Settings")] public byte LeftEyeCameraIndex;
-        public byte RightEyeCameraIndex;
-        public float VRStereoOffset;
 
         public bool IsValid() =>
             !string.IsNullOrEmpty(Chatbot) &&
@@ -48,15 +76,10 @@ namespace Demonixis.InMoov.Settings
                 // Services
                 Chatbot = nameof(AIMLNetService),
                 VoiceRecognition = nameof(VoskVoiceRecognitionService),
-#if UNITY_STANDALONE_WIN
-                SpeechSynthesis = nameof(WindowsSpeechSynthesis),
-#else
-                SpeechSynthesis = nameof(SpeechSynthesisService),
-#endif
+                SpeechSynthesis = nameof(SAMSpeechSynthesis),
                 Navigation = nameof(NavigationService),
-                EyeCamera = nameof(EyeCamera),
-                SpatialMapping = nameof(DepthMappingService),
-                ServoMixer = nameof(ServoMixerService)
+                ServoMixer = nameof(ServoMixerService),
+                ComputerVision = nameof(ComputerVisionService)
             };
         }
     }
