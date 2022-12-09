@@ -484,6 +484,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _language: 10
   _audioCodecs: 3
+  _voice: John
 --- !u!82 &348550593
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1722,9 +1723,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1474295294}
-  - component: {fileID: 1474295296}
   - component: {fileID: 1474295295}
-  - component: {fileID: 1474295297}
   m_Layer: 0
   m_Name: ComputerVision
   m_TagString: Untagged
@@ -1756,31 +1755,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1474295293}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6ab06e69efdb469c91ab94a6d45e82b5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1474295296
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1474295293}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5c1a847c9834f1990958f2a447d9ed4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1474295297
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1474295293}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0994042ddc3844ea9f79b643d95c5fe3, type: 3}
+  m_Script: {fileID: 11500000, guid: 76bd9c77dc5a4216bc54815d95edff22, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1494391337

@@ -59,13 +59,12 @@ namespace Demonixis.InMoov.Services.Speech
 
         public override void Speak(string message)
         {
-            if (!_paused)
-            {
-                addToSpeechQueue(message);
+            if (_paused) return;
+            
+            addToSpeechQueue(message);
 
-                if (_logOutput)
-                    Debug.Log(message);
-            }
+            if (_logOutput)
+                Debug.Log(message);
         }
 
         public override void Shutdown()

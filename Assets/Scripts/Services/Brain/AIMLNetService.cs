@@ -32,6 +32,7 @@ namespace Demonixis.InMoov.Chatbots
         private const string SerialFilename = "aiml-data.json";
         private Bot _aimlBot;
         private User _user;
+        private bool _paused;
         private AIMLNetServiceData _data;
         private string _pathToUserSettings;
         private string _lastWords;
@@ -82,11 +83,13 @@ namespace Demonixis.InMoov.Chatbots
 
         public override void SetPaused(bool paused)
         {
-            _aimlBot.isAcceptingUserInput = !paused;
+            _paused = paused;
         }
 
         public override void SubmitResponse(string inputSpeech)
         {
+            if (_paused) return;
+            
             if (inputSpeech.ToLower() == _lastWords)
             {
                 Debug.Log("Prevent the robot to respond to itself");

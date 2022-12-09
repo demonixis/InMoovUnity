@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using Demonixis.InMoov;
 using Demonixis.InMoov.Chatbots;
 using Demonixis.InMoov.ComputerVision;
@@ -28,15 +25,15 @@ public class ServicePanel : MonoBehaviour
     
     private void Start()
     {
-        SetupDropdown<ChatbotService>(_botServiceList);
-        SetupDropdown<SpeechSynthesisService>(_speechSynthesisServiceList);
-        SetupDropdown<VoiceRecognitionService>(_speechRecognitionServiceList);
-        SetupDropdown<NavigationService>(_navigationServiceList);
-        SetupDropdown<ComputerVisionService>(_computerVisionServiceList);
-        SetupDropdown<ServoMixerService>(_servoMixerServiceList);
+        SetupService<ChatbotService>(_botServiceList, _botServiceStatus);
+        SetupService<SpeechSynthesisService>(_speechSynthesisServiceList, _speechSynthesisServiceStatus);
+        SetupService<VoiceRecognitionService>(_speechRecognitionServiceList, _speechRecognitionServiceStatus);
+        SetupService<NavigationService>(_navigationServiceList, _navigationServiceStatus);
+        SetupService<ComputerVisionService>(_computerVisionServiceList, _computerVisionServiceStatus);
+        SetupService<ServoMixerService>(_servoMixerServiceList, _servoMixerServiceStatus);
     }
 
-    private void SetupDropdown<T>(TMP_Dropdown dropdown) where T : RobotService
+    private void SetupService<T>(TMP_Dropdown dropdown, Toggle toggle) where T : RobotService
     {
         var services = FindObjectsOfType<T>(true);
         var activatedIndex = 0;
@@ -53,5 +50,11 @@ public class ServicePanel : MonoBehaviour
 
         dropdown.SetValueWithoutNotify(activatedIndex);
         dropdown.RefreshShownValue();
+
+        toggle.SetIsOnWithoutNotify(services[activatedIndex].Initialized);
+        toggle.onValueChanged.AddListener(b =>
+        {
+            Robot.Instance.SetServicePaused<T>(b);
+        });
     }
 }

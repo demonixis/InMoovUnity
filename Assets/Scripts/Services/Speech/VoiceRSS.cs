@@ -10,6 +10,7 @@ namespace Demonixis.InMoov.Services.Speech
     {
         private TextToSpeechManager _ttsManager;
         private AudioSource _audioSource;
+        private bool _paused;
         
         [SerializeField] private Language _language = Language.English_UnitedStates;
         [SerializeField] private AudioCodecs _audioCodecs = AudioCodecs.OGG;
@@ -29,8 +30,14 @@ namespace Demonixis.InMoov.Services.Speech
             }
         }
 
+        public override void SetPaused(bool paused)
+        {
+            _paused = paused;
+        }
+
         public override void Speak(string text)
         {
+            if (_paused) return;
             StartCoroutine(SpeakCoroutine(text));
         }
 

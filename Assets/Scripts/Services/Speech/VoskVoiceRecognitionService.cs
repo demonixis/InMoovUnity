@@ -16,6 +16,15 @@ namespace Demonixis.InMoov.Services.Speech
             vosk.ResultFound += Vosk_ResultFound;
         }
 
+        public override void SetPaused(bool paused)
+        {
+            var vosk = GetComponent<VoskListener>();
+            if (paused)
+                vosk.StopListening();
+            else
+                vosk.StartListening();
+        }
+
         private void Vosk_ResultFound(object sender, VoskResultEventArgs e)
         {
             NotifyPhraseDetected(e.Result.Text);

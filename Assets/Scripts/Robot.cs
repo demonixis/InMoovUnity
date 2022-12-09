@@ -117,6 +117,16 @@ namespace Demonixis.InMoov
             ServiceChanged?.Invoke(old, newService);
         }
 
+        public void SetServicePaused<T>(bool paused) where T : RobotService
+        {
+            foreach (var service in _currentServices)
+            {
+                if (service is not T) continue;
+                service.SetPaused(paused);
+                break;
+            }
+        }
+
         /// <summary>
         /// Initialize services to make the robot alive
         /// </summary>
