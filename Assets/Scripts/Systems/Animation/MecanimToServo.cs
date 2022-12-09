@@ -42,10 +42,9 @@ namespace Demonixis.InMoov.Systems
         [SerializeField] private Transform _rightRingFinger;
         [SerializeField] private Transform _rightPinkyFinger;
 
-        protected override void Start()
+        private void Start()
         {
             _servoMixerService = Robot.Instance.GetServiceOfType<ServoMixerService>();
-            base.Start();
         }
 
         public override void Initialize()
@@ -60,9 +59,9 @@ namespace Demonixis.InMoov.Systems
 
         private IEnumerator Loop()
         {
-            Running = true;
+            Started = true;
 
-            while (Running)
+            while (Started)
             {
                 // Head
                 var head = _head.rotation.eulerAngles;

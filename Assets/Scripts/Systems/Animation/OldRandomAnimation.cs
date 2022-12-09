@@ -7,10 +7,10 @@ using UnityRandom = UnityEngine.Random;
 
 namespace Demonixis.InMoov.Systems
 {
-    public class RandomAnimation : RobotSystem
+    public class OldRandomAnimation : RobotSystem
     {
         [Serializable]
-        public class ServoAnimation
+        public class RandomServoAction
         {
             private int _index;
 
@@ -19,7 +19,6 @@ namespace Demonixis.InMoov.Systems
             public byte Min;
             public byte Max;
             public byte[] Sequence;
-            public float Frequency;
 
             public int Cursor
             {
@@ -35,12 +34,13 @@ namespace Demonixis.InMoov.Systems
                 get => _index;
             }
 
-            public byte NextValue => (byte) (Sequence != null ? Sequence[Cursor] : 0);
+            public byte NextValue => (byte)(Sequence != null ? Sequence[Cursor] : 0);
         }
 
         private ServoMixerService _servoMixerService;
 
-        [SerializeField] private ServoAnimation[] _servoActions;
+        [SerializeField] private RandomServoAction[] _servoActions;
+        [SerializeField] private float _frequency = 2.0f;
 
         private void Start()
         {
@@ -49,8 +49,7 @@ namespace Demonixis.InMoov.Systems
 
         public override void Initialize()
         {
-            foreach (var action in _servoActions)
-                StartCoroutine(PlayAnimationAction(action));
+            StartCoroutine(Loop());
         }
 
         public override void Dispose()
@@ -58,27 +57,23 @@ namespace Demonixis.InMoov.Systems
             StopAllCoroutines();
         }
 
-        private IEnumerator PlayAnimationAction(ServoAnimation animation)
+        private IEnumerator Loop()
         {
+            Started = true;
+
             while (Started)
             {
-                var value = animation.RandomRange
-                    ? (byte) UnityRandom.Range(animation.Min, animation.Max)
-                    : animation.NextValue;
+                foreach (var action in _servoActions)
+                {
+                    var value = action.RandomRange
+                        ? (byte)UnityRandom.Range(action.Min, action.Max)
+                        : action.NextValue;
 
-                _servoMixerService.SetServoValueInServo(animation.Servo, value);
+                    _servoMixerService.SetServoValueInServo(action.Servo, value);
+                }
 
-                yield return CoroutineFactory.WaitForSeconds(animation.Frequency);
+                yield return CoroutineFactory.WaitForSeconds(_frequency);
             }
         }
-
-#if UNITY_EDITOR
-        private void OnValidate()
-        {
-            if (!Started || !Application.isPlaying) return;
-            Dispose();
-            Initialize();
-        }
-#endif
     }
 }

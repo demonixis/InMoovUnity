@@ -83,6 +83,15 @@ namespace Demonixis.InMoov.Servos
 
                     if (cardIndex < 0) continue;
                     
+                    if (data.Inverse)
+                        InvertServoValue(ref data.Value);
+                    
+                    // TODO add neutral offset
+                    //var offset = 90 - data.Neutral;
+                    //data.Value = (byte)(data.Value + offset);
+                    
+                    ClampServoValue(data.Min, data.Max, ref data.Value);
+                    
                     if (data.Enabled && data.MixageType != ServoMixageType.None)
                     {
                         switch (data.MixageType)
@@ -95,10 +104,6 @@ namespace Demonixis.InMoov.Servos
                                 break;
                         }
                     }
-                    
-                    ClampServoValue(data.Min, data.Max, ref data.Value);
-                    if (data.Inverse)
-                        InvertServoValue(ref data.Value);
 
                     _serialDataBuffer[cardIndex].SetValue(data.PinId, data.Value, data.Enabled);
                 }

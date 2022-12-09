@@ -11,15 +11,14 @@ namespace Demonixis.InMoov.Systems
         private ServoMixerService _servoMixerService;
         private bool _initialized;
 
-        [SerializeField] private float _jawOpenTime = 0.5f;
-        [SerializeField] private float _jawCloseTime = 0.35f;
-        [SerializeField] private byte _jawAmplitude = 10;
-        [SerializeField] private byte _wordsPerMinute = 100;
+        [SerializeField] private float _jawOpenTime = 0.25f;
+        [SerializeField] private float _jawCloseTime = 0.15f;
+        [SerializeField] private byte _jawAmplitude = 25;
+        [SerializeField] private byte _wordsPerMinute = 40;
 
-        protected override void Start()
+        private void Start()
         {
             _servoMixerService = Robot.Instance.GetServiceOfType<ServoMixerService>();
-            base.Start();
         }
 
         public override void Initialize()
@@ -50,6 +49,7 @@ namespace Demonixis.InMoov.Systems
 
             var robot = Robot.Instance;
             var chatbot = robot.GetServiceOfType<ChatbotService>();
+            if (chatbot == null) return;
             chatbot.ResponseReady -= OnChatBotResponse;
             robot.ServiceChanged -= OnRobotServiceChanged;
 

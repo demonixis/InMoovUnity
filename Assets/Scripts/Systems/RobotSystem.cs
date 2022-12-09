@@ -5,17 +5,24 @@ namespace Demonixis.InMoov
 {
     public abstract class RobotSystem : MonoBehaviour, IDisposable
     {
-        [SerializeField] private bool _autoStart;
-
-        public bool Running { get; protected set; }
-
-        protected virtual void Start()
-        {
-            if (_autoStart)
-                Initialize();
-        }
+        public bool Started { get; protected set; }
 
         public abstract void Initialize();
         public abstract void Dispose();
+        
+        public virtual void SetActive(bool active)
+        {
+            switch (active)
+            {
+                case true when !Started:
+                    Initialize();
+                    break;
+                case false when Started:
+                    Dispose();
+                    break;
+            }
+
+            Started = active;
+        }
     }
 }

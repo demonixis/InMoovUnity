@@ -1,5 +1,4 @@
-﻿using System;
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -16,14 +15,14 @@ namespace Demonixis.InMoov.UI
         {
             _activation.onValueChanged.AddListener(b =>
             {
-                _system.enabled = b;
+                _system.SetActive(b);
             });
         }
         
         public void Setup(RobotSystem system)
         {
             _name.text = system.GetType().Name;
-            _activation.SetIsOnWithoutNotify(system.enabled);
+            _activation.SetIsOnWithoutNotify(system.Started);
             _system = system;
         }
     }

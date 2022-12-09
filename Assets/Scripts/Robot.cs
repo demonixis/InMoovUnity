@@ -12,6 +12,7 @@ namespace Demonixis.InMoov
     {
         private static Robot _instance;
         private const string ServiceListFilename = "services.json";
+        private const string SystemListFilename = "systems.json";
 
         private List<RobotService> _currentServices;
         private ServiceList _serviceList;
@@ -53,6 +54,7 @@ namespace Demonixis.InMoov
         /// Retrieve an array of active services.
         /// </summary>
         public RobotService[] Services => _currentServices?.ToArray() ?? Array.Empty<RobotService>();
+
         public bool Running { get; private set; }
 
         public event Action<Robot> Initialized;
@@ -78,7 +80,9 @@ namespace Demonixis.InMoov
 
             Running = true;
             Initialized?.Invoke(this);
-
+            
+            InitializeSystems();
+            
             if (_waitingStartCallbacks.Count <= 0) return;
             foreach (var callback in _waitingStartCallbacks)
                 callback?.Invoke();
@@ -90,15 +94,6 @@ namespace Demonixis.InMoov
                 callback?.Invoke();
             else
                 _waitingStartCallbacks.Add(callback);
-        }
-
-        /// <summary>
-        /// Reboot services by clearing then reinitializing them
-        /// </summary>
-        public void RebootRebot()
-        {
-            ClearCurrentServices();
-            InitializeServices();
         }
 
         public T GetServiceOfType<T>() where T : RobotService
@@ -148,23 +143,51 @@ namespace Demonixis.InMoov
                 _speechSynthesis.Speak(string.IsNullOrEmpty(response) ? "I don't understand" : response);
             };
 
-            _voiceRecognition.PhraseDetected += s =>
-            {
-                _chatbotService.SubmitResponse(s);
-            };
+            _voiceRecognition.PhraseDetected += s => { _chatbotService.SubmitResponse(s); };
 
             _servoMixerService.Initialize();
         }
 
+        private void InitializeSystems()
+        {
+            var systemsList =
+                SaveGame.LoadRawData<string[]>(SaveGame.GetPreferredStorageMode(), SystemListFilename, "Config");
+
+            if (systemsList == null || systemsList.Length == 0) return;
+
+            var systems = GetComponentsInChildren<RobotSystem>(true);
+
+            foreach (var system in systems)
+            {
+                if (Array.IndexOf(systemsList, system.GetType().Name) == -1) continue;
+                system.SetActive(true);
+            }
+        }
+
         private void OnDestroy()
         {
+            // Save the list of used services
             _serviceList.Chatbot = _chatbotService.GetType().Name;
             _serviceList.VoiceRecognition = _voiceRecognition.GetType().Name;
             _serviceList.SpeechSynthesis = _speechSynthesis.GetType().Name;
             _serviceList.ServoMixer = _servoMixerService.GetType().Name;
+
             SaveGame.SaveRawData(SaveGame.GetPreferredStorageMode(), _serviceList, ServiceListFilename, "Config");
 
             ClearCurrentServices();
+
+            // Save the list of used systems
+            var activeSystems = new List<string>();
+            var systems = GetComponentsInChildren<RobotSystem>();
+            foreach (var system in systems)
+            {
+                if (!system.Started) continue;
+                activeSystems.Add(system.GetType().Name);
+                system.SetActive(false);
+            }
+
+            SaveGame.SaveRawData(SaveGame.GetPreferredStorageMode(), activeSystems.ToArray(), SystemListFilename,
+                "Config");
         }
 
         /// <summary>
