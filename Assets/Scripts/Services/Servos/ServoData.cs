@@ -13,6 +13,7 @@ namespace Demonixis.InMoov.Servos
     public struct ServoData
     {
         public ServoIdentifier Id;
+        public string ServoName;
         public bool Inverse;
         public byte Min;
         public byte Neutral;
@@ -36,6 +37,7 @@ namespace Demonixis.InMoov.Servos
             return new ServoData
             {
                 Id = servoId,
+                ServoName = $"{servoId}",
                 Inverse = false,
                 Min = 0,
                 Max = 180,
@@ -58,8 +60,8 @@ namespace Demonixis.InMoov.Servos
         // Eyes
         EyeX = 0,
         EyeY,
-        //EyelidLeft,
-        //EyeLidRight,
+        EyelidLeft,
+        EyeLidRight,
         
         // Jaw
         Jaw,
