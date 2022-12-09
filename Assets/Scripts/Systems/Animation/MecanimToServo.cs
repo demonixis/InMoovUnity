@@ -74,8 +74,8 @@ namespace Demonixis.InMoov.Systems
 
                 // Pelvis
                 var hips = _hip.rotation.eulerAngles;
-                _servoMixerService.SetServoValueInEuler(ServoIdentifier.PelvisYaw, hips.y);
-                _servoMixerService.SetServoValueInEuler(ServoIdentifier.PelvisPitch, hips.x);
+                _servoMixerService.SetServoValueInEuler(ServoIdentifier.PelvisYawPrimary, hips.y);
+                _servoMixerService.SetServoValueInEuler(ServoIdentifier.PelvisPitchPrimary, hips.x);
                 _servoMixerService.SetServoValueInEuler(ServoIdentifier.PelvisRollPrimary, hips.z);
 
                 // Left Side

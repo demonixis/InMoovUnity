@@ -73,8 +73,10 @@ namespace Demonixis.InMoov.Servos
         HeadRollSecondary,
 
         // Torso + Stomach
-        PelvisYaw,
-        PelvisPitch,
+        PelvisYawPrimary,
+        PelvisYawSecondary,
+        PelvisPitchPrimary,
+        PelvisPitchSecondary,
         PelvisRollPrimary,
         PelvisRollSecondary,
 

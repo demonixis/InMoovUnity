@@ -1518,9 +1518,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da1bcfb0aab04064c96ce5a16e50a2c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _jawOpenTime: 0.25
-  _jawCloseTime: 0.15
-  _jawAmplitude: 25
+  _jawOpenTime: 0.15
+  _jawCloseTime: 0.1
+  _jawAmplitude: 20
   _wordsPerMinute: 40
 --- !u!114 &1281199286
 MonoBehaviour:
