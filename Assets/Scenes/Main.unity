@@ -1181,6 +1181,7 @@ GameObject:
   - component: {fileID: 1281199283}
   - component: {fileID: 1281199284}
   - component: {fileID: 1281199285}
+  - component: {fileID: 1281199286}
   m_Layer: 0
   m_Name: Animation
   m_TagString: Untagged
@@ -1215,7 +1216,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a5e7a10f2f985143bef61722071dc3c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _autoStart: 0
   _updateInterval: 0.033333335
   _rig: {fileID: 5006512736181424505}
   _head: {fileID: 1707243786737977796}
@@ -1251,7 +1251,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3fc3faf248ef4d7fa58b27667dd28a42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _autoStart: 0
   _servoActions:
   - Servo: 3
     RandomRange: 1
@@ -1306,11 +1305,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da1bcfb0aab04064c96ce5a16e50a2c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _autoStart: 1
   _jawOpenTime: 0.25
   _jawCloseTime: 0.15
   _jawAmplitude: 25
   _wordsPerMinute: 40
+--- !u!114 &1281199286
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1281199281}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b8bf47c24ee24614b88986473d2a3b3e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _servoActions: []
 --- !u!1 &1322867179
 GameObject:
   m_ObjectHideFlags: 0

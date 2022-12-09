@@ -50,7 +50,7 @@ namespace Demonixis.InMoov.UI
                 ResetTransform(item.transform);
 
                 var servoItem = item.AddComponent<ServoMixerItem>();
-                servoItem.Setup((ServoIdentifier)i);
+                servoItem.Setup((ServoIdentifier) i);
                 servoItem.Clicked += OnServoClicked;
 
                 _mixedServo.options.Add(new TMP_Dropdown.OptionData(names[i]));
@@ -71,31 +71,31 @@ namespace Demonixis.InMoov.UI
                 _servoPinId.options.Add(new TMP_Dropdown.OptionData($"Pin #{i}"));
 
             // Bind events
-            _mixedServo.SetValueWithoutNotify((int)_currentData.MixedServo);
+            _mixedServo.SetValueWithoutNotify((int) _currentData.MixedServo);
             _mixedServo.RefreshShownValue();
             _mixedServo.onValueChanged.AddListener(i =>
             {
-                _currentData.MixedServo = (ServoIdentifier)i;
+                _currentData.MixedServo = (ServoIdentifier) i;
                 UpdateDataOnArduino();
             });
 
-            _mixages.SetValueWithoutNotify((int)_currentData.MixageType);
+            _mixages.SetValueWithoutNotify((int) _currentData.MixageType);
             _mixages.RefreshShownValue();
             _mixages.onValueChanged.AddListener(i =>
             {
-                _currentData.MixageType = (ServoMixageType)i;
+                _currentData.MixageType = (ServoMixageType) i;
                 UpdateDataOnArduino();
             });
 
-            _servoPinId.SetValueWithoutNotify((int)_currentData.PinId);
+            _servoPinId.SetValueWithoutNotify((int) _currentData.PinId);
             _servoPinId.RefreshShownValue();
             _servoPinId.onValueChanged.AddListener(i =>
             {
-                _currentData.PinId = (byte)(_servoPinId.value + SerialPortManager.PinStart);
+                _currentData.PinId = (byte) (_servoPinId.value + SerialPortManager.PinStart);
                 UpdateDataOnArduino();
             });
 
-            _servoCardId.SetValueWithoutNotify((int)_currentData.CardId);
+            _servoCardId.SetValueWithoutNotify((int) _currentData.CardId);
             _servoCardId.RefreshShownValue();
             _servoCardId.onValueChanged.AddListener(i =>
             {
@@ -109,7 +109,7 @@ namespace Demonixis.InMoov.UI
                 _currentData.Enabled = b;
                 UpdateDataOnArduino();
             });
-            
+
             _servoReversed.SetIsOnWithoutNotify(_currentData.Inverse);
             _servoReversed.onValueChanged.AddListener(b =>
             {
@@ -119,31 +119,31 @@ namespace Demonixis.InMoov.UI
 
             SetupSlider(_servoNeutral, 0, 180, _currentData.Neutral, i =>
             {
-                _currentData.Neutral = (byte)i;
+                _currentData.Neutral = (byte) i;
                 UpdateDataOnArduino();
             });
 
             SetupSlider(_servoMin, 0, 180, _currentData.Min, i =>
             {
-                _currentData.Min = (byte)i;
+                _currentData.Min = (byte) i;
                 UpdateDataOnArduino();
             });
 
             SetupSlider(_servoMax, 0, 180, _currentData.Max, i =>
             {
-                _currentData.Max = (byte)i;
+                _currentData.Max = (byte) i;
                 UpdateDataOnArduino();
             });
 
             SetupSlider(_servoSpeed, 10, 100, _currentData.Speed, i =>
             {
-                _currentData.Speed = (byte)i;
+                _currentData.Speed = (byte) i;
                 UpdateDataOnArduino();
             });
 
             SetupSlider(_servoValue, 0, 180, _currentData.Value, i =>
             {
-                _currentData.Value = (byte)i;
+                _currentData.Value = (byte) i;
                 UpdateDataOnArduino();
             });
         }
@@ -188,9 +188,9 @@ namespace Demonixis.InMoov.UI
 
             _servoCardId.SetValueWithoutNotify(data.CardId);
             _servoCardId.RefreshShownValue();
-            
-            _mixages.SetValueWithoutNotify((int)data.MixageType);
-            _mixedServo.SetValueWithoutNotify((int)data.MixedServo);
+
+            _mixages.SetValueWithoutNotify((int) data.MixageType);
+            _mixedServo.SetValueWithoutNotify((int) data.MixedServo);
         }
 
         private int FindPinValueFromPinId(int pinId)
@@ -216,6 +216,18 @@ namespace Demonixis.InMoov.UI
             target.localPosition = Vector3.zero;
             target.localRotation = Quaternion.identity;
             target.localScale = Vector3.one;
+        }
+
+        public void SetEveryoneToNeutral()
+        {
+            var names = Enum.GetNames(typeof(ServoIdentifier));
+
+            for (var i = 0; i < names.Length; i++)
+            {
+                var data = _servoMixerService.GetServoData((ServoIdentifier) i);
+                data.Value = data.Neutral;
+                _servoMixerService.SetServoData((ServoIdentifier)i, ref data);
+            }
         }
     }
 }
