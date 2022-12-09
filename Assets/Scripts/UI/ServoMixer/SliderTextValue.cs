@@ -19,8 +19,14 @@ namespace Demonixis.InMoov
             _slider = GetComponentInParent<Slider>();
             _slider.onValueChanged.AddListener(f =>
             {
-                _text.text = $"{(int) Mathf.Floor(f)}";
+                RefreshValue();
             });
+
+            RefreshValue();
+        }
+
+        public void RefreshValue()
+        {
             _text.text = $"{(int) Mathf.Floor(_slider.value)}";
         }
     }

@@ -83,14 +83,14 @@ namespace Demonixis.InMoov.Servos
 
                     if (cardIndex < 0) continue;
                     
-                    if (data.Inverse)
-                        InvertServoValue(ref data.Value);
-                    
                     // TODO add neutral offset
                     //var offset = 90 - data.Neutral;
                     //data.Value = (byte)(data.Value + offset);
                     
                     ClampServoValue(data.Min, data.Max, ref data.Value);
+
+                    if (data.Inverse)
+                        InvertServoValue(ref data.Value);
                     
                     if (data.Enabled && data.MixageType != ServoMixageType.None)
                     {
@@ -127,15 +127,7 @@ namespace Demonixis.InMoov.Servos
         public void SetServoValueInEuler(ServoIdentifier servoId, float rawValue)
         {
             ref var data = ref _servoData[(int)servoId];
-
             var value = ServoConverter.UnityRotationToServo(rawValue, data.ScaleValueTo180 > 0);
-
-            // Apply servo data
-            ClampServoValue(data.Min, data.Max, ref value);
-
-            // Reverse
-            if (data.Inverse)
-                InvertServoValue(ref value);
 
             data.Value = value;
         }
@@ -143,21 +135,12 @@ namespace Demonixis.InMoov.Servos
         public void SetServoValueInServo(ServoIdentifier servoId, byte value)
         {
             ref var data = ref _servoData[(int)servoId];
-
-            // Apply servo data
-            //ClampServoValue(data.Min, data.Max, ref value);
-
-            // Reverse
-            //if (data.Inverse)
-                //InvertServoValue(ref value);
-
             data.Value = value;
         }
 
         public void SetRawServoValue(ServoIdentifier servoId, byte value)
         {
             ref var data = ref _servoData[(int)servoId];
-            //ClampServoValue(data.Min, data.Max, ref value);
             data.Value = value;
         }
 

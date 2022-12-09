@@ -12,6 +12,7 @@ namespace Demonixis.InMoov.UI
         private ServoMixerService _servoMixerService;
         private ServoIdentifier _currentServo;
         private ServoData _currentData;
+        private SliderTextValue[] _sliderTextValues;
 
         [Header("Servo List"), SerializeField] private RectTransform _servoList;
 
@@ -34,6 +35,7 @@ namespace Demonixis.InMoov.UI
 
         private void Start()
         {
+            _sliderTextValues = GetComponentsInChildren<SliderTextValue>();
             _currentData = ServoData.New(ServoIdentifier.None);
             _servoMixerService = FindObjectOfType<ServoMixerService>();
 
@@ -191,6 +193,9 @@ namespace Demonixis.InMoov.UI
 
             _mixages.SetValueWithoutNotify((int) data.MixageType);
             _mixedServo.SetValueWithoutNotify((int) data.MixedServo);
+
+            foreach (var item in _sliderTextValues)
+                item.RefreshValue();
         }
 
         private int FindPinValueFromPinId(int pinId)
