@@ -5,6 +5,7 @@ using Demonixis.InMoov.Settings;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Demonixis.InMoov
 {
@@ -25,6 +26,8 @@ namespace Demonixis.InMoov
 
         // Animation
         private ServoMixerService _servoMixerService;
+
+        [SerializeField] private bool _autoStartRobot = true;
 
         /// <summary>
         /// Gets a static instance of the robot.
@@ -75,14 +78,20 @@ namespace Demonixis.InMoov
 
         private void Start()
         {
+            if (_autoStartRobot)
+                InitializeRobot();
+        }
+
+        public void InitializeRobot()
+        {
             // TODO in prevision of deferred load.
             InitializeServices();
 
             Running = true;
             Initialized?.Invoke(this);
-            
+
             InitializeSystems();
-            
+
             if (_waitingStartCallbacks.Count <= 0) return;
             foreach (var callback in _waitingStartCallbacks)
                 callback?.Invoke();
@@ -96,10 +105,15 @@ namespace Demonixis.InMoov
                 _waitingStartCallbacks.Add(callback);
         }
 
+        /// <summary>
+        /// Gets the active service of type T.
+        /// </summary>
+        /// <typeparam name="T">The type of serice.</typeparam>
+        /// <returns>It returns a service.</returns>
         public T GetServiceOfType<T>() where T : RobotService
         {
             var type = typeof(T);
-            foreach (var current in Services)
+            foreach (var current in _currentServices)
             {
                 if (current is T service)
                     return service;
@@ -109,14 +123,39 @@ namespace Demonixis.InMoov
             return null;
         }
 
-        public void ChangeService<T>(T service) where T : RobotService
+        /// <summary>
+        /// Change a service by another one using a name.
+        /// </summary>
+        /// <typeparam name="T">The type of service</typeparam>
+        /// <param name="serviceName">The new service name</param>
+        public void ChangeServiceByName<T>(string serviceName) where T : RobotService
         {
-            // FIXME
-            T old = default(T);
-            T newService = default(T);
-            ServiceChanged?.Invoke(old, newService);
+            var old = GetServiceOfType<T>();
+            old.Shutdown();
+            _currentServices.Remove(old);
+
+            var services = GetComponentsInChildren<T>();
+
+            foreach (var newService in services)
+            {
+                if (newService.ServiceName != serviceName) continue;
+                _currentServices.Add(newService);
+                newService.Initialize();
+                ServiceChanged?.Invoke(old, newService);
+
+                // FIXME For now we'll reload the scene because we need
+                // to implement this change everywhere. It'll be made soon
+                SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+
+                break;
+            }
         }
 
+        /// <summary>
+        /// Pause a service by its type.
+        /// </summary>
+        /// <typeparam name="T">The type of service.</typeparam>
+        /// <param name="paused">Set to true to pause the service and false to unpause it.</param>
         public void SetServicePaused<T>(bool paused) where T : RobotService
         {
             foreach (var service in _currentServices)

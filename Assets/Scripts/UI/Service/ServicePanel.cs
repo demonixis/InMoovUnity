@@ -50,6 +50,10 @@ public class ServicePanel : MonoBehaviour
 
         dropdown.SetValueWithoutNotify(activatedIndex);
         dropdown.RefreshShownValue();
+        dropdown.onValueChanged.AddListener(i =>
+        {
+            Robot.Instance.ChangeService
+        });
 
         toggle.SetIsOnWithoutNotify(services[activatedIndex].Initialized);
         toggle.onValueChanged.AddListener(b =>

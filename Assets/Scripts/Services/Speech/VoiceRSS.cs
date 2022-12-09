@@ -20,6 +20,11 @@ namespace Demonixis.InMoov.Services.Speech
         {
             _audioSource = GetComponent<AudioSource>();
             _ttsManager = new TextToSpeechManager();
+        }
+
+        public override void Initialize()
+        {
+            base.Initialize();
 
             var settings = GlobalSettings.GetInstance();
             _ttsManager.APIKey = settings.VoiceRSSKey;
