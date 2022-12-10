@@ -1,5 +1,4 @@
 using Demonixis.InMoov;
-using System.Collections;
 using Demonixis.InMoov.Chatbots;
 using Demonixis.InMoov.Services.Speech;
 using TMPro;
@@ -18,8 +17,10 @@ public class BrainPanel : MonoBehaviour
         Robot.Instance.WhenStarted(Initialize);
     }
 
-    private void Initialize()
+    public void Initialize()
     {
+        if (_chatbot != null) return;
+        
         var robot = Robot.Instance;
         if (robot.TryGetService(out VoiceRecognitionService voiceRecognitionService))
         {

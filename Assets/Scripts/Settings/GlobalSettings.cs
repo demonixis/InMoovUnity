@@ -62,12 +62,14 @@ namespace Demonixis.InMoov.Settings
         public string Navigation;
         public string ComputerVision;
         public string ServoMixer;
+        public string XR;
 
         public bool IsValid() =>
             !string.IsNullOrEmpty(Chatbot) &&
             !string.IsNullOrEmpty(SpeechSynthesis) &&
             !string.IsNullOrEmpty(VoiceRecognition) &&
-            !string.IsNullOrEmpty(ServoMixer);
+            !string.IsNullOrEmpty(ServoMixer) &&
+            !string.IsNullOrEmpty(XR);
 
         public static ServiceList New()
         {
@@ -79,7 +81,8 @@ namespace Demonixis.InMoov.Settings
                 SpeechSynthesis = nameof(SAMSpeechSynthesis),
                 Navigation = nameof(NavigationService),
                 ServoMixer = nameof(ServoMixerService),
-                ComputerVision = nameof(ComputerVisionService)
+                ComputerVision = nameof(ComputerVisionService),
+                XR = nameof(XRService)
             };
         }
     }

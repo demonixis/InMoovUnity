@@ -17,6 +17,7 @@ namespace Demonixis.InMoov
         private const string ServiceListFilename = "services.json";
         private const string SystemListFilename = "systems.json";
 
+        private SpeechBrainProxy _speechBrainProxy;
         private List<RobotService> _currentServices;
         private List<Action> _waitingStartCallbacks;
 
@@ -66,6 +67,7 @@ namespace Demonixis.InMoov
                 return;
             }
 
+            _speechBrainProxy = new SpeechBrainProxy();
             _currentServices = new List<RobotService>();
             _waitingStartCallbacks = new List<Action>();
         }
@@ -89,6 +91,8 @@ namespace Demonixis.InMoov
             if (_waitingStartCallbacks.Count <= 0) return;
             foreach (var callback in _waitingStartCallbacks)
                 callback?.Invoke();
+            
+            _waitingStartCallbacks.Clear();
         }
 
         public void WhenStarted(Action callback)
@@ -117,14 +121,11 @@ namespace Demonixis.InMoov
             var voiceRecognition = SelectService<VoiceRecognitionService>(serviceList.VoiceRecognition);
             var speechSynthesis = SelectService<SpeechSynthesisService>(serviceList.SpeechSynthesis);
             SelectService<ServoMixerService>(serviceList.ServoMixer);
-
-            // Initialize them
-            chatbotService.ResponseReady += response =>
-            {
-                speechSynthesis.Speak(string.IsNullOrEmpty(response) ? "I don't understand" : response);
-            };
-
-            voiceRecognition.PhraseDetected += s => { chatbotService.SubmitResponse(s); };
+            SelectService<ServoMixerService>(serviceList.XR);
+            SelectService<ServoMixerService>(serviceList.Navigation);
+            SelectService<ServoMixerService>(serviceList.ComputerVision);
+            
+            _speechBrainProxy.Setup(chatbotService, voiceRecognition, speechSynthesis);
         }
         
         /// <summary>
