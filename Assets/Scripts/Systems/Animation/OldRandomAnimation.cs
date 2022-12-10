@@ -34,7 +34,7 @@ namespace Demonixis.InMoov.Systems
                 get => _index;
             }
 
-            public byte NextValue => (byte)(Sequence != null ? Sequence[Cursor] : 0);
+            public byte NextValue => (byte) (Sequence != null ? Sequence[Cursor] : 0);
         }
 
         private ServoMixerService _servoMixerService;
@@ -44,11 +44,12 @@ namespace Demonixis.InMoov.Systems
 
         private void Start()
         {
-            _servoMixerService = Robot.Instance.GetServiceOfType<ServoMixerService>();
+            Robot.Instance.WhenStarted(Initialize);
         }
 
         public override void Initialize()
         {
+            _servoMixerService = Robot.Instance.GetService<ServoMixerService>();
             StartCoroutine(Loop());
         }
 
@@ -66,7 +67,7 @@ namespace Demonixis.InMoov.Systems
                 foreach (var action in _servoActions)
                 {
                     var value = action.RandomRange
-                        ? (byte)UnityRandom.Range(action.Min, action.Max)
+                        ? (byte) UnityRandom.Range(action.Min, action.Max)
                         : action.NextValue;
 
                     _servoMixerService.SetServoValueInServo(action.Servo, value);

@@ -44,7 +44,7 @@ public class ServicePanel : MonoBehaviour
         {
             dropdown.options.Add(new TMP_Dropdown.OptionData(services[i].ServiceName));
 
-            if (services[i].Initialized)
+            if (services[i].Started)
                 activatedIndex = i;
         }
 
@@ -52,13 +52,14 @@ public class ServicePanel : MonoBehaviour
         dropdown.RefreshShownValue();
         dropdown.onValueChanged.AddListener(i =>
         {
-            Robot.Instance.ChangeService
+            var serviceName = dropdown.options[dropdown.value].text;
+            Robot.Instance.ReplaceService<T>(serviceName);
         });
 
-        toggle.SetIsOnWithoutNotify(services[activatedIndex].Initialized);
+        toggle.SetIsOnWithoutNotify(services[activatedIndex].Started);
         toggle.onValueChanged.AddListener(b =>
         {
-            Robot.Instance.SetServicePaused<T>(b);
+            Robot.Instance.SetServicePaused<T>(!b);
         });
     }
 }

@@ -20,8 +20,7 @@ namespace Demonixis.InMoov.Services.Speech
 #if MS_SPEECH_SYNTHESIS
         private DictationRecognizer _dictationRecognizer;
 #endif
-        private bool _paused;
-
+        
         public override void Initialize()
         {
 #if MS_SPEECH_SYNTHESIS
@@ -32,17 +31,12 @@ namespace Demonixis.InMoov.Services.Speech
             _dictationRecognizer.DictationResult += (text, confidence) =>
             {
                 Debug.Log($"[DictationResult] {text} - {confidence}");
-                if (_paused) return;
+                if (Paused) return;
                 NotifyPhraseDetected(text);
             };
             _dictationRecognizer.Start();
 #endif
             base.Initialize();
-        }
-
-        public override void SetPaused(bool paused)
-        {
-            _paused = paused;
         }
 
         public override void Shutdown()

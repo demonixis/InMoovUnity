@@ -9,15 +9,14 @@ namespace Demonixis.InMoov.Systems
     {
         private ServoMixerService _servoMixerService;
 
-        [Header("Config")][SerializeField] private float _updateInterval = 1.0f / 30.0f;
+        [Header("Config")] [SerializeField] private float _updateInterval = 1.0f / 30.0f;
 
-        [Header("Rig")][SerializeField] private Transform _rig;
+        [Header("Rig")] [SerializeField] private Transform _rig;
         [SerializeField] private Transform _head;
         [SerializeField] private Transform _neck;
         [SerializeField] private Transform _hip;
 
-        [Header("Left (Top)")]
-        [SerializeField]
+        [Header("Left (Top)")] [SerializeField]
         private Transform _leftShoulder;
 
         [SerializeField] private Transform _leftUpperArm;
@@ -29,8 +28,7 @@ namespace Demonixis.InMoov.Systems
         [SerializeField] private Transform _leftRingFinger;
         [SerializeField] private Transform _leftPinkyFinger;
 
-        [Header("Right (Top)")]
-        [SerializeField]
+        [Header("Right (Top)")] [SerializeField]
         private Transform _rightShoulder;
 
         [SerializeField] private Transform _rightUpperArm;
@@ -44,11 +42,12 @@ namespace Demonixis.InMoov.Systems
 
         private void Start()
         {
-            _servoMixerService = Robot.Instance.GetServiceOfType<ServoMixerService>();
+            Robot.Instance.WhenStarted(Initialize);
         }
 
         public override void Initialize()
         {
+            _servoMixerService = Robot.Instance.GetService<ServoMixerService>();
             StartCoroutine(Loop());
         }
 

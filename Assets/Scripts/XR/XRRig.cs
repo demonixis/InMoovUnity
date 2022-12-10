@@ -48,7 +48,7 @@ namespace Demonixis.InMoov
                     offset.localEulerAngles = new Vector3(60, 0, 0);
             }
 
-            _servoMixerService = Robot.Instance.GetServiceOfType<ServoMixerService>();
+            _servoMixerService = Robot.Instance.GetService<ServoMixerService>();
         }
 
         private IEnumerator PawnControllerOverride()

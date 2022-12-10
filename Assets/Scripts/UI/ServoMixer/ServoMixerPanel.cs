@@ -35,6 +35,11 @@ namespace Demonixis.InMoov.UI
 
         private void Start()
         {
+            Robot.Instance.WhenStarted(Initialize);
+        }
+
+        private void Initialize()
+        {
             _sliderTextValues = GetComponentsInChildren<SliderTextValue>();
             _currentData = ServoData.New(ServoIdentifier.None);
             _servoMixerService = FindObjectOfType<ServoMixerService>();
@@ -231,7 +236,7 @@ namespace Demonixis.InMoov.UI
             {
                 var data = _servoMixerService.GetServoData((ServoIdentifier) i);
                 data.Value = data.Neutral;
-                _servoMixerService.SetServoData((ServoIdentifier)i, ref data);
+                _servoMixerService.SetServoData((ServoIdentifier) i, ref data);
             }
         }
     }

@@ -1,34 +1,40 @@
 using Demonixis.InMoov;
 using System.Collections;
+using Demonixis.InMoov.Chatbots;
+using Demonixis.InMoov.Services.Speech;
 using TMPro;
 using UnityEngine;
 
 public class BrainPanel : MonoBehaviour
 {
+    private ChatbotService _chatbot;
+
     [SerializeField] private TMP_InputField _manualBotInput;
     [SerializeField] private Transform _botInputContainer;
     [SerializeField] private GameObject _botTextPrefab;
 
-    private IEnumerator Start()
+    private void Start()
     {
-        yield return new WaitForEndOfFrame();
+        Robot.Instance.WhenStarted(Initialize);
+    }
 
-        Robot.Instance.VoiceRecognition.PhraseDetected += s =>
+    private void Initialize()
+    {
+        var robot = Robot.Instance;
+        if (robot.TryGetService(out VoiceRecognitionService voiceRecognitionService))
         {
-            AppendTextTo(_botInputContainer, s, false);
-        };
+            voiceRecognitionService.PhraseDetected += s => AppendTextTo(_botInputContainer, s, false);
+        }
 
-        Robot.Instance.Chatbot.ResponseReady += s =>
-        {
-            AppendTextTo(_botInputContainer, s, true);
-        };
+        _chatbot = robot.GetService<ChatbotService>();
+        _chatbot.ResponseReady += s => AppendTextTo(_botInputContainer, s, true);
 
         _manualBotInput.onSubmit.AddListener(s =>
         {
             AppendTextTo(_botInputContainer, s, false);
-            Robot.Instance.Chatbot.SubmitResponse(s);
+            _chatbot.SubmitResponse(s);
             _manualBotInput.SetTextWithoutNotify(string.Empty);
-        });
+        }); 
     }
 
     private void AppendTextTo(Transform parent, string text, bool justifyRight)

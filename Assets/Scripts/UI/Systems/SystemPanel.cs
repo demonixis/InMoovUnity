@@ -9,9 +9,14 @@ namespace Demonixis.InMoov.UI
 
         private void Start()
         {
+            Robot.Instance.WhenStarted(Initialize);
+        }
+
+        private void Initialize()
+        {
             foreach (Transform target in _container)
                 Destroy(target.gameObject);
-            
+
             var systems = FindObjectsOfType<RobotSystem>(true);
             foreach (var system in systems)
             {

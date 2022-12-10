@@ -13,8 +13,6 @@ namespace Demonixis.InMoov.Services.Speech
 {
     public class WindowsSpeechSynthesis : SpeechSynthesisService
     {
-        private bool _paused;
-
 #if MS_SPEECH_SYNTHESIS
         [DllImport("WindowsVoice")]
         public static extern void initSpeech();
@@ -51,15 +49,10 @@ namespace Demonixis.InMoov.Services.Speech
             initSpeech();
             base.Initialize();
         }
-
-        public override void SetPaused(bool paused)
-        {
-            _paused = paused;
-        }
-
+        
         public override void Speak(string message)
         {
-            if (_paused) return;
+            if (Paused) return;
             
             addToSpeechQueue(message);
 

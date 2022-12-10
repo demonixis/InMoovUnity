@@ -2,10 +2,7 @@
 {
     public class SpeechSynthesisService : RobotService
     {
-        public override RobotServices Type => RobotServices.Voice;
-
-        public override void SetPaused(bool paused) { }
-
+        public void SetCulture(string culture) { }
         public virtual void Speak(string message) { }
     }
 }

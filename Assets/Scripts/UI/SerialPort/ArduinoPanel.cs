@@ -21,6 +21,11 @@ namespace Demonixis.InMoov.UI
 
         private void Start()
         {
+            Robot.Instance.WhenStarted(Initialize);
+        }
+
+        private void Initialize()
+        {
             _serialPort = FindObjectOfType<SerialPortManager>();
             _cardList.options.Clear();
 

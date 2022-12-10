@@ -20,9 +20,7 @@ namespace Demonixis.InMoov.Servos
         private bool _paused;
 
         [SerializeField] private float _updateInterval = 1.0f / 30.0f;
-
-        public override RobotServices Type => RobotServices.Servo;
-
+        
         public override void Initialize()
         {
             base.Initialize();

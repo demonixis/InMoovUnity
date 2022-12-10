@@ -9,8 +9,8 @@ namespace Demonixis.InMoov
 
         public abstract void Initialize();
         public abstract void Dispose();
-        
-        public virtual void SetActive(bool active)
+
+        public void SetActive(bool active)
         {
             switch (active)
             {

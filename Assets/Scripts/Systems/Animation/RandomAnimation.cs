@@ -44,11 +44,13 @@ namespace Demonixis.InMoov.Systems
 
         private void Start()
         {
-            _servoMixerService = Robot.Instance.GetServiceOfType<ServoMixerService>();
+            Robot.Instance.WhenStarted(Initialize);
         }
 
         public override void Initialize()
         {
+            _servoMixerService = Robot.Instance.GetService<ServoMixerService>();
+
             foreach (var action in _servoActions)
                 StartCoroutine(PlayAnimationAction(action));
         }
@@ -58,17 +60,17 @@ namespace Demonixis.InMoov.Systems
             StopAllCoroutines();
         }
 
-        private IEnumerator PlayAnimationAction(ServoAnimation animation)
+        private IEnumerator PlayAnimationAction(ServoAnimation servoAnimation)
         {
             while (Started)
             {
-                var value = animation.RandomRange
-                    ? (byte) UnityRandom.Range(animation.Min, animation.Max)
-                    : animation.NextValue;
+                var value = servoAnimation.RandomRange
+                    ? (byte) UnityRandom.Range(servoAnimation.Min, servoAnimation.Max)
+                    : servoAnimation.NextValue;
 
-                _servoMixerService.SetServoValueInServo(animation.Servo, value);
+                _servoMixerService.SetServoValueInServo(servoAnimation.Servo, value);
 
-                yield return CoroutineFactory.WaitForSeconds(animation.Frequency);
+                yield return CoroutineFactory.WaitForSeconds(servoAnimation.Frequency);
             }
         }
 

@@ -6,21 +6,15 @@ namespace Demonixis.InMoov.Services.Speech
     public class SAMSpeechSynthesis : SpeechSynthesisService
     {
         private AudioSource _audioSource;
-        private bool _paused;
-        
+
         private void Start()
         {
             _audioSource = GetComponent<AudioSource>();
         }
-        
-        public override void SetPaused(bool paused)
-        {
-            _paused = paused;
-        }
 
         public override void Speak(string message)
         {
-            if (_paused) return;
+            if (Paused) return;
             
             message += "."; // TODO: my C# port seems to crash without final punctuation.
             

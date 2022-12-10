@@ -32,7 +32,6 @@ namespace Demonixis.InMoov.Chatbots
         private const string SerialFilename = "aiml-data.json";
         private Bot _aimlBot;
         private User _user;
-        private bool _paused;
         private AIMLNetServiceData _data;
         private string _pathToUserSettings;
         private string _lastWords;
@@ -81,14 +80,9 @@ namespace Demonixis.InMoov.Chatbots
             return Directory.Exists(Path.Combine(Application.streamingAssetsPath, "AIML.Net", lang));
         }
 
-        public override void SetPaused(bool paused)
-        {
-            _paused = paused;
-        }
-
         public override void SubmitResponse(string inputSpeech)
         {
-            if (_paused) return;
+            if (Paused) return;
             
             if (inputSpeech.ToLower() == _lastWords)
             {

@@ -18,7 +18,7 @@ namespace Demonixis.InMoov.Systems
 
         private void Start()
         {
-            _servoMixerService = Robot.Instance.GetServiceOfType<ServoMixerService>();
+            Robot.Instance.WhenStarted(Initialize);
         }
 
         public override void Initialize()
@@ -35,8 +35,11 @@ namespace Demonixis.InMoov.Systems
         {
             if (_initialized) return;
 
+
             var robot = Robot.Instance;
-            var chatbot = robot.GetServiceOfType<ChatbotService>();
+            _servoMixerService = robot.GetService<ServoMixerService>();
+
+            var chatbot = robot.GetService<ChatbotService>();
             chatbot.ResponseReady += OnChatBotResponse;
             robot.ServiceChanged += OnRobotServiceChanged;
 
@@ -48,7 +51,7 @@ namespace Demonixis.InMoov.Systems
             if (!_initialized) return;
 
             var robot = Robot.Instance;
-            var chatbot = robot.GetServiceOfType<ChatbotService>();
+            var chatbot = robot.GetService<ChatbotService>();
             if (chatbot == null) return;
             chatbot.ResponseReady -= OnChatBotResponse;
             robot.ServiceChanged -= OnRobotServiceChanged;
