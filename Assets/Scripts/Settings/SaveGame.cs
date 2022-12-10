@@ -13,7 +13,9 @@ namespace Demonixis.InMoov.Settings
 {
     public enum GameSaveStorageMode
     {
-        External = 0, Internal, Auto
+        External = 0,
+        Internal,
+        Auto
     }
 
     [Serializable]
@@ -86,9 +88,10 @@ namespace Demonixis.InMoov.Settings
             return path;
         }
 
-        public static string SaveRawData(GameSaveStorageMode storageMode, object data, string filename, string additionalPath = null)
+        public static string SaveRawData(GameSaveStorageMode storageMode, object data, string filename,
+            string additionalPath = null)
         {
-            var json = data is string ? (string)data : JsonConvert.SerializeObject(data, Formatting.Indented);
+            var json = data is string ? (string) data : JsonConvert.SerializeObject(data, Formatting.Indented);
             var externalStorageSave = storageMode != GameSaveStorageMode.Internal;
 
             if (externalStorageSave)
@@ -120,6 +123,7 @@ namespace Demonixis.InMoov.Settings
                 PlayerPrefs.SetString(filename, json);
                 PlayerPrefs.Save();
             }
+
             return json;
         }
 
@@ -170,12 +174,14 @@ namespace Demonixis.InMoov.Settings
             return default(T);
         }
 
-        public static string SaveData(GameSaveStorageMode storageMode, SaveGame saveGame, string filename, string additionalFolder = null)
+        public static string SaveData(GameSaveStorageMode storageMode, SaveGame saveGame, string filename,
+            string additionalFolder = null)
         {
             return SaveRawData(storageMode, saveGame, filename, additionalFolder);
         }
 
-        public static T LoadData<T>(GameSaveStorageMode storageMode, string filename, string additionalFolder = null) where T : SaveGame
+        public static T LoadData<T>(GameSaveStorageMode storageMode, string filename, string additionalFolder = null)
+            where T : SaveGame
         {
             return LoadRawData<T>(storageMode, filename, additionalFolder);
         }

@@ -2,7 +2,12 @@
 {
     public class SpeechSynthesisService : RobotService
     {
-        public void SetCulture(string culture) { }
-        public virtual void Speak(string message) { }
+        public void SetCulture(string culture)
+        {
+        }
+
+        public virtual void Speak(string message)
+        {
+        }
     }
 }

@@ -14,13 +14,10 @@ namespace Demonixis.InMoov
         private IEnumerator Start()
         {
             yield return null;
-            
+
             _text = GetComponent<TextMeshProUGUI>();
             _slider = GetComponentInParent<Slider>();
-            _slider.onValueChanged.AddListener(f =>
-            {
-                RefreshValue();
-            });
+            _slider.onValueChanged.AddListener(f => { RefreshValue(); });
 
             RefreshValue();
         }

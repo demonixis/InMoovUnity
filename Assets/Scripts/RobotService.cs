@@ -33,7 +33,7 @@ namespace Demonixis.InMoov
         {
             Paused = paused;
         }
-        
+
         public virtual void Shutdown()
         {
             Started = false;

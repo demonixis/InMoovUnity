@@ -19,11 +19,10 @@ namespace Demonixis.InMoov
         [SerializeField] private AudioListener _audioListener;
         [SerializeField] private Transform[] _handOffsets;
 
-        [Header("Replication")]
-        [SerializeField] private float _sendInterval = 1.0f / 60.0f;
+        [Header("Replication")] [SerializeField]
+        private float _sendInterval = 1.0f / 60.0f;
 
-        [Header("Misc")]
-        [SerializeField] private bool _startActive;
+        [Header("Misc")] [SerializeField] private bool _startActive;
         [SerializeField] private bool _isRobot;
 
         public bool IsRobot => _isRobot;

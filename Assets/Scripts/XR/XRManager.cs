@@ -118,7 +118,7 @@ namespace Demonixis.ToolboxV2.XR
             {
                 if (names[i].ToLower() == name.ToLower())
                 {
-                    return (XRVendor)i;
+                    return (XRVendor) i;
                 }
             }
 
@@ -434,12 +434,16 @@ namespace Demonixis.ToolboxV2.XR
 
             do
             {
-                InputDevices.GetDevicesWithCharacteristics(InputDeviceCharacteristics.HeadMounted | InputDeviceCharacteristics.TrackedDevice, head);
-                InputDevices.GetDevicesWithCharacteristics(InputDeviceCharacteristics.Controller | InputDeviceCharacteristics.Left | InputDeviceCharacteristics.TrackedDevice, left);
-                InputDevices.GetDevicesWithCharacteristics(InputDeviceCharacteristics.Controller | InputDeviceCharacteristics.Right | InputDeviceCharacteristics.TrackedDevice, right);
+                InputDevices.GetDevicesWithCharacteristics(
+                    InputDeviceCharacteristics.HeadMounted | InputDeviceCharacteristics.TrackedDevice, head);
+                InputDevices.GetDevicesWithCharacteristics(
+                    InputDeviceCharacteristics.Controller | InputDeviceCharacteristics.Left |
+                    InputDeviceCharacteristics.TrackedDevice, left);
+                InputDevices.GetDevicesWithCharacteristics(
+                    InputDeviceCharacteristics.Controller | InputDeviceCharacteristics.Right |
+                    InputDeviceCharacteristics.TrackedDevice, right);
                 yield return null;
-            }
-            while (head.Count + left.Count + right.Count < 2);
+            } while (head.Count + left.Count + right.Count < 2);
 
             foreach (var h in head)
             {
@@ -533,7 +537,7 @@ namespace Demonixis.ToolboxV2.XR
 
             if (result)
             {
-                var clipCount = (int)(caps.bufferFrequencyHz * seconds);
+                var clipCount = (int) (caps.bufferFrequencyHz * seconds);
                 clip = new byte[clipCount];
 
                 for (int i = 0; i < clipCount; i++)

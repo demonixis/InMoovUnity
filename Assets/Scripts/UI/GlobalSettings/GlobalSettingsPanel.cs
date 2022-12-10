@@ -19,7 +19,7 @@ namespace Demonixis.InMoov.UI
                 _languagesList.options.Add(new TMP_Dropdown.OptionData(lang));
             }
 
-            _languagesList.SetValueWithoutNotify((int)SystemLanguage.English);
+            _languagesList.SetValueWithoutNotify((int) SystemLanguage.English);
             _languagesList.RefreshShownValue();
         }
     }

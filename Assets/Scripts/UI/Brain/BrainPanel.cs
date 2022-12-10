@@ -20,7 +20,7 @@ public class BrainPanel : MonoBehaviour
     public void Initialize()
     {
         if (_chatbot != null) return;
-        
+
         var robot = Robot.Instance;
         if (robot.TryGetService(out VoiceRecognitionService voiceRecognitionService))
         {
@@ -35,7 +35,7 @@ public class BrainPanel : MonoBehaviour
             AppendTextTo(_botInputContainer, s, false);
             _chatbot.SubmitResponse(s);
             _manualBotInput.SetTextWithoutNotify(string.Empty);
-        }); 
+        });
     }
 
     private void AppendTextTo(Transform parent, string text, bool justifyRight)

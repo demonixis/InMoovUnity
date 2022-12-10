@@ -15,11 +15,11 @@ namespace Demonixis.InMoov.Services.Speech
         public override void Speak(string message)
         {
             if (Paused) return;
-            
+
             message += "."; // TODO: my C# port seems to crash without final punctuation.
-            
+
             var output = UnitySAM.TextToPhonemes(message + "[", out int[] ints);
-            
+
             UnitySAM.SetInput(ints);
 
             var buffer = UnitySAM.SAMMain();

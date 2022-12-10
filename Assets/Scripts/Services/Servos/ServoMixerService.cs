@@ -20,7 +20,7 @@ namespace Demonixis.InMoov.Servos
         private bool _paused;
 
         [SerializeField] private float _updateInterval = 1.0f / 30.0f;
-        
+
         public override void Initialize()
         {
             base.Initialize();
@@ -31,7 +31,7 @@ namespace Demonixis.InMoov.Servos
 
             _servoData = new ServoData[servoCount];
             for (var i = 0; i < servoCount; i++)
-                _servoData[i] = ServoData.New((ServoIdentifier)i);
+                _servoData[i] = ServoData.New((ServoIdentifier) i);
 
             // Load saved data and apply them
             var servoMixerData =
@@ -77,19 +77,19 @@ namespace Demonixis.InMoov.Servos
                 for (var i = 0; i < _servoData.Length; i++)
                 {
                     var data = _servoData[i];
-                    var cardIndex = (int)data.CardId;
+                    var cardIndex = (int) data.CardId;
 
                     if (cardIndex < 0) continue;
-                    
+
                     // TODO add neutral offset
                     //var offset = 90 - data.Neutral;
                     //data.Value = (byte)(data.Value + offset);
-                    
+
                     ClampServoValue(data.Min, data.Max, ref data.Value);
 
                     if (data.Inverse)
                         InvertServoValue(ref data.Value);
-                    
+
                     if (data.Enabled && data.MixageType != ServoMixageType.None)
                     {
                         switch (data.MixageType)
@@ -98,7 +98,7 @@ namespace Demonixis.InMoov.Servos
                                 SetRawServoValue(data.MixedServo, data.Value);
                                 break;
                             case ServoMixageType.InverseValue:
-                                SetRawServoValue(data.MixedServo, (byte)(180 - data.Value));
+                                SetRawServoValue(data.MixedServo, (byte) (180 - data.Value));
                                 break;
                         }
                     }
@@ -119,12 +119,12 @@ namespace Demonixis.InMoov.Servos
 
         public int GetServoValue(ServoIdentifier servoId)
         {
-            return _servoData[(int)servoId].Value;
+            return _servoData[(int) servoId].Value;
         }
 
         public void SetServoValueInEuler(ServoIdentifier servoId, float rawValue)
         {
-            ref var data = ref _servoData[(int)servoId];
+            ref var data = ref _servoData[(int) servoId];
             var value = ServoConverter.UnityRotationToServo(rawValue, data.ScaleValueTo180 > 0);
 
             data.Value = value;
@@ -132,26 +132,26 @@ namespace Demonixis.InMoov.Servos
 
         public void SetServoValueInServo(ServoIdentifier servoId, byte value)
         {
-            ref var data = ref _servoData[(int)servoId];
+            ref var data = ref _servoData[(int) servoId];
             data.Value = value;
         }
 
         public void SetRawServoValue(ServoIdentifier servoId, byte value)
         {
-            ref var data = ref _servoData[(int)servoId];
+            ref var data = ref _servoData[(int) servoId];
             data.Value = value;
         }
 
         private void ClampServoValue(byte min, byte max, ref byte value)
         {
-            value = (byte)Mathf.Max(min, value);
-            value = (byte)Mathf.Min(max, value);
+            value = (byte) Mathf.Max(min, value);
+            value = (byte) Mathf.Min(max, value);
         }
-        
+
         private void InvertServoValue(ref byte value)
         {
             var inverted = 180 - value;
-            value = (byte)inverted;
+            value = (byte) inverted;
         }
 
         public void SetServosToNeutral()
@@ -165,25 +165,25 @@ namespace Demonixis.InMoov.Servos
 
         public void SetServoData(ServoIdentifier servoId, ref ServoData data)
         {
-            var index = (int)servoId;
+            var index = (int) servoId;
             _servoData[index] = data;
         }
 
         public ServoData GetServoData(ServoIdentifier id)
         {
-            return _servoData[(int)id];
+            return _servoData[(int) id];
         }
 
         public void LockServo(ServoIdentifier id)
         {
-            var index = (int)id;
+            var index = (int) id;
             if (!_lockedServos.Contains(index))
                 _lockedServos.Add(index);
         }
 
         public void UnlockServo(ServoIdentifier id)
         {
-            var index = (int)id;
+            var index = (int) id;
             if (_lockedServos.Contains(index))
                 _lockedServos.Remove(index);
         }

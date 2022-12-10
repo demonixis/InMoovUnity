@@ -20,7 +20,7 @@ namespace Demonixis.InMoov.Services.Speech
 #if MS_SPEECH_SYNTHESIS
         private DictationRecognizer _dictationRecognizer;
 #endif
-        
+
         public override void Initialize()
         {
 #if MS_SPEECH_SYNTHESIS

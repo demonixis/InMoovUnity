@@ -49,11 +49,11 @@ namespace Demonixis.InMoov.Services.Speech
             initSpeech();
             base.Initialize();
         }
-        
+
         public override void Speak(string message)
         {
             if (Paused) return;
-            
+
             addToSpeechQueue(message);
 
             if (_logOutput)

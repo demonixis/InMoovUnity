@@ -25,8 +25,8 @@ namespace Demonixis.InMoov
 
         private void ActivateWebcamTexture(int cameraIndex)
         {
-
-            if (!TryGetWebcamInfos(cameraIndex, out string cameraName, out int width, out int height, out int refreshRate))
+            if (!TryGetWebcamInfos(cameraIndex, out string cameraName, out int width, out int height,
+                    out int refreshRate))
             {
                 Debug.LogError($"Can't open the webcam {cameraIndex}");
                 _rawimage.enabled = false;
@@ -46,7 +46,8 @@ namespace Demonixis.InMoov
             _webCamTexture.Play();
         }
 
-        private bool TryGetWebcamInfos(int cameraIndex, out string cameraName, out int width, out int height, out int refreshRate)
+        private bool TryGetWebcamInfos(int cameraIndex, out string cameraName, out int width, out int height,
+            out int refreshRate)
         {
             cameraName = string.Empty;
             width = 0;
@@ -84,7 +85,8 @@ namespace Demonixis.InMoov
 
             foreach (var res in resolutions)
             {
-                if (res.width > bestResolution.width && res.height > bestResolution.height && res.refreshRate > bestResolution.refreshRate)
+                if (res.width > bestResolution.width && res.height > bestResolution.height &&
+                    res.refreshRate > bestResolution.refreshRate)
                 {
                     bestResolution.width = res.width;
                     bestResolution.height = res.height;

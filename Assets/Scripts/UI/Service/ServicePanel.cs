@@ -22,7 +22,7 @@ public class ServicePanel : MonoBehaviour
     [SerializeField] private Toggle _computerVisionServiceStatus;
     [SerializeField] private TMP_Dropdown _navigationServiceList;
     [SerializeField] private Toggle _navigationServiceStatus;
-    
+
     private void Start()
     {
         SetupService<ChatbotService>(_botServiceList, _botServiceStatus);
@@ -37,9 +37,9 @@ public class ServicePanel : MonoBehaviour
     {
         var services = FindObjectsOfType<T>(true);
         var activatedIndex = 0;
-        
+
         dropdown.options.Clear();
-        
+
         for (var i = 0; i < services.Length; i++)
         {
             dropdown.options.Add(new TMP_Dropdown.OptionData(services[i].ServiceName));
@@ -57,9 +57,6 @@ public class ServicePanel : MonoBehaviour
         });
 
         toggle.SetIsOnWithoutNotify(services[activatedIndex].Started);
-        toggle.onValueChanged.AddListener(b =>
-        {
-            Robot.Instance.SetServicePaused<T>(!b);
-        });
+        toggle.onValueChanged.AddListener(b => { Robot.Instance.SetServicePaused<T>(!b); });
     }
 }

@@ -7,8 +7,9 @@ namespace Demonixis.InMoov.Services.Speech
         private ChatbotService _chatbot;
         private SpeechSynthesisService _speechSynthesis;
         private VoiceRecognitionService _voiceRecognition;
-        
-        public void Setup(ChatbotService chatbotService, VoiceRecognitionService voiceRecognition, SpeechSynthesisService speechSynthesis)
+
+        public void Setup(ChatbotService chatbotService, VoiceRecognitionService voiceRecognition,
+            SpeechSynthesisService speechSynthesis)
         {
             _chatbot = chatbotService;
             _voiceRecognition = voiceRecognition;

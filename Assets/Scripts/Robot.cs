@@ -91,7 +91,7 @@ namespace Demonixis.InMoov
             if (_waitingStartCallbacks.Count <= 0) return;
             foreach (var callback in _waitingStartCallbacks)
                 callback?.Invoke();
-            
+
             _waitingStartCallbacks.Clear();
         }
 
@@ -124,10 +124,10 @@ namespace Demonixis.InMoov
             SelectService<ServoMixerService>(serviceList.XR);
             SelectService<ServoMixerService>(serviceList.Navigation);
             SelectService<ServoMixerService>(serviceList.ComputerVision);
-            
+
             _speechBrainProxy.Setup(chatbotService, voiceRecognition, speechSynthesis);
         }
-        
+
         /// <summary>
         /// Select the service T by its name and use a fallback if not available
         /// </summary>
@@ -294,7 +294,7 @@ namespace Demonixis.InMoov
         private void OnDestroy()
         {
             var serviceList = new ServiceList();
-            
+
             foreach (var service in _currentServices)
             {
                 if (service is ChatbotService)

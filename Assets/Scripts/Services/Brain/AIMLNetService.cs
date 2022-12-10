@@ -38,7 +38,8 @@ namespace Demonixis.InMoov.Chatbots
 
         public override void Initialize()
         {
-            _data = SaveGame.LoadRawData<AIMLNetServiceData>(SaveGame.GetPreferredStorageMode(), SerialFilename, "Brain");
+            _data = SaveGame.LoadRawData<AIMLNetServiceData>(SaveGame.GetPreferredStorageMode(), SerialFilename,
+                "Brain");
 
             if (!_data.IsValid())
                 _data = AIMLNetServiceData.CreateNew();
@@ -83,7 +84,7 @@ namespace Demonixis.InMoov.Chatbots
         public override void SubmitResponse(string inputSpeech)
         {
             if (Paused) return;
-            
+
             if (inputSpeech.ToLower() == _lastWords)
             {
                 Debug.Log("Prevent the robot to respond to itself");

@@ -13,12 +13,9 @@ namespace Demonixis.InMoov.UI
 
         private void Start()
         {
-            _activation.onValueChanged.AddListener(b =>
-            {
-                _system.SetActive(b);
-            });
+            _activation.onValueChanged.AddListener(b => { _system.SetActive(b); });
         }
-        
+
         public void Setup(RobotSystem system)
         {
             _name.text = system.GetType().Name;

@@ -29,7 +29,8 @@ namespace Demonixis.InMoov.Servos
 
         public override string ToString()
         {
-            return $"{Id} - Min: {Min} / Max: {Max} / Neutral: {Neutral} / Invert: {Inverse} / Card: {CardId} / Pin: {PinId}";
+            return
+                $"{Id} - Min: {Min} / Max: {Max} / Neutral: {Neutral} / Invert: {Inverse} / Card: {CardId} / Pin: {PinId}";
         }
 
         public static ServoData New(ServoIdentifier servoId)
@@ -44,28 +45,28 @@ namespace Demonixis.InMoov.Servos
                 Neutral = 90,
                 Speed = 1,
                 PinId = SerialPortManager.PinStart,
-                CardId = (int)ArduinoIdentifiers.None,
+                CardId = (int) ArduinoIdentifiers.None,
                 Enabled = false,
                 Value = 90,
                 ScaleValueTo180 = 0,
                 MixedServo = ServoIdentifier.None,
-                MixageType =  ServoMixageType.None
+                MixageType = ServoMixageType.None
             };
         }
     }
 
     [Serializable]
     public enum ServoIdentifier
-    {   
+    {
         // Eyes
         EyeX = 0,
         EyeY,
         EyelidLeft,
         EyeLidRight,
-        
+
         // Jaw
         Jaw,
-        
+
         // Head
         HeadYaw,
         HeadPitch,
