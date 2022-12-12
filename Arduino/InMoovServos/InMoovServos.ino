@@ -1,15 +1,14 @@
 #include <Servo.h>
 
-// You can change that for another board
 const int PinStart = 2;
-const int MaxPinEnd = 53; 
+const int PinEnd = 53; 
 #if defined(ARDUINO_AVR_MEGA2560)
-const int PinEnd = MaxPinEnd;
+const int BoardPinEnd = PinEnd;
 #else
-const int PinEnd = 13;
+const int BoardPinEnd = 13;
 #endif
-const int BufferLimitLength = PinEnd - PinStart;
-const int ServoCount = PinEnd - MaxPinEnd;
+const int BufferLength = BoardPinEnd - PinStart;
+const int ServoCount = PinEnd - PinStart;
 const int ServoMin = 0;
 const int ServoNeutral = 90;
 const int ServoMax = 180;
@@ -58,7 +57,7 @@ void loop() {
   }
 
   // Apply values to the servos
-  for (int i = 0; i < BufferLimitLength; i++) {
+  for (int i = 0; i < BufferLength; i++) {
     // Check if we need to enable or disable the servo
     if (servoActivation[i] != lastServoActivation[i]) {
       if (servoActivation[i] > 0) {
