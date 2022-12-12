@@ -31,7 +31,7 @@ For instance, you can rewrite the servo service to use a Raspberry Pi card inste
 |----------|--------------------------------------------------------------|---------|----------|
 | SAM | A C# port of the SAM speech synthetiser which is crossplatformer and enabled by default | Yes | Windows, Linux, Macos, Android |
 | System.Speech  | The integrated Speech Synthesis feature integrated in the Windows operating system. It's Windows **only** and you've to manage languages yourself from Windows | No | Windows / Microsoft Store |
-| VoiceRSS | VoiceRSS is an online services that requires an API key (put that key into the `global-config.json` file). It supports many languages. The free tier allows up to 350 query per day | No | Windows, Linux, Macos, Android |
+| VoiceRSS | VoiceRSS is an online service that requires an API key (put that key into the `global-config.json` file). It supports many languages. The free tier allows up to 350 query per day | No | Windows, Linux, Macos, Android |
 
 ### Servo Mixer
 | Service  | Description  												  |
