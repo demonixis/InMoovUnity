@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Demonixis.InMoov.UI
 {
-    public class GlobalSettingsPanel : MonoBehaviour
+    public sealed class GlobalSettingsPanel : MonoBehaviour
     {
         [SerializeField] private TMP_Dropdown _languagesList;
 

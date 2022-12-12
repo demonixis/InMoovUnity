@@ -4,7 +4,7 @@ using Demonixis.InMoov.Services.Speech;
 using TMPro;
 using UnityEngine;
 
-public class BrainPanel : MonoBehaviour
+public sealed class BrainPanel : MonoBehaviour
 {
     private ChatbotService _chatbot;
 

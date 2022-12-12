@@ -8,7 +8,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ServicePanel : MonoBehaviour
+public sealed class ServicePanel : MonoBehaviour
 {
     [SerializeField] private TMP_Dropdown _botServiceList;
     [SerializeField] private Toggle _botServiceStatus;

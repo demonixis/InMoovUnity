@@ -11,7 +11,6 @@ namespace Demonixis.InMoov.Servos
     {
         public int CardId;
         public string PortName;
-        public bool IsMega2560;
     }
 
     public enum ArduinoIdentifiers
@@ -25,60 +24,38 @@ namespace Demonixis.InMoov.Servos
         None
     }
 
-    public struct SerialPortProxy
-    {
-        public SerialPort Serial;
-        public bool IsMega2560;
-
-        public bool IsOpen => Serial?.IsOpen ?? false;
-        public string PortName => Serial?.PortName ?? string.Empty;
-
-        public void Dispose()
-        {
-            if (Serial == null) return;
-            Serial.Dispose();
-        }
-    }
-
     [Serializable]
     public sealed class SerialPortManager : MonoBehaviour
     {
         public const int PinStart = 2;
-        public const int PinEnd = 13;
         public const int PinEndMega = 53;
         public const string SerialFilename = "serial.json";
         public const int DefaultBaudRate = 9600;
-        private Dictionary<int, SerialPortProxy> _serialPorts;
+        private Dictionary<int, SerialPort> _serialPorts;
         private bool _disposed;
 
 #if UNITY_EDITOR
         [SerializeField] private bool _logFirstTrame = true;
         [SerializeField] private bool _logArduino = true;
 #endif
-
-        public static int MaximumServoCount => PinEnd - PinStart;
-        public static int MaximumServoCountMega => PinEndMega - PinStart;
+        
+        public static int MaximumServoCount => PinEndMega - PinStart;
 
         public bool IsConnected(int cardId)
         {
             return _serialPorts.ContainsKey(cardId) && _serialPorts[cardId].IsOpen;
         }
 
-        public bool IsMega2560(int cardId)
-        {
-            return _serialPorts.ContainsKey(cardId) && _serialPorts[cardId].IsMega2560;
-        }
-
         public void Initialize()
         {
-            _serialPorts = new Dictionary<int, SerialPortProxy>();
+            _serialPorts = new Dictionary<int, SerialPort>();
 
             var savedData =
                 SaveGame.LoadRawData<SerialData[]>(SaveGame.GetPreferredStorageMode(), SerialFilename, "Config");
 
             if (savedData == null || savedData.Length <= 0) return;
             foreach (var data in savedData)
-                Connect(data.CardId, data.PortName, data.IsMega2560);
+                Connect(data.CardId, data.PortName);
         }
 
         public void Dispose()
@@ -92,8 +69,7 @@ namespace Demonixis.InMoov.Servos
                 serialData[i++] = new SerialData
                 {
                     CardId = keyValue.Key,
-                    PortName = keyValue.Value.PortName,
-                    IsMega2560 = keyValue.Value.IsMega2560
+                    PortName = keyValue.Value.PortName
                 };
             }
 
@@ -116,12 +92,11 @@ namespace Demonixis.InMoov.Servos
             if (_serialPorts == null || !_serialPorts.ContainsKey(cardId)) return;
 
             var serialPort = _serialPorts[cardId];
-            if (serialPort.Serial == null) return;
+            if (serialPort == null) return;
 
             try
             {
-                var bufferSize = serialPort.IsMega2560 ? MaximumServoCountMega : MaximumServoCount;
-                serialPort.Serial.Write(buffer.DataBuffer, 0, bufferSize);
+                serialPort.Write(buffer.DataBuffer, 0, MaximumServoCount);
             }
             catch (Exception ex)
             {
@@ -135,9 +110,9 @@ namespace Demonixis.InMoov.Servos
 
             foreach (var sp in _serialPorts)
             {
-                if (sp.Value.Serial == null) continue;
+                if (sp.Value == null) continue;
 
-                var result = sp.Value.Serial.ReadExisting();
+                var result = sp.Value.ReadExisting();
 #if UNITY_EDITOR
                 if (_logArduino && !string.IsNullOrEmpty(result))
                     Debug.Log(result);
@@ -145,7 +120,7 @@ namespace Demonixis.InMoov.Servos
             }
         }
 
-        public bool Connect(int cardId, string serialName, bool isMega2560)
+        public bool Connect(int cardId, string serialName)
         {
             if (_serialPorts.ContainsKey(cardId)) return false;
 
@@ -160,11 +135,7 @@ namespace Demonixis.InMoov.Servos
                 {
                     serialPort.ErrorReceived += (sender, e) => Debug.Log($"Error {e}");
                     serialPort.DataReceived += (sender, e) => Debug.Log($"Data Received: {e}");
-                    _serialPorts.Add(cardId, new SerialPortProxy
-                    {
-                        Serial = serialPort,
-                        IsMega2560 = isMega2560
-                    });
+                    _serialPorts.Add(cardId, serialPort);
                     return true;
                 }
             }

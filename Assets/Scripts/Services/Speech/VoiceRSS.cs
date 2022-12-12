@@ -6,7 +6,7 @@ using UnityEngine;
 namespace Demonixis.InMoov.Services.Speech
 {
     [RequireComponent(typeof(AudioSource))]
-    public class VoiceRSS : SpeechSynthesisService
+    public sealed class VoiceRSS : SpeechSynthesisService
     {
         private TextToSpeechManager _ttsManager;
         private AudioSource _audioSource;

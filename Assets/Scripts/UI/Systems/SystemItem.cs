@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 namespace Demonixis.InMoov.UI
 {
-    public class SystemItem : MonoBehaviour
+    public sealed class SystemItem : MonoBehaviour
     {
         private RobotSystem _system;
 

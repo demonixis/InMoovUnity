@@ -4,7 +4,7 @@ using Yetibyte.Unity.SpeechRecognition;
 namespace Demonixis.InMoov.Services.Speech
 {
     [RequireComponent(typeof(VoskListener))]
-    public class VoskVoiceRecognitionService : VoiceRecognitionService
+    public sealed class VoskVoiceRecognitionService : VoiceRecognitionService
     {
         public override void Initialize()
         {

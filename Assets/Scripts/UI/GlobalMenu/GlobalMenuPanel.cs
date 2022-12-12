@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Demonixis.InMoov.UI
 {
-    public class GlobalMenuPanel : MonoBehaviour
+    public sealed class GlobalMenuPanel : MonoBehaviour
     {
         private GameObject _currentVisible;
 

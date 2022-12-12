@@ -7,7 +7,7 @@ using UnityEngine.UI;
 namespace Demonixis.InMoov.UI
 {
     [RequireComponent(typeof(Button))]
-    public class ServoMixerItem : MonoBehaviour
+    public sealed class ServoMixerItem : MonoBehaviour
     {
         private ServoIdentifier _servoIdentifier;
         public event Action<ServoIdentifier> Clicked;

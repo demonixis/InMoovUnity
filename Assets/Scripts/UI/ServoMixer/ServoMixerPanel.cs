@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 namespace Demonixis.InMoov.UI
 {
-    public class ServoMixerPanel : MonoBehaviour
+    public sealed class ServoMixerPanel : MonoBehaviour
     {
         private ServoMixerService _servoMixerService;
         private ServoIdentifier _currentServo;

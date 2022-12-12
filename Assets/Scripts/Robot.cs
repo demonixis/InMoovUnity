@@ -11,7 +11,7 @@ using UnityEngine.SceneManagement;
 
 namespace Demonixis.InMoov
 {
-    public class Robot : MonoBehaviour
+    public sealed class Robot : MonoBehaviour
     {
         private static Robot _instance;
         private const string ServiceListFilename = "services.json";

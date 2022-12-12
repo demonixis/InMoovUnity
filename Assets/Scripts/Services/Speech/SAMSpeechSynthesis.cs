@@ -3,7 +3,7 @@
 namespace Demonixis.InMoov.Services.Speech
 {
     [RequireComponent(typeof(AudioSource))]
-    public class SAMSpeechSynthesis : SpeechSynthesisService
+    public sealed class SAMSpeechSynthesis : SpeechSynthesisService
     {
         private AudioSource _audioSource;
 

@@ -15,7 +15,6 @@ namespace Demonixis.InMoov.Servos
         private SerialPortManager _serialPortManager;
         private ServoData[] _servoData;
         private SerialDataBuffer[] _serialDataBuffer;
-        private List<int> _lockedServos;
         private bool _running;
         private bool _paused;
 
@@ -44,8 +43,7 @@ namespace Demonixis.InMoov.Servos
             _serialDataBuffer = new SerialDataBuffer[names.Length];
             for (var i = 0; i < _serialDataBuffer.Length; i++)
                 _serialDataBuffer[i] = new SerialDataBuffer();
-
-            _lockedServos = new List<int>();
+            
             _serialPortManager = GetComponent<SerialPortManager>();
             _serialPortManager.Initialize();
 
@@ -172,20 +170,6 @@ namespace Demonixis.InMoov.Servos
         public ServoData GetServoData(ServoIdentifier id)
         {
             return _servoData[(int) id];
-        }
-
-        public void LockServo(ServoIdentifier id)
-        {
-            var index = (int) id;
-            if (!_lockedServos.Contains(index))
-                _lockedServos.Add(index);
-        }
-
-        public void UnlockServo(ServoIdentifier id)
-        {
-            var index = (int) id;
-            if (_lockedServos.Contains(index))
-                _lockedServos.Remove(index);
         }
     }
 }

@@ -85,7 +85,7 @@ namespace Demonixis.InMoov.Systems
                 _servoMixerService.SetServoValueInEuler(ServoIdentifier.LeftShoulderYaw, upperArm.y);
                 _servoMixerService.SetServoValueInEuler(ServoIdentifier.LeftShoulderPitch, upperArm.x);
                 _servoMixerService.SetServoValueInEuler(ServoIdentifier.LeftShoulderRoll, upperArm.z);
-                _servoMixerService.SetServoValueInEuler(ServoIdentifier.LeftArm, lowerArm.x);
+                _servoMixerService.SetServoValueInEuler(ServoIdentifier.LeftElbow, lowerArm.x);
                 _servoMixerService.SetServoValueInEuler(ServoIdentifier.LeftWrist, wrist.z);
 
                 // Left Hand
@@ -108,7 +108,7 @@ namespace Demonixis.InMoov.Systems
                 _servoMixerService.SetServoValueInEuler(ServoIdentifier.RightShoulderYaw, upperArm.y);
                 _servoMixerService.SetServoValueInEuler(ServoIdentifier.RightShoulderPitch, upperArm.x);
                 _servoMixerService.SetServoValueInEuler(ServoIdentifier.RightShoulderRoll, upperArm.z);
-                _servoMixerService.SetServoValueInEuler(ServoIdentifier.RightArm, lowerArm.x);
+                _servoMixerService.SetServoValueInEuler(ServoIdentifier.RightElbow, lowerArm.x);
                 _servoMixerService.SetServoValueInEuler(ServoIdentifier.RightWrist, wrist.z);
 
                 // Right Hand

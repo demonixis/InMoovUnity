@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Demonixis.InMoov.UI
 {
-    public class SystemPanel : MonoBehaviour
+    public sealed class SystemPanel : MonoBehaviour
     {
         [SerializeField] private GameObject _itemPrefab;
         [SerializeField] private Transform _container;

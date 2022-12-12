@@ -8,7 +8,7 @@ using UnityEngine.SpatialTracking;
 
 namespace Demonixis.InMoov
 {
-    public class XRRig : MonoBehaviour
+    public sealed class XRRig : MonoBehaviour
     {
         private ServoMixerService _servoMixerService;
         private TrackedPoseDriver[] _trackedPoseDrivers;

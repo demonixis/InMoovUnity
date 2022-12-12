@@ -8,14 +8,13 @@ using UnityEngine.UI;
 
 namespace Demonixis.InMoov.UI
 {
-    public class ArduinoPanel : MonoBehaviour
+    public sealed class ArduinoPanel : MonoBehaviour
     {
         private SerialPortManager _serialPort;
 
         [SerializeField] private TextMeshProUGUI _status;
         [SerializeField] private TMP_Dropdown _portList;
         [SerializeField] private TMP_Dropdown _cardList;
-        [SerializeField] private Toggle _isMega2560;
         [SerializeField] private Button _connectButton;
         [SerializeField] private Button _disconnectedButton;
 
@@ -36,8 +35,6 @@ namespace Demonixis.InMoov.UI
             _cardList.SetValueWithoutNotify(0);
             _cardList.RefreshShownValue();
             _cardList.onValueChanged.AddListener(i => RefreshCardStatus());
-
-            _isMega2560.SetIsOnWithoutNotify(false);
 
             RefreshPorts(true);
             RefreshCardStatus();
@@ -62,7 +59,6 @@ namespace Demonixis.InMoov.UI
             _status.text = connected ? "Connected" : "Disconnected";
             _connectButton.interactable = !connected;
             _disconnectedButton.interactable = connected;
-            _isMega2560.SetIsOnWithoutNotify(_serialPort.IsMega2560(cardId));
         }
 
         private IEnumerator RefreshCardStatusCoroutine()
@@ -75,7 +71,19 @@ namespace Demonixis.InMoov.UI
         {
             var ports = SerialPort.GetPortNames();
 
-            if (!force && ports.Length == _portList.options.Count) return;
+            if (!force && ports.Length == _portList.options.Count)
+            {
+                var samePortCount = 0;
+                for (var i = 0; i < ports.Length; i++)
+                {
+                    if (ports[i] == _portList.options[i].text)
+                        samePortCount++;
+                }
+
+                // No changes
+                if (samePortCount == ports.Length)
+                    return;
+            }
 
             _portList.options.Clear();
 
@@ -108,7 +116,7 @@ namespace Demonixis.InMoov.UI
             var portName = _portList.options[_portList.value].text;
             var cardId = _cardList.value;
 
-            _serialPort.Connect(cardId, portName, _isMega2560.isOn);
+            _serialPort.Connect(cardId, portName);
 
             StartCoroutine(RefreshCardStatusCoroutine());
         }
