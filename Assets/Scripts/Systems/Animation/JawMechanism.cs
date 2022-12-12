@@ -15,12 +15,7 @@ namespace Demonixis.InMoov.Systems
         [SerializeField] private float _jawCloseTime = 0.15f;
         [SerializeField] private byte _jawAmplitude = 25;
         [SerializeField] private byte _wordsPerMinute = 40;
-
-        private void Start()
-        {
-            Robot.Instance.WhenStarted(Initialize);
-        }
-
+        
         public override void Initialize()
         {
             InternalInitialize();

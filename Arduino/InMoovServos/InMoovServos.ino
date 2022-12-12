@@ -1,7 +1,7 @@
 #include <Servo.h>
 
 const int PinStart = 2;
-const int PinEnd = 53; 
+const int PinEnd = 53;
 #if defined(ARDUINO_AVR_MEGA2560)
 const int BoardPinEnd = PinEnd;
 #else
@@ -13,6 +13,7 @@ const int ServoMin = 0;
 const int ServoNeutral = 90;
 const int ServoMax = 180;
 const int DefaultBaudRate = 9600;
+const int MaxBufferSize = 63;
 
 // The trame is
 // Servo 0 (Pin2) => Value [0; 180], Disable if value is upper to ServoMax
@@ -41,11 +42,18 @@ void loop() {
   int dataCount = Serial.available();
 
   if (dataCount > 0) {
-    Serial.print(dataCount);
-    Serial.println();
+    Serial.println(dataCount);
   }
 
   if (dataCount != ServoCount) {
+    // Flush the buffer if full.
+    if (dataCount == MaxBufferSize) {
+      while (Serial.available()) {
+        Serial.read();
+      }
+    }
+
+    // Return while it doesn't have the expected size.
     return;
   }
 

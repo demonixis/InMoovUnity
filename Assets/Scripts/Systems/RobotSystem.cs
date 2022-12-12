@@ -12,6 +12,14 @@ namespace Demonixis.InMoov
 
         public void SetActive(bool active)
         {
+            Robot.Instance.WhenStarted(() =>
+            {
+                InternalSetActive(active);
+            });
+        }
+
+        private void InternalSetActive(bool active)
+        {
             switch (active)
             {
                 case true when !Started:

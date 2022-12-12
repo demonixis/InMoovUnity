@@ -6,12 +6,11 @@ namespace Demonixis.InMoov.Servos
     [Serializable]
     public sealed class SerialDataBuffer
     {
-        public const int ArduinoMaxBufferSize = 64;
         public byte[] DataBuffer { get; private set; }
 
         public SerialDataBuffer()
         {
-            DataBuffer = new byte[ArduinoMaxBufferSize];
+            DataBuffer = new byte[SerialPortManager.MaximumServoCount];
         }
 
         public void SetValue(int pinNumber, byte value, bool enabled)
@@ -24,6 +23,14 @@ namespace Demonixis.InMoov.Servos
 
             var index = pinNumber - SerialPortManager.PinStart;
             DataBuffer[index] = enabled ? value : byte.MaxValue;
+        }
+
+        public static byte[] GetClearedBuffer()
+        {
+            var buffer = new byte[SerialPortManager.MaximumServoCount];
+            for (var i = 0; i < buffer.Length; i++)
+                buffer[i] = byte.MaxValue;
+            return buffer;
         }
 
         public void ClearData()

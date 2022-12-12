@@ -38,7 +38,7 @@ namespace Demonixis.InMoov.Servos
         [SerializeField] private bool _logFirstTrame = true;
         [SerializeField] private bool _logArduino = true;
 #endif
-        
+
         public static int MaximumServoCount => PinEndMega - PinStart;
 
         public bool IsConnected(int cardId)
@@ -76,8 +76,17 @@ namespace Demonixis.InMoov.Servos
             SaveGame.SaveRawData(SaveGame.GetPreferredStorageMode(), serialData,
                 SerialFilename, "Config");
 
+            var clearBuffer = SerialDataBuffer.GetClearedBuffer();
             foreach (var serial in _serialPorts)
+            {
+                var serialPort = serial.Value;
+                if (serialPort == null) continue;
+                
+                if (serialPort.IsOpen)
+                    serialPort.Write(clearBuffer, 0, clearBuffer.Length);
+                
                 serial.Value.Dispose();
+            }
 
             _disposed = true;
         }
@@ -93,15 +102,7 @@ namespace Demonixis.InMoov.Servos
 
             var serialPort = _serialPorts[cardId];
             if (serialPort == null) return;
-
-            try
-            {
-                serialPort.Write(buffer.DataBuffer, 0, MaximumServoCount);
-            }
-            catch (Exception ex)
-            {
-                Debug.Log(ex.Message);
-            }
+            serialPort.Write(buffer.DataBuffer, 0, buffer.DataBuffer.Length);
         }
 
         private void Update()

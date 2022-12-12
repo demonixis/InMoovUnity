@@ -42,11 +42,6 @@ namespace Demonixis.InMoov.Systems
         [SerializeField] private RandomServoAction[] _servoActions;
         [SerializeField] private float _frequency = 2.0f;
 
-        private void Start()
-        {
-            Robot.Instance.WhenStarted(Initialize);
-        }
-
         public override void Initialize()
         {
             _servoMixerService = Robot.Instance.GetService<ServoMixerService>();

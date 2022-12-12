@@ -121,9 +121,9 @@ namespace Demonixis.InMoov
             var voiceRecognition = SelectService<VoiceRecognitionService>(serviceList.VoiceRecognition);
             var speechSynthesis = SelectService<SpeechSynthesisService>(serviceList.SpeechSynthesis);
             SelectService<ServoMixerService>(serviceList.ServoMixer);
-            SelectService<ServoMixerService>(serviceList.XR);
-            SelectService<ServoMixerService>(serviceList.Navigation);
-            SelectService<ServoMixerService>(serviceList.ComputerVision);
+            SelectService<XRService>(serviceList.XR);
+            SelectService<NavigationService>(serviceList.Navigation);
+            SelectService<ComputerVisionService>(serviceList.ComputerVision);
 
             _speechBrainProxy.Setup(chatbotService, voiceRecognition, speechSynthesis);
         }

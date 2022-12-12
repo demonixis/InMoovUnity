@@ -40,11 +40,6 @@ namespace Demonixis.InMoov.Systems
         [SerializeField] private Transform _rightRingFinger;
         [SerializeField] private Transform _rightPinkyFinger;
 
-        private void Start()
-        {
-            Robot.Instance.WhenStarted(Initialize);
-        }
-
         public override void Initialize()
         {
             _servoMixerService = Robot.Instance.GetService<ServoMixerService>();

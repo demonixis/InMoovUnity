@@ -42,11 +42,6 @@ namespace Demonixis.InMoov.Systems
 
         [SerializeField] private ServoAnimation[] _servoActions;
 
-        private void Start()
-        {
-            Robot.Instance.WhenStarted(Initialize);
-        }
-
         public override void Initialize()
         {
             _servoMixerService = Robot.Instance.GetService<ServoMixerService>();
