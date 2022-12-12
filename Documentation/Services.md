@@ -1,6 +1,6 @@
 # Services
 
-A service is a tiny program that handles a specific primary task, it's mandatory. You can get the list of enabled services using Robot. Instance. Services. A dedicated user interface allows you to select the service you want. Note that when a service is changed, the entire scene is reloaded (it's temporary).
+A service is a tiny program that handles a specific primary task, it's mandatory. You can get the list of enabled services using `Robot.Instance.Services`. A dedicated user interface allows to select the desired service. Note that when a service is changed, the entire scene is reloaded (it's temporary).
 For instance, you can rewrite the servo service to use a Raspberry Pi card instead of an Arduino.
 
 ## Service Type
