@@ -17,7 +17,7 @@ The robot is treated like a "standard NPC" (Non Playable Character). That way, a
 - Random Animations
 - Everything is overridable!
 
-You can read the [documentation here](Documentations/README.md) and see what is available, what is not, the roadmap, etc.
+You can read the [documentation here](Documentation/README.md) and see what is available, what is not, the roadmap, etc.
 
 ## Requirements
 ### Final User
