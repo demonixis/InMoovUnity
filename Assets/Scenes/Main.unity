@@ -1781,7 +1781,67 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b8bf47c24ee24614b88986473d2a3b3e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _servoActions: []
+  _servoActions:
+  - Servo: 0
+    RandomRange: 1
+    Min: 75
+    Max: 135
+    Sequence: 
+    Frequency: 2
+  - Servo: 1
+    RandomRange: 1
+    Min: 75
+    Max: 135
+    Sequence: 
+    Frequency: 2
+  - Servo: 5
+    RandomRange: 1
+    Min: 75
+    Max: 115
+    Sequence: 
+    Frequency: 2
+  - Servo: 6
+    RandomRange: 1
+    Min: 75
+    Max: 115
+    Sequence: 
+    Frequency: 2
+  - Servo: 13
+    RandomRange: 1
+    Min: 70
+    Max: 120
+    Sequence: 
+    Frequency: 4
+  - Servo: 19
+    RandomRange: 1
+    Min: 0
+    Max: 180
+    Sequence: 
+    Frequency: 4
+  - Servo: 18
+    RandomRange: 1
+    Min: 0
+    Max: 180
+    Sequence: 
+    Frequency: 2.5
+  - Servo: 15
+    RandomRange: 1
+    Min: 80
+    Max: 110
+    Sequence: 
+    Frequency: 3
+  - Servo: 16
+    RandomRange: 1
+    Min: 80
+    Max: 110
+    Sequence: 
+    Frequency: 3
+  - Servo: 17
+    RandomRange: 1
+    Min: 120
+    Max: 140
+    Sequence: 
+    Frequency: 3
 --- !u!1 &1314284959
 GameObject:
   m_ObjectHideFlags: 0

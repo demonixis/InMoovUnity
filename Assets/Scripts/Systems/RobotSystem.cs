@@ -7,8 +7,15 @@ namespace Demonixis.InMoov
     {
         public bool Started { get; protected set; }
 
-        public abstract void Initialize();
-        public abstract void Dispose();
+        public virtual void Initialize()
+        {
+            Started = true;
+        }
+
+        public virtual void Dispose()
+        {
+            Started = false;
+        }
 
         public void SetActive(bool active)
         {

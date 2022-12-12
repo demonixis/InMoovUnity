@@ -44,12 +44,14 @@ namespace Demonixis.InMoov.Systems
 
         public override void Initialize()
         {
+            base.Initialize();
             _servoMixerService = Robot.Instance.GetService<ServoMixerService>();
             StartCoroutine(Loop());
         }
 
         public override void Dispose()
         {
+            base.Dispose();
             StopAllCoroutines();
         }
 

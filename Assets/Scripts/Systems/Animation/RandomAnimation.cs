@@ -44,6 +44,8 @@ namespace Demonixis.InMoov.Systems
 
         public override void Initialize()
         {
+            base.Initialize();
+            
             _servoMixerService = Robot.Instance.GetService<ServoMixerService>();
 
             foreach (var action in _servoActions)
@@ -52,6 +54,7 @@ namespace Demonixis.InMoov.Systems
 
         public override void Dispose()
         {
+            base.Dispose();
             StopAllCoroutines();
         }
 

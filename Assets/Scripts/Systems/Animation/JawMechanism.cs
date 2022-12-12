@@ -28,9 +28,10 @@ namespace Demonixis.InMoov.Systems
 
         private void InternalInitialize()
         {
+            base.Initialize();
+            
             if (_initialized) return;
-
-
+            
             var robot = Robot.Instance;
             _servoMixerService = robot.GetService<ServoMixerService>();
 
@@ -43,6 +44,8 @@ namespace Demonixis.InMoov.Systems
 
         private void InternalShutdown()
         {
+            base.Dispose();
+            
             if (!_initialized) return;
 
             var robot = Robot.Instance;
