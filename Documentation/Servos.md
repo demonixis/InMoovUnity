@@ -1,11 +1,11 @@
 # Servo Mapping
+The bone naming convention was changed to be closer to a skeleton in real time 3d.
+All bones are suffixed with the its degree of freedom. For instance, Yaw/Pitch/Roll.
+
+## Mapping
 Some servos are suffixed by Primary/Secondary. This is the case for some servos that work together.
 In the current build of InMoov, you've to disassemble some servos to invert them. Thanks to the Servo Mixer panel, you can mix two servos together.
 For instance you can create a mix between Head Roll Primary and Secondary with an opposite direction. It requires two pins on the board of course.
-
-## Mapping
-The bone naming convention was changed to be closer to a skeleton in real time 3d.
-All bones are suffixed with the its degree of freedom. For instance, Yaw/Pitch/Roll.
 
 #### Head
 | InMoov Servo | InMoov Unity Servo  |
