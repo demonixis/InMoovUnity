@@ -2,7 +2,9 @@
 #define MS_SPEECH_SYNTHESIS
 #endif
 
+using System.Collections;
 using System.Text;
+using Demonixis.InMoov.Utils;
 using UnityEngine;
 
 #if MS_SPEECH_SYNTHESIS
@@ -55,6 +57,7 @@ namespace Demonixis.InMoov.Services.Speech
             if (Paused) return;
 
             addToSpeechQueue(message);
+            StartCoroutine(SpeechLoop(message));
 
             if (_logOutput)
                 Debug.Log(message);
@@ -63,6 +66,17 @@ namespace Demonixis.InMoov.Services.Speech
         public override void Shutdown()
         {
             destroySpeech();
+        }
+
+        private IEnumerator SpeechLoop(string message)
+        {
+            NotifySpeechState(true);
+
+            var words = message.Split(' ');
+            // FIXME
+            yield return CoroutineFactory.WaitForSeconds(words.Length * 0.1f);
+            
+            NotifySpeechState(false);
         }
     }
 }

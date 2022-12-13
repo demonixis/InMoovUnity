@@ -309,6 +309,8 @@ namespace Demonixis.InMoov
                     serviceList.Navigation = service.ServiceName;
                 else if (service is ComputerVisionService)
                     serviceList.ComputerVision = service.ServiceName;
+                else if (service is XRService)
+                    serviceList.XR = service.ServiceName;
             }
 
             // Save the list of used services

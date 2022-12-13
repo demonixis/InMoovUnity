@@ -9,6 +9,7 @@ public sealed class BrainPanel : MonoBehaviour
     private ChatbotService _chatbot;
 
     [SerializeField] private TMP_InputField _manualBotInput;
+    [SerializeField] private TMP_InputField _customSpeechSynthesis;
     [SerializeField] private Transform _botInputContainer;
     [SerializeField] private GameObject _botTextPrefab;
 
@@ -35,6 +36,12 @@ public sealed class BrainPanel : MonoBehaviour
             AppendTextTo(_botInputContainer, s, false);
             _chatbot.SubmitResponse(s);
             _manualBotInput.SetTextWithoutNotify(string.Empty);
+        });
+        
+        _customSpeechSynthesis.onSubmit.AddListener(s =>
+        {
+            var speech = Robot.Instance.GetService<SpeechSynthesisService>();
+            speech.Speak(s);
         });
     }
 

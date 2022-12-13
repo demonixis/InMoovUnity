@@ -52,6 +52,7 @@ namespace Demonixis.InMoov.Services.Speech
             {
                 _audioSource.clip = clip;
                 _audioSource.Play();
+                StartCoroutine(SpeechLoop());
             }
             else
             {
@@ -61,6 +62,18 @@ namespace Demonixis.InMoov.Services.Speech
                                "2.Fill in something in text field.\n" +
                                "3.Choose the correct audio format.");
             }
+        }
+
+        private IEnumerator SpeechLoop()
+        {
+            NotifySpeechState(true);
+            
+            while (_audioSource.isPlaying)
+            {
+                yield return null;
+            }
+            
+            NotifySpeechState(false);
         }
     }
 }

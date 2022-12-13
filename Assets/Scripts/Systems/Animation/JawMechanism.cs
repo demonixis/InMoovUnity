@@ -1,6 +1,7 @@
 using Demonixis.InMoov.Chatbots;
 using Demonixis.InMoov.Servos;
 using System.Collections;
+using Demonixis.InMoov.Services.Speech;
 using Demonixis.InMoov.Utils;
 using UnityEngine;
 
@@ -10,6 +11,7 @@ namespace Demonixis.InMoov.Systems
     {
         private ServoMixerService _servoMixerService;
         private bool _initialized;
+        private string _phraseTarget;
 
         [SerializeField] private float _jawOpenTime = 0.25f;
         [SerializeField] private float _jawCloseTime = 0.15f;
@@ -39,7 +41,16 @@ namespace Demonixis.InMoov.Systems
             chatbot.ResponseReady += OnChatBotResponse;
             robot.ServiceChanged += OnRobotServiceChanged;
 
+            var speechSynthesis = robot.GetService<SpeechSynthesisService>();
+            speechSynthesis.SpeechStarted += SpeechSynthesisOnSpeechStarted;
+            
             _initialized = true;
+        }
+
+        private void SpeechSynthesisOnSpeechStarted()
+        {
+            StopAllCoroutines();
+            StartCoroutine(MoveJaw(_phraseTarget));
         }
 
         private void InternalShutdown()
@@ -59,8 +70,7 @@ namespace Demonixis.InMoov.Systems
 
         private void OnChatBotResponse(string response)
         {
-            StopAllCoroutines();
-            StartCoroutine(MoveJaw(response));
+            _phraseTarget = response;
         }
 
         private void OnRobotServiceChanged(RobotService oldService, RobotService newService)
@@ -75,6 +85,8 @@ namespace Demonixis.InMoov.Systems
 
         private IEnumerator MoveJaw(string sentence)
         {
+            if (string.IsNullOrEmpty(sentence)) yield break;
+            
             var words = sentence.Split(' ');
             var targetTime = words.Length * 60.0f / _wordsPerMinute;
             var data = _servoMixerService.GetServoData(ServoIdentifier.Jaw);
