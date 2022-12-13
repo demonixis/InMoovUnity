@@ -1,4 +1,5 @@
 ﻿using Demonixis.InMoov.Settings;
+using UnityEngine;
 
 namespace Demonixis.InMoov.ComputerVision
 {
@@ -17,10 +18,10 @@ namespace Demonixis.InMoov.ComputerVision
                 return;
 
             if (_settings.IsCameraConnected(true))
-                InitializeWebCamTexture(_settings.WebCamLeft, true);
+                TryInitializeWebCamTexture(_settings.WebCamLeft, true, out WebCamTexture leftEye);
 
             if (_settings.IsCameraConnected(false))
-                InitializeWebCamTexture(_settings.WebCamRight, false);
+                TryInitializeWebCamTexture(_settings.WebCamRight, false, out WebCamTexture rightEye);
         }
 
         public override void SetPaused(bool paused)

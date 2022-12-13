@@ -4,21 +4,28 @@ namespace Demonixis.InMoov.ComputerVision
 {
     public partial class ComputerVisionService
     {
-        private WebCamTexture[] _webCamTextures;
+        private WebCamTexture[] _webCamTextures = new WebCamTexture[2];
         
         public void SetWebCamTextureEnabled(bool left, bool start)
         {
-            if (_webCamTextures == null ||
-                left && _webCamTextures[0] == null ||
-                !left && _webCamTextures[1] == null)
-                return;
-
-            var texture = _webCamTextures[left ? 0 : 1];
-
+            var texture = GetWebCamTexture(left);
+            if (texture == null) return;
+            
             if (start)
                 texture.Play();
             else
                 texture.Stop();
+        }
+
+        public void ToggleWebCamTexturePlayer(bool left)
+        {
+            var texture = GetWebCamTexture(left);
+            if (texture == null) return;
+            
+            if (texture.isPlaying)
+                texture.Stop();
+            else
+                texture.Play();
         }
 
         public WebCamTexture GetWebCamTexture(bool left)
@@ -26,25 +33,31 @@ namespace Demonixis.InMoov.ComputerVision
             return _webCamTextures[left ? 0 : 1];
         }
 
-        public void InitializeWebCamTexture(int cameraIndex, bool left, bool autoPlay = false)
+        public bool TryInitializeWebCamTexture(int cameraIndex, bool left, out WebCamTexture texture)
         {
             if (!TryGetWebcamInfos(cameraIndex, out string cameraName, out int width, out int height))
             {
                 Debug.LogError($"Can't open the webcam {cameraIndex}");
-                return;
+                texture = null;
+                return false;
             }
 
-            var texture = new WebCamTexture(cameraName, width, height);
-            if (texture == null)
-            {
-                Debug.LogError($"Can't create a webcam texture for the camera {cameraIndex}");
-                return;
-            }
+            texture = new WebCamTexture(cameraName, width, height);
 
             if (_webCamTextures == null)
                 _webCamTextures = new WebCamTexture[2];
 
-            _webCamTextures[left ? 0 : 1] = texture;
+            var index = left ? 0 : 1;
+            
+            if (_webCamTextures[index] != null && _webCamTextures[index].isPlaying)
+            {
+                _webCamTextures[index].Stop();
+                _webCamTextures[index] = null;
+            }
+
+            _webCamTextures[index] = texture;
+
+            return texture;
         }
 
         private bool TryGetWebcamInfos(int cameraIndex, out string cameraName, out int width, out int height)

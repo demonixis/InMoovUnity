@@ -17,7 +17,7 @@ namespace Demonixis.InMoov
         private const string ServiceListFilename = "services.json";
         private const string SystemListFilename = "systems.json";
 
-        private SpeechBrainProxy _speechBrainProxy;
+        private BrainSpeechProxy _brainSpeechProxy;
         private List<RobotService> _currentServices;
         private List<Action> _waitingStartCallbacks;
 
@@ -67,7 +67,7 @@ namespace Demonixis.InMoov
                 return;
             }
 
-            _speechBrainProxy = new SpeechBrainProxy();
+            _brainSpeechProxy = new BrainSpeechProxy();
             _currentServices = new List<RobotService>();
             _waitingStartCallbacks = new List<Action>();
         }
@@ -125,7 +125,7 @@ namespace Demonixis.InMoov
             SelectService<NavigationService>(serviceList.Navigation);
             SelectService<ComputerVisionService>(serviceList.ComputerVision);
 
-            _speechBrainProxy.Setup(chatbotService, voiceRecognition, speechSynthesis);
+            _brainSpeechProxy.Setup(chatbotService, voiceRecognition, speechSynthesis);
         }
 
         /// <summary>

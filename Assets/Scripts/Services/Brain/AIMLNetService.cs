@@ -81,7 +81,7 @@ namespace Demonixis.InMoov.Chatbots
             return Directory.Exists(Path.Combine(Application.streamingAssetsPath, "AIML.Net", lang));
         }
 
-        public override void SubmitResponse(string inputSpeech)
+        protected override void SubmitResponseToBot(string inputSpeech)
         {
             if (Paused) return;
 
@@ -94,6 +94,7 @@ namespace Demonixis.InMoov.Chatbots
             var request = new Request(inputSpeech, _user, _aimlBot);
             var result = _aimlBot.Chat(request);
             _lastWords = result.Output;
+            
             NotifyResponseReady(_lastWords);
         }
 
