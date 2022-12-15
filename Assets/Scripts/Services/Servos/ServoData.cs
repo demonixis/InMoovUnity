@@ -85,8 +85,8 @@ namespace Demonixis.InMoov.Servos
         LeftShoulderYaw,
         LeftShoulderPitch,
         LeftShoulderRoll,
-        LeftElbow,
-        LeftWrist,
+        LeftElbowPitch,
+        LeftWristRoll,
 
         // Left Hand
         LeftFingerThumb,
@@ -99,8 +99,8 @@ namespace Demonixis.InMoov.Servos
         RightShoulderYaw,
         RightShoulderPitch,
         RightShoulderRoll,
-        RightElbow,
-        RightWrist,
+        RightElbowPitch,
+        RightWristRoll,
 
         // Right Hand
         RightFingerThumb,
