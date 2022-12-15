@@ -3514,7 +3514,7 @@
 <category><pattern>WHAT IS A SECRET *</pattern><template>That information is confidential.</template></category>  
 <category><pattern>WHAT IS A * SEEKER</pattern><template>You are a seeker. "Seeker" is my codeword for clients.</template></category>  
 <category><pattern>WHAT IS A SELF *</pattern><template>One that is <person/> of itself.</template></category>  
-<category><pattern>WHAT IS A STEALTH *</pattern><template>A <person/> that can elude radar detection by technical means.</template></category>  
+<category><pattern>WHAT IS A STEALTH *</pattern><template>A <person/> that can elude radar Detection by technical means.</template></category>  
 <category><pattern>WHAT IS A TCP *</pattern><template>TCP/IP protocol refers to the standards for switching and signaling between computer systems that makes the Internet a reality.  <think>      <set name="it">       <set name="topic"> TCP/IP PROTOCOL</set>      </set>     </think>    </template></category>  
 <category><pattern>WHAT IS ATOMIC *</pattern><template>More complex than nuclear <person/>.</template></category>  
 <category><pattern>WHAT IS A TRANSITIVE *</pattern><template>The opposite of an intransitive <person/>.</template></category>  

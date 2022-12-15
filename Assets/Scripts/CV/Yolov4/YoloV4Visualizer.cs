@@ -2,33 +2,25 @@ using System.Collections;
 using Demonixis.InMoov.Chatbots;
 using Demonixis.InMoov.Utils;
 using UnityEngine;
-using UnityEngine.UI;
 using YoloV4Tiny;
 
-namespace Demonixis.InMoov.ComputerVision
+namespace Demonixis.InMoov.ComputerVision.Filters
 {
-    public sealed class YoloV4Visualizer : MonoBehaviour
+    public sealed class YoloV4Visualizer : MLVisualizer
     {
         private ChatbotService _chatbot;
         private ObjectDetector _detector;
         private readonly YoloV4Marker[] _markers = new YoloV4Marker[50];
-
-        [SerializeField] WebCamTexture _source = null;
+        
         [SerializeField, Range(0, 1)] float _threshold = 0.5f;
-        [SerializeField] ResourceSet _resources = null;
-        [SerializeField] RawImage _preview = null;
+        [SerializeField] ResourceSet _resources;
         [SerializeField] YoloV4Marker yoloV4MarkerPrefab = null;
-
-        public void Setup(WebCamTexture texture, RawImage image)
-        {
-            _source = texture;
-            _preview = image;
-        }
 
         private void OnEnable()
         {
             _chatbot = Robot.Instance.GetService<ChatbotService>();
             _detector = new ObjectDetector(_resources);
+            
             for (var i = 0; i < _markers.Length; i++)
                 _markers[i] = Instantiate(yoloV4MarkerPrefab, _preview.transform);
 
@@ -40,12 +32,9 @@ namespace Demonixis.InMoov.ComputerVision
             StopAllCoroutines();
             _detector.Dispose();
             _chatbot.DetectedObjects.Clear();
-        }
-
-        private void OnDestroy()
-        {
-            for (var i = 0; i < _markers.Length; i++)
-                Destroy(_markers[i]);
+            
+            foreach (var marker in _markers)
+                Destroy(marker);
         }
 
         private void LateUpdate()

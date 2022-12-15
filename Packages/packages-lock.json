@@ -166,6 +166,14 @@
       },
       "url": "https://packages.unity.com"
     },
+    "jp.keijiro.mediapipe.blazeface": {
+      "version": "file:jp.keijiro.mediapipe.blazeface",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {
+        "com.unity.barracuda": "1.3.3-preview"
+      }
+    },
     "jp.keijiro.yolov4tiny": {
       "version": "file:jp.keijiro.yolov4tiny",
       "depth": 0,

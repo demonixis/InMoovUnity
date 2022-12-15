@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using YoloV4Tiny;
 
-namespace Demonixis.InMoov.ComputerVision
+namespace Demonixis.InMoov.ComputerVision.Filters
 {
     public sealed class YoloV4Marker : MonoBehaviour
     {

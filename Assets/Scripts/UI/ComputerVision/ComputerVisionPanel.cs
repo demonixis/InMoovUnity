@@ -1,5 +1,6 @@
 using System.Collections;
 using Demonixis.InMoov.ComputerVision;
+using Demonixis.InMoov.ComputerVision.Filters;
 using Demonixis.InMoov.Utils;
 using TMPro;
 using UnityEngine;
@@ -9,37 +10,25 @@ namespace Demonixis.InMoov
 {
     public class ComputerVisionPanel : MonoBehaviour
     {
-        [SerializeField] private TMP_Dropdown _leftEyeList;
+        [Header("Webcams")] [SerializeField] private TMP_Dropdown _leftEyeList;
         [SerializeField] private TMP_Dropdown _rightEyeList;
-        [SerializeField] private TMP_Dropdown _filterList;
 
-        [SerializeField] private RawImage _leftRawImage;
+        [Header("Webcam previews")] [SerializeField]
+        private RawImage _leftRawImage;
+
         [SerializeField] private RawImage _rightRawImage;
+
+        [Header("ML Filters")] [SerializeField]
+        private Toggle _yoloObjectDetector;
+
+        [SerializeField] private Toggle _blazeFaceDetector;
 
         private void Start()
         {
-            _filterList.options.Clear();
-            _filterList.options.Add(new TMP_Dropdown.OptionData("None"));
-            _filterList.options.Add(new TMP_Dropdown.OptionData("YoloV4 Object Detection"));
-            _filterList.onValueChanged.AddListener(i =>
-            {
-                var visualizer = GetComponentInChildren<YoloV4Visualizer>(true);
-
-                if (i == 0)
-                {
-                    visualizer.enabled = false;
-                    return;
-                }
-
-                if (visualizer.enabled) return;
-                
-                var cv = Robot.Instance.GetService<ComputerVisionService>();
-                var texture = cv.GetWebCamTexture(true);
-                if (texture == null) return;
-
-                visualizer.Setup(texture, _leftRawImage);
-                visualizer.enabled = true;
-            });
+            _yoloObjectDetector.SetIsOnWithoutNotify(false);
+            _yoloObjectDetector.onValueChanged.AddListener(SetVisualizerEnabled<YoloV4Visualizer>);
+            _blazeFaceDetector.SetIsOnWithoutNotify(false);
+            _blazeFaceDetector.onValueChanged.AddListener(SetVisualizerEnabled<BlazeFaceVisualizer>);
 
             _leftEyeList.onValueChanged.AddListener(i => UpdateRawImage(true, _leftEyeList.value - 1));
             _rightEyeList.onValueChanged.AddListener(i => UpdateRawImage(false, _leftEyeList.value - 1));
@@ -104,6 +93,26 @@ namespace Demonixis.InMoov
 
                 yield return CoroutineFactory.WaitForSeconds(1.5f);
             }
+        }
+
+        private void SetVisualizerEnabled<T>(bool active) where T : MLVisualizer
+        {
+            var visualizer = GetComponentInChildren<T>(true);
+
+            if (!active)
+            {
+                visualizer.enabled = false;
+                return;
+            }
+
+            if (visualizer.enabled) return;
+
+            var cv = Robot.Instance.GetService<ComputerVisionService>();
+            var texture = cv.GetWebCamTexture(true);
+            if (texture == null) return;
+
+            visualizer.Setup(texture, _leftRawImage);
+            visualizer.enabled = true;
         }
     }
 }
