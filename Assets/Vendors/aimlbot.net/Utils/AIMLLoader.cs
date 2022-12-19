@@ -2,17 +2,18 @@ using System;
 using System.IO;
 using System.Text;
 using System.Xml;
+using AIMLbot.Normalize;
 
 namespace AIMLbot.Utils
 {
     /// <summary>
-    /// A utility class for loading AIML files from disk into the graphmaster structure that 
-    /// forms an AIML bot's "brain"
+    ///     A utility class for loading AIML files from disk into the graphmaster structure that
+    ///     forms an AIML bot's "brain"
     /// </summary>
     public class AimlLoader
     {
         private readonly Bot _bot;
-        
+
         public AimlLoader(Bot bot)
         {
             _bot = bot;
@@ -21,7 +22,7 @@ namespace AIMLbot.Utils
         #region Methods
 
         /// <summary>
-        /// Loads the AIML from files found in the bot's AIMLpath into the bot's brain
+        ///     Loads the AIML from files found in the bot's AIMLpath into the bot's brain
         /// </summary>
         public void LoadAiml()
         {
@@ -29,7 +30,7 @@ namespace AIMLbot.Utils
         }
 
         /// <summary>
-        /// Loads the AIML from files found in the path
+        ///     Loads the AIML from files found in the path
         /// </summary>
         /// <param name="path"></param>
         public void LoadAiml(string path)
@@ -44,7 +45,7 @@ namespace AIMLbot.Utils
                 {
                     foreach (var filename in fileEntries) LoadAimlFile(filename);
                     _bot.WriteToLog("Finished processing the AIML files. " + Convert.ToString(_bot.Size) +
-                                   " categories processed.");
+                                    " categories processed.");
                 }
                 else
                 {
@@ -61,8 +62,8 @@ namespace AIMLbot.Utils
         }
 
         /// <summary>
-        /// Given the name of a file in the AIML path directory, attempts to load it into the 
-        /// graphmaster
+        ///     Given the name of a file in the AIML path directory, attempts to load it into the
+        ///     graphmaster
         /// </summary>
         /// <param name="filename">The name of the file to process</param>
         public void LoadAimlFile(string filename)
@@ -76,7 +77,7 @@ namespace AIMLbot.Utils
         }
 
         /// <summary>
-        /// Given an XML document containing valid AIML, attempts to load it into the graphmaster
+        ///     Given an XML document containing valid AIML, attempts to load it into the graphmaster
         /// </summary>
         /// <param name="doc">The XML document containing the AIML</param>
         /// <param name="filename">Where the XML document originated</param>
@@ -95,8 +96,8 @@ namespace AIMLbot.Utils
         }
 
         /// <summary>
-        /// Given a "topic" node, processes all the categories for the topic and adds them to the 
-        /// graphmaster "brain"
+        ///     Given a "topic" node, processes all the categories for the topic and adds them to the
+        ///     graphmaster "brain"
         /// </summary>
         /// <param name="node">the "topic" node</param>
         /// <param name="filename">the file from which this node is taken</param>
@@ -114,7 +115,7 @@ namespace AIMLbot.Utils
         }
 
         /// <summary>
-        /// Adds a category to the graphmaster structure using the default topic ("*")
+        ///     Adds a category to the graphmaster structure using the default topic ("*")
         /// </summary>
         /// <param name="node">the XML node containing the category</param>
         /// <param name="filename">the file from which this category was taken</param>
@@ -124,7 +125,7 @@ namespace AIMLbot.Utils
         }
 
         /// <summary>
-        /// Adds a category to the graphmaster structure using the given topic
+        ///     Adds a category to the graphmaster structure using the given topic
         /// </summary>
         /// <param name="node">the XML node containing the category</param>
         /// <param name="topicName">the topic to be used</param>
@@ -153,22 +154,24 @@ namespace AIMLbot.Utils
                 catch
                 {
                     _bot.WriteToLog("ERROR! Failed to load a new category into the graphmaster where the path = " +
-                                   categoryPath + " and template = " + template.OuterXml +
-                                   " produced by a category in the file: " + filename);
+                                    categoryPath + " and template = " + template.OuterXml +
+                                    " produced by a category in the file: " + filename);
                 }
             else
                 _bot.WriteToLog("WARNING! Attempted to load a new category with an empty pattern where the path = " +
-                               categoryPath + " and template = " + template.OuterXml +
-                               " produced by a category in the file: " + filename);
+                                categoryPath + " and template = " + template.OuterXml +
+                                " produced by a category in the file: " + filename);
         }
 
         /// <summary>
-        /// Generates a path from a category XML node and topic name
+        ///     Generates a path from a category XML node and topic name
         /// </summary>
         /// <param name="node">the category XML node</param>
         /// <param name="topicName">the topic</param>
-        /// <param name="isUserInput">marks the path to be created as originating from user input - so
-        /// normalize out the * and _ wildcards used by AIML</param>
+        /// <param name="isUserInput">
+        ///     marks the path to be created as originating from user input - so
+        ///     normalize out the * and _ wildcards used by AIML
+        /// </param>
         /// <returns>The appropriately processed path</returns>
         public string GeneratePath(XmlNode node, string topicName, bool isUserInput)
         {
@@ -188,7 +191,7 @@ namespace AIMLbot.Utils
         }
 
         /// <summary>
-        /// Given a name will try to find a node named "name" in the childnodes or return null
+        ///     Given a name will try to find a node named "name" in the childnodes or return null
         /// </summary>
         /// <param name="name">The name of the node</param>
         /// <param name="node">The node whose children need searching</param>
@@ -202,13 +205,15 @@ namespace AIMLbot.Utils
         }
 
         /// <summary>
-        /// Generates a path from the passed arguments
+        ///     Generates a path from the passed arguments
         /// </summary>
         /// <param name="pattern">the pattern</param>
         /// <param name="that">the that</param>
         /// <param name="topicName">the topic</param>
-        /// <param name="isUserInput">marks the path to be created as originating from user input - so
-        /// normalize out the * and _ wildcards used by AIML</param>
+        /// <param name="isUserInput">
+        ///     marks the path to be created as originating from user input - so
+        ///     normalize out the * and _ wildcards used by AIML
+        /// </param>
         /// <returns>The appropriately processed path</returns>
         public string GeneratePath(string pattern, string that, string topicName, bool isUserInput)
         {
@@ -255,19 +260,21 @@ namespace AIMLbot.Utils
         }
 
         /// <summary>
-        /// Given an input, provide a normalized output
+        ///     Given an input, provide a normalized output
         /// </summary>
         /// <param name="input">The string to be normalized</param>
-        /// <param name="isUserInput">True if the string being normalized is part of the user input path - 
-        /// flags that we need to normalize out * and _ chars</param>
+        /// <param name="isUserInput">
+        ///     True if the string being normalized is part of the user input path -
+        ///     flags that we need to normalize out * and _ chars
+        /// </param>
         /// <returns>The normalized string</returns>
         public string Normalize(string input, bool isUserInput)
         {
             var result = new StringBuilder();
 
             // objects for normalization of the input
-            var substitutor = new Normalize.ApplySubstitutions(_bot);
-            var stripper = new Normalize.StripIllegalCharacters(_bot);
+            var substitutor = new ApplySubstitutions(_bot);
+            var stripper = new StripIllegalCharacters(_bot);
 
             var substitutedInput = substitutor.Transform(input);
             // split the pattern into it's component words

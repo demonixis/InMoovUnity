@@ -1,56 +1,56 @@
 using System;
 using System.Collections.Generic;
+using AIMLbot.Utils;
 
 namespace AIMLbot
 {
     /// <summary>
-    /// Encapsulates information and history of a user who has interacted with the bot
+    ///     Encapsulates information and history of a user who has interacted with the bot
     /// </summary>
     public class User
     {
         #region Attributes
 
         /// <summary>
-        /// The local instance of the GUID that identifies this user to the bot
+        ///     The local instance of the GUID that identifies this user to the bot
         /// </summary>
-        private string id;
+        private readonly string id;
 
         /// <summary>
-        /// The bot this user is using
+        ///     The bot this user is using
         /// </summary>
         public Bot bot;
 
         /// <summary>
-        /// The GUID that identifies this user to the bot
+        ///     The GUID that identifies this user to the bot
         /// </summary>
         public string UserID => id;
 
         /// <summary>
-        /// A collection of all the result objects returned to the user in this session
+        ///     A collection of all the result objects returned to the user in this session
         /// </summary>
-        private List<Result> Results = new();
+        private readonly List<Result> Results = new();
 
         /// <summary>
-        /// the value of the "topic" predicate
+        ///     the value of the "topic" predicate
         /// </summary>
         public string Topic => Predicates.GrabSetting("topic");
 
         /// <summary>
-        /// the predicates associated with this particular user
+        ///     the predicates associated with this particular user
         /// </summary>
-        public Utils.SettingsDictionary Predicates;
+        public SettingsDictionary Predicates;
 
         /// <summary>
-        /// The most recent result to be returned by the bot
+        ///     The most recent result to be returned by the bot
         /// </summary>
         public Result LastResult
         {
             get
             {
                 if (Results.Count > 0)
-                    return (Result) Results[0];
-                else
-                    return null;
+                    return Results[0];
+                return null;
             }
         }
 
@@ -59,7 +59,7 @@ namespace AIMLbot
         #region Methods
 
         /// <summary>
-        /// Ctor
+        ///     Ctor
         /// </summary>
         /// <param name="UserID">The GUID of the user</param>
         /// <param name="bot">the bot the user is connected to</param>
@@ -69,7 +69,7 @@ namespace AIMLbot
             {
                 id = UserID;
                 this.bot = bot;
-                Predicates = new Utils.SettingsDictionary(this.bot);
+                Predicates = new SettingsDictionary(this.bot);
                 this.bot.DefaultPredicates.Clone(Predicates);
                 Predicates.AddSetting("topic", "*");
             }
@@ -80,19 +80,18 @@ namespace AIMLbot
         }
 
         /// <summary>
-        /// Returns the string to use for the next that part of a subsequent path
+        ///     Returns the string to use for the next that part of a subsequent path
         /// </summary>
         /// <returns>the string to use for that</returns>
         public string getLastBotOutput()
         {
             if (Results.Count > 0)
-                return ((Result) Results[0]).RawOutput;
-            else
-                return "*";
+                return Results[0].RawOutput;
+            return "*";
         }
 
         /// <summary>
-        /// Returns the first sentence of the last output from the bot
+        ///     Returns the first sentence of the last output from the bot
         /// </summary>
         /// <returns>the first sentence of the last output from the bot</returns>
         public string getThat()
@@ -101,7 +100,7 @@ namespace AIMLbot
         }
 
         /// <summary>
-        /// Returns the first sentence of the output "n" steps ago from the bot
+        ///     Returns the first sentence of the output "n" steps ago from the bot
         /// </summary>
         /// <param name="n">the number of steps back to go</param>
         /// <returns>the first sentence of the output "n" steps ago from the bot</returns>
@@ -111,7 +110,7 @@ namespace AIMLbot
         }
 
         /// <summary>
-        /// Returns the sentence numbered by "sentence" of the output "n" steps ago from the bot
+        ///     Returns the sentence numbered by "sentence" of the output "n" steps ago from the bot
         /// </summary>
         /// <param name="n">the number of steps back to go</param>
         /// <param name="sentence">the sentence number to get</param>
@@ -120,16 +119,16 @@ namespace AIMLbot
         {
             if ((n >= 0) & (n < Results.Count))
             {
-                var historicResult = (Result) Results[n];
+                var historicResult = Results[n];
                 if ((sentence >= 0) & (sentence < historicResult.OutputSentences.Count))
-                    return (string) historicResult.OutputSentences[sentence];
+                    return historicResult.OutputSentences[sentence];
             }
 
             return string.Empty;
         }
 
         /// <summary>
-        /// Returns the first sentence of the last output from the bot
+        ///     Returns the first sentence of the last output from the bot
         /// </summary>
         /// <returns>the first sentence of the last output from the bot</returns>
         public string getResultSentence()
@@ -138,7 +137,7 @@ namespace AIMLbot
         }
 
         /// <summary>
-        /// Returns the first sentence from the output from the bot "n" steps ago
+        ///     Returns the first sentence from the output from the bot "n" steps ago
         /// </summary>
         /// <param name="n">the number of steps back to go</param>
         /// <returns>the first sentence from the output from the bot "n" steps ago</returns>
@@ -148,7 +147,7 @@ namespace AIMLbot
         }
 
         /// <summary>
-        /// Returns the identified sentence number from the output from the bot "n" steps ago
+        ///     Returns the identified sentence number from the output from the bot "n" steps ago
         /// </summary>
         /// <param name="n">the number of steps back to go</param>
         /// <param name="sentence">the sentence number to return</param>
@@ -157,16 +156,16 @@ namespace AIMLbot
         {
             if ((n >= 0) & (n < Results.Count))
             {
-                var historicResult = (Result) Results[n];
+                var historicResult = Results[n];
                 if ((sentence >= 0) & (sentence < historicResult.InputSentences.Count))
-                    return (string) historicResult.InputSentences[sentence];
+                    return historicResult.InputSentences[sentence];
             }
 
             return string.Empty;
         }
 
         /// <summary>
-        /// Adds the latest result from the bot to the Results collection
+        ///     Adds the latest result from the bot to the Results collection
         /// </summary>
         /// <param name="latestResult">the latest result from the bot</param>
         public void addResult(Result latestResult)

@@ -1,18 +1,19 @@
 using System.Xml;
+using AIMLbot.Utils;
 
 namespace AIMLbot.AIMLTagHandlers
 {
     /// <summary>
-    /// The sr element is a shortcut for: 
-    /// 
-    /// <srai><star/></srai> 
-    /// 
-    /// The atomic sr does not have any content. 
+    ///     The sr element is a shortcut for:
+    ///     <srai>
+    ///         <star />
+    ///     </srai>
+    ///     The atomic sr does not have any content.
     /// </summary>
-    public class sr : Utils.AIMLTagHandler
+    public class Sr : AIMLTagHandler
     {
         /// <summary>
-        /// Ctor
+        ///     Ctor
         /// </summary>
         /// <param name="bot">The bot involved in this request</param>
         /// <param name="user">The user making the request</param>
@@ -20,9 +21,9 @@ namespace AIMLbot.AIMLTagHandlers
         /// <param name="request">The request inputted into the system</param>
         /// <param name="result">The result to be passed to the user</param>
         /// <param name="templateNode">The node to be processed</param>
-        public sr(Bot bot,
+        public Sr(AIMLbot.Bot bot,
             User user,
-            Utils.SubQuery query,
+            SubQuery query,
             Request request,
             Result result,
             XmlNode templateNode)
@@ -35,11 +36,11 @@ namespace AIMLbot.AIMLTagHandlers
             if (templateNode.Name.ToLower() == "sr")
             {
                 var starNode = GetNode("<star/>");
-                var recursiveStar = new star(bot, user, query, request, result, starNode);
+                var recursiveStar = new Star(bot, user, query, request, result, starNode);
                 var starContent = recursiveStar.Transform();
 
                 var sraiNode = GetNode("<srai>" + starContent + "</srai>");
-                var sraiHandler = new srai(bot, user, query, request, result, sraiNode);
+                var sraiHandler = new Srai(bot, user, query, request, result, sraiNode);
                 return sraiHandler.Transform();
             }
 

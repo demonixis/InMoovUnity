@@ -1,41 +1,50 @@
-using AIMLbot.Normalize;
 using System.Collections.Generic;
 using System.IO;
 using System.Xml;
+using AIMLbot.Normalize;
 
 namespace AIMLbot.Utils
 {
     /// <summary>
-    /// A bespoke Dictionary<,> for loading, adding, checking, removing and extracting
-    /// settings.
+    ///     A bespoke Dictionary<,> for loading, adding, checking, removing and extracting
+    ///     settings.
     /// </summary>
     public class SettingsDictionary
     {
+        /// <summary>
+        ///     Ctor
+        /// </summary>
+        /// <param name="inBot">The bot for whom this is a settings dictionary</param>
+        public SettingsDictionary(Bot inBot)
+        {
+            bot = inBot;
+        }
+
         #region Attributes
 
         /// <summary>
-        /// Holds a dictionary of settings
+        ///     Holds a dictionary of settings
         /// </summary>
         private readonly Dictionary<string, string> _settingsHash = new();
 
         /// <summary>
-        /// Contains an ordered collection of all the keys (unfortunately Dictionary<,>s are
-        /// not ordered)
+        ///     Contains an ordered collection of all the keys (unfortunately Dictionary<,>s are
+        ///     not ordered)
         /// </summary>
         private readonly List<string> _orderedKeys = new();
 
         /// <summary>
-        /// The bot this dictionary is associated with
+        ///     The bot this dictionary is associated with
         /// </summary>
         protected Bot bot;
 
         /// <summary>
-        /// The number of items in the dictionary
+        ///     The number of items in the dictionary
         /// </summary>
         public int Count => _orderedKeys.Count;
 
         /// <summary>
-        /// An XML representation of the contents of this dictionary
+        ///     An XML representation of the contents of this dictionary
         /// </summary>
         public XmlDocument DictionaryAsXML
         {
@@ -52,7 +61,7 @@ namespace AIMLbot.Utils
                     var name = result.CreateAttribute("name");
                     name.Value = key;
                     var value = result.CreateAttribute("value");
-                    value.Value = (string) _settingsHash[key];
+                    value.Value = _settingsHash[key];
                     item.Attributes.Append(name);
                     item.Attributes.Append(value);
                     root.AppendChild(item);
@@ -64,27 +73,16 @@ namespace AIMLbot.Utils
 
         #endregion
 
-        /// <summary>
-        /// Ctor
-        /// </summary>
-        /// <param name="inBot">The bot for whom this is a settings dictionary</param>
-        public SettingsDictionary(Bot inBot)
-        {
-            bot = inBot;
-        }
-
         #region Methods
 
         /// <summary>
-        /// Loads bespoke settings into the class from the file referenced in pathToSettings.
-        /// 
-        /// The XML should have an XML declaration like this:
-        /// 
-        /// <?xml version="1.0" encoding="utf-8" ?> 
-        /// 
-        /// followed by a <root> tag with child nodes of the form:
-        /// 
-        /// <item name="name" value="value"/>
+        ///     Loads bespoke settings into the class from the file referenced in pathToSettings.
+        ///     The XML should have an XML declaration like this:
+        ///     <?xml version="1.0" encoding="utf-8"?>
+        ///     followed by a
+        ///     <root>
+        ///         tag with child nodes of the form:
+        ///         <item name="name" value="value" />
         /// </summary>
         /// <param name="pathToSettings">The file containing the settings</param>
         public void LoadSettings(string pathToSettings)
@@ -110,15 +108,13 @@ namespace AIMLbot.Utils
         }
 
         /// <summary>
-        /// Loads bespoke settings to the class from the XML supplied in the args.
-        /// 
-        /// The XML should have an XML declaration like this:
-        /// 
-        /// <?xml version="1.0" encoding="utf-8" ?> 
-        /// 
-        /// followed by a <root> tag with child nodes of the form:
-        /// 
-        /// <item name="name" value="value"/>
+        ///     Loads bespoke settings to the class from the XML supplied in the args.
+        ///     The XML should have an XML declaration like this:
+        ///     <?xml version="1.0" encoding="utf-8"?>
+        ///     followed by a
+        ///     <root>
+        ///         tag with child nodes of the form:
+        ///         <item name="name" value="value" />
         /// </summary>
         /// <param name="inSettingsAsXML">The settings as an XML document</param>
         public void LoadSettings(XmlDocument inSettingsAsXML)
@@ -127,26 +123,22 @@ namespace AIMLbot.Utils
             ClearSettings();
 
             if (inSettingsAsXML.DocumentElement == null) return;
-            
+
             var rootChildren = inSettingsAsXML.DocumentElement.ChildNodes;
 
             foreach (XmlNode myNode in rootChildren)
-            {
                 if ((myNode.Name == "item") & (myNode.Attributes.Count == 2))
-                {
                     if ((myNode.Attributes[0].Name == "name") & (myNode.Attributes[1].Name == "value"))
                     {
                         var name = myNode.Attributes["name"].Value;
                         var value = myNode.Attributes["value"].Value;
                         if (name.Length > 0) AddSetting(name, value);
                     }
-                }
-            }
         }
 
         /// <summary>
-        /// Adds a bespoke setting to the Settings class (accessed via the grabSettings(string name)
-        /// method.
+        ///     Adds a bespoke setting to the Settings class (accessed via the grabSettings(string name)
+        ///     method.
         /// </summary>
         /// <param name="name">The name of the new setting</param>
         /// <param name="value">The value associated with this setting</param>
@@ -160,7 +152,7 @@ namespace AIMLbot.Utils
         }
 
         /// <summary>
-        /// Removes the named setting from this class
+        ///     Removes the named setting from this class
         /// </summary>
         /// <param name="name">The name of the setting to remove</param>
         public void RemoveSetting(string name)
@@ -171,9 +163,10 @@ namespace AIMLbot.Utils
         }
 
         /// <summary>
-        /// Removes a named setting from the Dictionary<,>
+        ///     Removes a named setting from the Dictionary<,>
         /// </summary>
-        /// <param name="name">the key for the Dictionary<,></param>
+        /// <param name="name">
+        ///     the key for the Dictionary<,></param>
         private void RemoveFromHash(string name)
         {
             var normalizedName = MakeCaseInsensitive.TransformInput(name);
@@ -181,8 +174,8 @@ namespace AIMLbot.Utils
         }
 
         /// <summary>
-        /// Updates the named setting with a new value whilst retaining the position in the
-        /// dictionary
+        ///     Updates the named setting with a new value whilst retaining the position in the
+        ///     dictionary
         /// </summary>
         /// <param name="name">the name of the setting</param>
         /// <param name="value">the new value</param>
@@ -195,7 +188,7 @@ namespace AIMLbot.Utils
         }
 
         /// <summary>
-        /// Clears the dictionary to an empty state
+        ///     Clears the dictionary to an empty state
         /// </summary>
         public void ClearSettings()
         {
@@ -204,7 +197,7 @@ namespace AIMLbot.Utils
         }
 
         /// <summary>
-        /// Returns the value of a setting given the name of the setting
+        ///     Returns the value of a setting given the name of the setting
         /// </summary>
         /// <param name="name">the name of the setting whose value we're interested in</param>
         /// <returns>the value of the setting</returns>
@@ -215,7 +208,7 @@ namespace AIMLbot.Utils
         }
 
         /// <summary>
-        /// Checks to see if a setting of a particular name exists
+        ///     Checks to see if a setting of a particular name exists
         /// </summary>
         /// <param name="name">The setting name to check</param>
         /// <returns>Existential truth value</returns>
@@ -226,7 +219,7 @@ namespace AIMLbot.Utils
         }
 
         /// <summary>
-        /// Returns a collection of the names of all the settings defined in the dictionary
+        ///     Returns a collection of the names of all the settings defined in the dictionary
         /// </summary>
         /// <returns>A collection of the names of all the settings defined in the dictionary</returns>
         public IEnumerable<string> SettingNames
@@ -240,7 +233,7 @@ namespace AIMLbot.Utils
         }
 
         /// <summary>
-        /// Copies the values in the current object into the SettingsDictionary passed as the target
+        ///     Copies the values in the current object into the SettingsDictionary passed as the target
         /// </summary>
         /// <param name="target">The target to recieve the values from this SettingsDictionary</param>
         public void Clone(SettingsDictionary target)

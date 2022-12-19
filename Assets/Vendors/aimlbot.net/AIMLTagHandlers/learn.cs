@@ -1,16 +1,17 @@
 using System.IO;
 using System.Xml;
+using AIMLbot.Utils;
 
 namespace AIMLbot.AIMLTagHandlers
 {
     /// <summary>
-    /// The learn element instructs the AIML interpreter to retrieve a resource specified by a URI, 
-    /// and to process its AIML object contents.
+    ///     The learn element instructs the AIML interpreter to retrieve a resource specified by a URI,
+    ///     and to process its AIML object contents.
     /// </summary>
-    public class learn : Utils.AIMLTagHandler
+    public class Learn : AIMLTagHandler
     {
         /// <summary>
-        /// Ctor
+        ///     Ctor
         /// </summary>
         /// <param name="bot">The bot involved in this request</param>
         /// <param name="user">The user making the request</param>
@@ -18,9 +19,9 @@ namespace AIMLbot.AIMLTagHandlers
         /// <param name="request">The request inputted into the system</param>
         /// <param name="result">The result to be passed to the user</param>
         /// <param name="templateNode">The node to be processed</param>
-        public learn(Bot bot,
+        public Learn(AIMLbot.Bot bot,
             User user,
-            Utils.SubQuery query,
+            SubQuery query,
             Request request,
             Result result,
             XmlNode templateNode)

@@ -1,18 +1,19 @@
 using System;
 using System.Collections.Generic;
 using System.Xml;
+using AIMLbot.Utils;
 
 namespace AIMLbot.AIMLTagHandlers
 {
     /// <summary>
-    /// The random element instructs the AIML interpreter to return exactly one of its contained li 
-    /// elements randomly. The random element must contain one or more li elements of type 
-    /// defaultListItem, and cannot contain any other elements.
+    ///     The random element instructs the AIML interpreter to return exactly one of its contained li
+    ///     elements randomly. The random element must contain one or more li elements of type
+    ///     defaultListItem, and cannot contain any other elements.
     /// </summary>
-    public class random : Utils.AIMLTagHandler
+    public class Random : AIMLTagHandler
     {
         /// <summary>
-        /// Ctor
+        ///     Ctor
         /// </summary>
         /// <param name="bot">The bot involved in this request</param>
         /// <param name="user">The user making the request</param>
@@ -20,9 +21,9 @@ namespace AIMLbot.AIMLTagHandlers
         /// <param name="request">The request inputted into the system</param>
         /// <param name="result">The result to be passed to the user</param>
         /// <param name="templateNode">The node to be processed</param>
-        public random(Bot bot,
+        public Random(AIMLbot.Bot bot,
             User user,
-            Utils.SubQuery query,
+            SubQuery query,
             Request request,
             Result result,
             XmlNode templateNode)
@@ -43,8 +44,8 @@ namespace AIMLbot.AIMLTagHandlers
                             listNodes.Add(childNode);
                     if (listNodes.Count > 0)
                     {
-                        var r = new Random();
-                        var chosenNode = (XmlNode) listNodes[r.Next(listNodes.Count)];
+                        var r = new global::System.Random();
+                        var chosenNode = listNodes[r.Next(listNodes.Count)];
                         return chosenNode.InnerXml;
                     }
                 }

@@ -1,7 +1,7 @@
 namespace AIMLbot.Utils
 {
     /// <summary>
-    /// Used to determine the gender of things
+    ///     Used to determine the gender of things
     /// </summary>
     public enum Gender
     {

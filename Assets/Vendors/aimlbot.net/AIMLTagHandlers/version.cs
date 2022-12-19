@@ -1,17 +1,17 @@
 using System.Xml;
+using AIMLbot.Utils;
 
 namespace AIMLbot.AIMLTagHandlers
 {
     /// <summary>
-    /// The version element tells the AIML interpreter that it should substitute the version number
-    /// of the AIML interpreter.
-    /// 
-    /// The version element does not have any content. 
+    ///     The version element tells the AIML interpreter that it should substitute the version number
+    ///     of the AIML interpreter.
+    ///     The version element does not have any content.
     /// </summary>
-    public class version : Utils.AIMLTagHandler
+    public class Version : AIMLTagHandler
     {
         /// <summary>
-        /// Ctor
+        ///     Ctor
         /// </summary>
         /// <param name="bot">The bot involved in this request</param>
         /// <param name="user">The user making the request</param>
@@ -19,9 +19,9 @@ namespace AIMLbot.AIMLTagHandlers
         /// <param name="request">The request inputted into the system</param>
         /// <param name="result">The result to be passed to the user</param>
         /// <param name="templateNode">The node to be processed</param>
-        public version(Bot bot,
+        public Version(AIMLbot.Bot bot,
             User user,
-            Utils.SubQuery query,
+            SubQuery query,
             Request request,
             Result result,
             XmlNode templateNode)

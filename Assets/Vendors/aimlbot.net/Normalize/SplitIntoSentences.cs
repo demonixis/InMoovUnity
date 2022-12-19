@@ -1,25 +1,26 @@
+using System;
 using System.Collections.Generic;
 
 namespace AIMLbot.Normalize
 {
     /// <summary>
-    /// Splits the raw input into its constituent sentences. Split using the tokens found in 
-    /// the bots Splitters string array.
+    ///     Splits the raw input into its constituent sentences. Split using the tokens found in
+    ///     the bots Splitters string array.
     /// </summary>
     public class SplitIntoSentences
     {
         /// <summary>
-        /// The bot this sentence splitter is associated with
+        ///     The bot this sentence splitter is associated with
         /// </summary>
-        private Bot bot;
+        private readonly Bot bot;
 
         /// <summary>
-        /// The raw input string
+        ///     The raw input string
         /// </summary>
         private string inputString;
 
         /// <summary>
-        /// Ctor
+        ///     Ctor
         /// </summary>
         /// <param name="bot">The bot this sentence splitter is associated with</param>
         /// <param name="inputString">The raw input string to be processed</param>
@@ -30,7 +31,7 @@ namespace AIMLbot.Normalize
         }
 
         /// <summary>
-        /// Ctor
+        ///     Ctor
         /// </summary>
         /// <param name="bot">The bot this sentence splitter is associated with</param>
         public SplitIntoSentences(Bot bot)
@@ -39,8 +40,8 @@ namespace AIMLbot.Normalize
         }
 
         /// <summary>
-        /// Splits the supplied raw input into an array of strings according to the tokens found in
-        /// the bot's Splitters List<>
+        ///     Splits the supplied raw input into an array of strings according to the tokens found in
+        ///     the bot's Splitters List<>
         /// </summary>
         /// <param name="inputString">The raw input to split</param>
         /// <returns>An array of strings representing the constituent "sentences"</returns>
@@ -51,14 +52,14 @@ namespace AIMLbot.Normalize
         }
 
         /// <summary>
-        /// Splits the raw input supplied via the ctor into an array of strings according to the tokens
-        /// found in the bot's Splitters List<>
+        ///     Splits the raw input supplied via the ctor into an array of strings according to the tokens
+        ///     found in the bot's Splitters List<>
         /// </summary>
         /// <returns>An array of strings representing the constituent "sentences"</returns>
         public string[] Transform()
         {
             var tokens = bot.Splitters.ToArray();
-            var rawResult = inputString.Split(tokens, System.StringSplitOptions.RemoveEmptyEntries);
+            var rawResult = inputString.Split(tokens, StringSplitOptions.RemoveEmptyEntries);
             var tidyResult = new List<string>();
             foreach (var rawSentence in rawResult)
             {

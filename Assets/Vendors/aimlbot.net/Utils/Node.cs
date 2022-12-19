@@ -2,11 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Xml;
+using AIMLbot.Normalize;
 
 namespace AIMLbot.Utils
 {
     /// <summary>
-    /// Encapsulates a node in the graphmaster tree structure
+    ///     Encapsulates a node in the graphmaster tree structure
     /// </summary>
     [Serializable]
     public class Node
@@ -14,27 +15,27 @@ namespace AIMLbot.Utils
         #region Attributes
 
         /// <summary>
-        /// Contains the child nodes of this node
+        ///     Contains the child nodes of this node
         /// </summary>
         private Dictionary<string, Node> _children = new();
 
         /// <summary>
-        /// The number of direct children (non-recursive) of this node
+        ///     The number of direct children (non-recursive) of this node
         /// </summary>
         public int NumberOfChildNodes => _children.Count;
 
         /// <summary>
-        /// The template (if any) associated with this node
+        ///     The template (if any) associated with this node
         /// </summary>
         public string template = string.Empty;
 
         /// <summary>
-        /// The AIML source for the category that defines the template
+        ///     The AIML source for the category that defines the template
         /// </summary>
         public string filename = string.Empty;
 
         /// <summary>
-        /// The word that identifies this node to it's parent node
+        ///     The word that identifies this node to it's parent node
         /// </summary>
         public string word = string.Empty;
 
@@ -45,7 +46,7 @@ namespace AIMLbot.Utils
         #region Add category
 
         /// <summary>
-        /// Adds a category to the node
+        ///     Adds a category to the node
         /// </summary>
         /// <param name="path">the path for the category</param>
         /// <param name="inTemplate">the template to find at the end of the path</param>
@@ -71,7 +72,7 @@ namespace AIMLbot.Utils
             var words = path.Trim().Split(" ".ToCharArray());
 
             // get the first word (to form the key for the child nodemapper)
-            var firstWord = Normalize.MakeCaseInsensitive.TransformInput(words[0]);
+            var firstWord = MakeCaseInsensitive.TransformInput(words[0]);
 
             // concatenate the rest of the sentence into a suffix (to act as the
             // path argument in the child nodemapper)
@@ -101,8 +102,8 @@ namespace AIMLbot.Utils
         #region Evaluate Node
 
         /// <summary>
-        /// Navigates this node (and recusively into child nodes) for a match to the path passed as an argument
-        /// whilst processing the referenced request
+        ///     Navigates this node (and recusively into child nodes) for a match to the path passed as an argument
+        ///     whilst processing the referenced request
         /// </summary>
         /// <param name="path">The normalized path derived from the user's input</param>
         /// <param name="query">The query that this search is for</param>
@@ -144,7 +145,7 @@ namespace AIMLbot.Utils
             var splitPath = path.Split(" \r\n\t".ToCharArray());
 
             // get the first word of the sentence
-            var firstWord = Normalize.MakeCaseInsensitive.TransformInput(splitPath[0]);
+            var firstWord = MakeCaseInsensitive.TransformInput(splitPath[0]);
 
             // and concatenate the rest of the input into a new path for child nodes
             var newPath = path.Substring(firstWord.Length, path.Length - firstWord.Length);
@@ -153,7 +154,7 @@ namespace AIMLbot.Utils
             // wildcard. "_" comes first in precedence in the AIML alphabet
             if (_children.ContainsKey("_"))
             {
-                var childNode = (Node) _children["_"];
+                var childNode = _children["_"];
 
                 // add the next word to the wildcard match 
                 var newWildcard = new StringBuilder();
@@ -201,7 +202,7 @@ namespace AIMLbot.Utils
                     newMatchstate = MatchState.That;
                 else if (firstWord == "<TOPIC>") newMatchstate = MatchState.Topic;
 
-                var childNode = (Node) _children[firstWord];
+                var childNode = _children[firstWord];
                 // move down into the identified branch of the GraphMaster structure using the new
                 // matchstate
                 var newWildcard = new StringBuilder();
@@ -238,7 +239,7 @@ namespace AIMLbot.Utils
             if (_children.ContainsKey("*"))
             {
                 // o.k. look for the path in the child node denoted by "*"
-                var childNode = (Node) _children["*"];
+                var childNode = _children["*"];
 
                 // add the next word to the wildcard match 
                 var newWildcard = new StringBuilder();
@@ -287,7 +288,7 @@ namespace AIMLbot.Utils
         }
 
         /// <summary>
-        /// Correctly stores a word in the wildcard slot
+        ///     Correctly stores a word in the wildcard slot
         /// </summary>
         /// <param name="word">The word matched by the wildcard</param>
         /// <param name="wildcard">The contents of the user input absorbed by the AIML wildcards "_" and "*"</param>
