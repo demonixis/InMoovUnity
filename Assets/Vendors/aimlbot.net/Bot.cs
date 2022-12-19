@@ -74,7 +74,7 @@ namespace AIMLbot
                 }
             }
 
-            if (!Equals(null, WrittenToLog)) WrittenToLog();
+            WrittenToLog?.Invoke();
         }
 
         #endregion
