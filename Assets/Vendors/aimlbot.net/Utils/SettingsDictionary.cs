@@ -16,13 +16,13 @@ namespace AIMLbot.Utils
         /// <summary>
         /// Holds a dictionary of settings
         /// </summary>
-        private Dictionary<string, string> settingsHash = new();
+        private readonly Dictionary<string, string> _settingsHash = new();
 
         /// <summary>
         /// Contains an ordered collection of all the keys (unfortunately Dictionary<,>s are
         /// not ordered)
         /// </summary>
-        private List<string> orderedKeys = new();
+        private readonly List<string> _orderedKeys = new();
 
         /// <summary>
         /// The bot this dictionary is associated with
@@ -32,7 +32,7 @@ namespace AIMLbot.Utils
         /// <summary>
         /// The number of items in the dictionary
         /// </summary>
-        public int Count => orderedKeys.Count;
+        public int Count => _orderedKeys.Count;
 
         /// <summary>
         /// An XML representation of the contents of this dictionary
@@ -46,13 +46,13 @@ namespace AIMLbot.Utils
                 result.AppendChild(dec);
                 var root = result.CreateNode(XmlNodeType.Element, "root", "");
                 result.AppendChild(root);
-                foreach (var key in orderedKeys)
+                foreach (var key in _orderedKeys)
                 {
                     var item = result.CreateNode(XmlNodeType.Element, "item", "");
                     var name = result.CreateAttribute("name");
                     name.Value = key;
                     var value = result.CreateAttribute("value");
-                    value.Value = (string) settingsHash[key];
+                    value.Value = (string) _settingsHash[key];
                     item.Attributes.Append(name);
                     item.Attributes.Append(value);
                     root.AppendChild(item);
@@ -67,10 +67,10 @@ namespace AIMLbot.Utils
         /// <summary>
         /// Ctor
         /// </summary>
-        /// <param name="bot">The bot for whom this is a settings dictionary</param>
-        public SettingsDictionary(Bot bot)
+        /// <param name="inBot">The bot for whom this is a settings dictionary</param>
+        public SettingsDictionary(Bot inBot)
         {
-            this.bot = bot;
+            bot = inBot;
         }
 
         #region Methods
@@ -87,7 +87,7 @@ namespace AIMLbot.Utils
         /// <item name="name" value="value"/>
         /// </summary>
         /// <param name="pathToSettings">The file containing the settings</param>
-        public void loadSettings(string pathToSettings)
+        public void LoadSettings(string pathToSettings)
         {
             if (pathToSettings.Length > 0)
             {
@@ -96,7 +96,7 @@ namespace AIMLbot.Utils
                 {
                     var xmlDoc = new XmlDocument();
                     xmlDoc.Load(pathToSettings);
-                    loadSettings(xmlDoc);
+                    LoadSettings(xmlDoc);
                 }
                 else
                 {
@@ -120,22 +120,28 @@ namespace AIMLbot.Utils
         /// 
         /// <item name="name" value="value"/>
         /// </summary>
-        /// <param name="settingsAsXML">The settings as an XML document</param>
-        public void loadSettings(XmlDocument settingsAsXML)
+        /// <param name="inSettingsAsXML">The settings as an XML document</param>
+        public void LoadSettings(XmlDocument inSettingsAsXML)
         {
             // empty the hash
-            clearSettings();
+            ClearSettings();
 
-            var rootChildren = settingsAsXML.DocumentElement.ChildNodes;
+            if (inSettingsAsXML.DocumentElement == null) return;
+            
+            var rootChildren = inSettingsAsXML.DocumentElement.ChildNodes;
 
             foreach (XmlNode myNode in rootChildren)
+            {
                 if ((myNode.Name == "item") & (myNode.Attributes.Count == 2))
+                {
                     if ((myNode.Attributes[0].Name == "name") & (myNode.Attributes[1].Name == "value"))
                     {
                         var name = myNode.Attributes["name"].Value;
                         var value = myNode.Attributes["value"].Value;
-                        if (name.Length > 0) addSetting(name, value);
+                        if (name.Length > 0) AddSetting(name, value);
                     }
+                }
+            }
         }
 
         /// <summary>
@@ -144,36 +150,34 @@ namespace AIMLbot.Utils
         /// </summary>
         /// <param name="name">The name of the new setting</param>
         /// <param name="value">The value associated with this setting</param>
-        public void addSetting(string name, string value)
+        public void AddSetting(string name, string value)
         {
             var key = MakeCaseInsensitive.TransformInput(name);
-            if (key.Length > 0)
-            {
-                removeSetting(key);
-                orderedKeys.Add(key);
-                settingsHash.Add(MakeCaseInsensitive.TransformInput(key), value);
-            }
+            if (key.Length <= 0) return;
+            RemoveSetting(key);
+            _orderedKeys.Add(key);
+            _settingsHash.Add(MakeCaseInsensitive.TransformInput(key), value);
         }
 
         /// <summary>
         /// Removes the named setting from this class
         /// </summary>
         /// <param name="name">The name of the setting to remove</param>
-        public void removeSetting(string name)
+        public void RemoveSetting(string name)
         {
             var normalizedName = MakeCaseInsensitive.TransformInput(name);
-            orderedKeys.Remove(normalizedName);
-            removeFromHash(normalizedName);
+            _orderedKeys.Remove(normalizedName);
+            RemoveFromHash(normalizedName);
         }
 
         /// <summary>
         /// Removes a named setting from the Dictionary<,>
         /// </summary>
         /// <param name="name">the key for the Dictionary<,></param>
-        private void removeFromHash(string name)
+        private void RemoveFromHash(string name)
         {
             var normalizedName = MakeCaseInsensitive.TransformInput(name);
-            settingsHash.Remove(normalizedName);
+            _settingsHash.Remove(normalizedName);
         }
 
         /// <summary>
@@ -182,23 +186,21 @@ namespace AIMLbot.Utils
         /// </summary>
         /// <param name="name">the name of the setting</param>
         /// <param name="value">the new value</param>
-        public void updateSetting(string name, string value)
+        public void UpdateSetting(string name, string value)
         {
             var key = MakeCaseInsensitive.TransformInput(name);
-            if (orderedKeys.Contains(key))
-            {
-                removeFromHash(key);
-                settingsHash.Add(MakeCaseInsensitive.TransformInput(key), value);
-            }
+            if (!_orderedKeys.Contains(key)) return;
+            RemoveFromHash(key);
+            _settingsHash.Add(MakeCaseInsensitive.TransformInput(key), value);
         }
 
         /// <summary>
         /// Clears the dictionary to an empty state
         /// </summary>
-        public void clearSettings()
+        public void ClearSettings()
         {
-            orderedKeys.Clear();
-            settingsHash.Clear();
+            _orderedKeys.Clear();
+            _settingsHash.Clear();
         }
 
         /// <summary>
@@ -206,13 +208,10 @@ namespace AIMLbot.Utils
         /// </summary>
         /// <param name="name">the name of the setting whose value we're interested in</param>
         /// <returns>the value of the setting</returns>
-        public string grabSetting(string name)
+        public string GrabSetting(string name)
         {
             var normalizedName = MakeCaseInsensitive.TransformInput(name);
-            if (containsSettingCalled(normalizedName))
-                return (string) settingsHash[normalizedName];
-            else
-                return string.Empty;
+            return ContainsSettingCalled(normalizedName) ? _settingsHash[normalizedName] : string.Empty;
         }
 
         /// <summary>
@@ -220,25 +219,22 @@ namespace AIMLbot.Utils
         /// </summary>
         /// <param name="name">The setting name to check</param>
         /// <returns>Existential truth value</returns>
-        public bool containsSettingCalled(string name)
+        public bool ContainsSettingCalled(string name)
         {
             var normalizedName = MakeCaseInsensitive.TransformInput(name);
-            if (normalizedName.Length > 0)
-                return orderedKeys.Contains(normalizedName);
-            else
-                return false;
+            return normalizedName.Length > 0 && _orderedKeys.Contains(normalizedName);
         }
 
         /// <summary>
         /// Returns a collection of the names of all the settings defined in the dictionary
         /// </summary>
         /// <returns>A collection of the names of all the settings defined in the dictionary</returns>
-        public string[] SettingNames
+        public IEnumerable<string> SettingNames
         {
             get
             {
-                var result = new string[orderedKeys.Count];
-                orderedKeys.CopyTo(result, 0);
+                var result = new string[_orderedKeys.Count];
+                _orderedKeys.CopyTo(result, 0);
                 return result;
             }
         }
@@ -249,7 +245,7 @@ namespace AIMLbot.Utils
         /// <param name="target">The target to recieve the values from this SettingsDictionary</param>
         public void Clone(SettingsDictionary target)
         {
-            foreach (var key in orderedKeys) target.addSetting(key, grabSetting(key));
+            foreach (var key in _orderedKeys) target.AddSetting(key, GrabSetting(key));
         }
 
         #endregion

@@ -27,20 +27,14 @@ namespace AIMLbot.Utils
         /// <summary>
         /// Provides an instantiation of the class represented by this tag-handler
         /// </summary>
-        /// <param name="Assemblies">All the assemblies the bot knows about</param>
+        /// <param name="assemblies">All the assemblies the bot knows about</param>
         /// <returns>The instantiated class</returns>
-        public AIMLTagHandler Instantiate(Dictionary<string, Assembly> Assemblies)
+        public AIMLTagHandler Instantiate(Dictionary<string, Assembly> assemblies)
         {
-            if (Assemblies.ContainsKey(AssemblyName))
-            {
-                var tagDLL = (Assembly) Assemblies[AssemblyName];
-                var tagDLLTypes = tagDLL.GetTypes();
-                return (AIMLTagHandler) tagDLL.CreateInstance(ClassName);
-            }
-            else
-            {
-                return null;
-            }
+            if (!assemblies.ContainsKey(AssemblyName)) return null;
+            var tagDLL = assemblies[AssemblyName];
+            var tagDLLTypes = tagDLL.GetTypes();
+            return (AIMLTagHandler) tagDLL.CreateInstance(ClassName);
         }
     }
 }

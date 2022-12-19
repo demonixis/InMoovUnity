@@ -33,7 +33,7 @@ namespace AIMLbot.AIMLTagHandlers
         {
             if (this.templateNode.Name.ToLower() == "version")
             {
-                return this.bot.GlobalSettings.grabSetting("version");
+                return this.bot.GlobalSettings.GrabSetting("version");
             }
             return string.Empty;
         }

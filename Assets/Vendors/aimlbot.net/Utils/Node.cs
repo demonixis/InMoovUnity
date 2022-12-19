@@ -16,12 +16,12 @@ namespace AIMLbot.Utils
         /// <summary>
         /// Contains the child nodes of this node
         /// </summary>
-        private Dictionary<string, Node> children = new();
+        private Dictionary<string, Node> _children = new();
 
         /// <summary>
         /// The number of direct children (non-recursive) of this node
         /// </summary>
-        public int NumberOfChildNodes => children.Count;
+        public int NumberOfChildNodes => _children.Count;
 
         /// <summary>
         /// The template (if any) associated with this node
@@ -48,19 +48,19 @@ namespace AIMLbot.Utils
         /// Adds a category to the node
         /// </summary>
         /// <param name="path">the path for the category</param>
-        /// <param name="template">the template to find at the end of the path</param>
-        /// <param name="filename">the file that was the source of this category</param>
-        public void addCategory(string path, string template, string filename)
+        /// <param name="inTemplate">the template to find at the end of the path</param>
+        /// <param name="inFilename">the file that was the source of this category</param>
+        public void AddCategory(string path, string inTemplate, string inFilename)
         {
-            if (template.Length == 0)
-                throw new XmlException("The category with a pattern: " + path + " found in file: " + filename +
+            if (inTemplate.Length == 0)
+                throw new XmlException("The category with a pattern: " + path + " found in file: " + inFilename +
                                        " has an empty template tag. ABORTING");
 
             // check we're not at the leaf node
             if (path.Trim().Length == 0)
             {
-                this.template = template;
-                this.filename = filename;
+                template = inTemplate;
+                filename = inFilename;
                 return;
             }
 
@@ -80,17 +80,19 @@ namespace AIMLbot.Utils
             // o.k. check we don't already have a child with the key from this sentence
             // if we do then pass the handling of this sentence down the branch to the 
             // child nodemapper otherwise the child nodemapper doesn't yet exist, so create a new one
-            if (children.ContainsKey(firstWord))
+            if (_children.ContainsKey(firstWord))
             {
-                var childNode = children[firstWord];
-                childNode.addCategory(newPath, template, filename);
+                var childNode = _children[firstWord];
+                childNode.AddCategory(newPath, inTemplate, inFilename);
             }
             else
             {
-                var childNode = new Node();
-                childNode.word = firstWord;
-                childNode.addCategory(newPath, template, filename);
-                children.Add(childNode.word, childNode);
+                var childNode = new Node
+                {
+                    word = firstWord
+                };
+                childNode.AddCategory(newPath, inTemplate, inFilename);
+                _children.Add(childNode.word, childNode);
             }
         }
 
@@ -108,7 +110,7 @@ namespace AIMLbot.Utils
         /// <param name="matchstate">The part of the input path the node represents</param>
         /// <param name="wildcard">The contents of the user input absorbed by the AIML wildcards "_" and "*"</param>
         /// <returns>The template to process to generate the output</returns>
-        public string evaluate(string path, SubQuery query, Request request, MatchState matchstate,
+        public string Evaluate(string path, SubQuery query, Request request, MatchState matchstate,
             StringBuilder wildcard)
         {
             // check for timeout
@@ -125,12 +127,12 @@ namespace AIMLbot.Utils
 
             // check if this is the end of a branch in the GraphMaster 
             // return the cCategory for this node
-            if (children.Count == 0)
+            if (_children.Count == 0)
             {
                 if (path.Length > 0)
                     // if we get here it means that there is a wildcard in the user input part of the
                     // path.
-                    storeWildCard(path, wildcard);
+                    StoreWildCard(path, wildcard);
                 return template;
             }
 
@@ -149,16 +151,16 @@ namespace AIMLbot.Utils
 
             // first option is to see if this node has a child denoted by the "_" 
             // wildcard. "_" comes first in precedence in the AIML alphabet
-            if (children.ContainsKey("_"))
+            if (_children.ContainsKey("_"))
             {
-                var childNode = (Node) children["_"];
+                var childNode = (Node) _children["_"];
 
                 // add the next word to the wildcard match 
                 var newWildcard = new StringBuilder();
-                storeWildCard(splitPath[0], newWildcard);
+                StoreWildCard(splitPath[0], newWildcard);
 
                 // move down into the identified branch of the GraphMaster structure
-                var result = childNode.evaluate(newPath, query, request, matchstate, newWildcard);
+                var result = childNode.Evaluate(newPath, query, request, matchstate, newWildcard);
 
                 // and if we get a result from the branch process the wildcard matches and return 
                 // the result
@@ -188,7 +190,7 @@ namespace AIMLbot.Utils
             // second option - the nodemapper may have contained a "_" child, but led to no match
             // or it didn't contain a "_" child at all. So get the child nodemapper from this 
             // nodemapper that matches the first word of the input sentence.
-            if (children.ContainsKey(firstWord))
+            if (_children.ContainsKey(firstWord))
             {
                 // process the matchstate - this might not make sense but the matchstate is working
                 // with a "backwards" path: "topic <topic> that <that> user input"
@@ -199,11 +201,11 @@ namespace AIMLbot.Utils
                     newMatchstate = MatchState.That;
                 else if (firstWord == "<TOPIC>") newMatchstate = MatchState.Topic;
 
-                var childNode = (Node) children[firstWord];
+                var childNode = (Node) _children[firstWord];
                 // move down into the identified branch of the GraphMaster structure using the new
                 // matchstate
                 var newWildcard = new StringBuilder();
-                var result = childNode.evaluate(newPath, query, request, newMatchstate, newWildcard);
+                var result = childNode.Evaluate(newPath, query, request, newMatchstate, newWildcard);
                 // and if we get a result from the child return it
                 if (result.Length > 0)
                 {
@@ -233,16 +235,16 @@ namespace AIMLbot.Utils
             // third option - the input part of the path might have been matched so far but hasn't
             // returned a match, so check to see it contains the "*" wildcard. "*" comes last in
             // precedence in the AIML alphabet.
-            if (children.ContainsKey("*"))
+            if (_children.ContainsKey("*"))
             {
                 // o.k. look for the path in the child node denoted by "*"
-                var childNode = (Node) children["*"];
+                var childNode = (Node) _children["*"];
 
                 // add the next word to the wildcard match 
                 var newWildcard = new StringBuilder();
-                storeWildCard(splitPath[0], newWildcard);
+                StoreWildCard(splitPath[0], newWildcard);
 
-                var result = childNode.evaluate(newPath, query, request, matchstate, newWildcard);
+                var result = childNode.Evaluate(newPath, query, request, matchstate, newWildcard);
                 // and if we get a result from the branch process and return it
                 if (result.Length > 0)
                 {
@@ -273,8 +275,8 @@ namespace AIMLbot.Utils
             // valid if we proceed with the tail.
             if (word == "_" || word == "*")
             {
-                storeWildCard(splitPath[0], wildcard);
-                return evaluate(newPath, query, request, matchstate, wildcard);
+                StoreWildCard(splitPath[0], wildcard);
+                return Evaluate(newPath, query, request, matchstate, wildcard);
             }
 
             // If we get here then we're at a dead end so return an empty string. Hopefully, if the
@@ -289,7 +291,7 @@ namespace AIMLbot.Utils
         /// </summary>
         /// <param name="word">The word matched by the wildcard</param>
         /// <param name="wildcard">The contents of the user input absorbed by the AIML wildcards "_" and "*"</param>
-        private void storeWildCard(string word, StringBuilder wildcard)
+        private void StoreWildCard(string word, StringBuilder wildcard)
         {
             if (wildcard.Length > 0) wildcard.Append(" ");
             wildcard.Append(word);

@@ -33,7 +33,7 @@ namespace AIMLbot
         /// <summary>
         /// the value of the "topic" predicate
         /// </summary>
-        public string Topic => Predicates.grabSetting("topic");
+        public string Topic => Predicates.GrabSetting("topic");
 
         /// <summary>
         /// the predicates associated with this particular user
@@ -71,7 +71,7 @@ namespace AIMLbot
                 this.bot = bot;
                 Predicates = new Utils.SettingsDictionary(this.bot);
                 this.bot.DefaultPredicates.Clone(Predicates);
-                Predicates.addSetting("topic", "*");
+                Predicates.AddSetting("topic", "*");
             }
             else
             {

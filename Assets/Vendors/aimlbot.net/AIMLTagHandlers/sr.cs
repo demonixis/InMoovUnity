@@ -34,11 +34,11 @@ namespace AIMLbot.AIMLTagHandlers
         {
             if (this.templateNode.Name.ToLower() == "sr")
             {
-                XmlNode starNode = Utils.AIMLTagHandler.getNode("<star/>");
+                XmlNode starNode = Utils.AIMLTagHandler.GetNode("<star/>");
                 star recursiveStar = new star(this.bot, this.user, this.query, this.request, this.result, starNode);
                 string starContent = recursiveStar.Transform();
 
-                XmlNode sraiNode = AIMLbot.Utils.AIMLTagHandler.getNode("<srai>" + starContent + "</srai>");
+                XmlNode sraiNode = AIMLbot.Utils.AIMLTagHandler.GetNode("<srai>" + starContent + "</srai>");
                 srai sraiHandler = new srai(this.bot, this.user, this.query, this.request, this.result, sraiNode);
                 return sraiHandler.Transform();
             }

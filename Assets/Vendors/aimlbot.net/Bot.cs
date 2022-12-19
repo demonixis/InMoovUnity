@@ -85,7 +85,7 @@ namespace AIMLbot
         /// <summary>
         /// How big to let the log buffer get before writing to disk
         /// </summary>
-        private int MaxLogBufferSize => Convert.ToInt32(GlobalSettings.grabSetting("maxlogbuffersize"));
+        private int MaxLogBufferSize => Convert.ToInt32(GlobalSettings.GrabSetting("maxlogbuffersize"));
 
         /// <summary>
         /// Flag to show if the bot is willing to accept user input
@@ -95,35 +95,35 @@ namespace AIMLbot
         /// <summary>
         /// The message to show if a user tries to use the bot whilst it is set to not process user input
         /// </summary>
-        private string NotAcceptingUserInputMessage => GlobalSettings.grabSetting("notacceptinguserinputmessage");
+        private string NotAcceptingUserInputMessage => GlobalSettings.GrabSetting("notacceptinguserinputmessage");
 
         /// <summary>
         /// The maximum amount of time a request should take (in milliseconds)
         /// </summary>
-        public double TimeOut => Convert.ToDouble(GlobalSettings.grabSetting("timeout"));
+        public double TimeOut => Convert.ToDouble(GlobalSettings.GrabSetting("timeout"));
 
         /// <summary>
         /// The message to display in the event of a timeout
         /// </summary>
-        public string TimeOutMessage => GlobalSettings.grabSetting("timeoutmessage");
+        public string TimeOutMessage => GlobalSettings.GrabSetting("timeoutmessage");
 
         /// <summary>
         /// The locale of the bot as a CultureInfo object
         /// </summary>
-        public CultureInfo Locale => new CultureInfo(GlobalSettings.grabSetting("culture"));
+        public CultureInfo Locale => new CultureInfo(GlobalSettings.GrabSetting("culture"));
 
         /// <summary>
         /// Will match all the illegal characters that might be inputted by the user
         /// </summary>
         public Regex Strippers =>
-            new Regex(GlobalSettings.grabSetting("stripperregex"), RegexOptions.IgnorePatternWhitespace);
+            new Regex(GlobalSettings.GrabSetting("stripperregex"), RegexOptions.IgnorePatternWhitespace);
 
         /// <summary>
         /// The email address of the botmaster to be used if WillCallHome is set to true
         /// </summary>
         public string AdminEmail
         {
-            get => GlobalSettings.grabSetting("adminemail");
+            get => GlobalSettings.GrabSetting("adminemail");
             set
             {
                 if (value.Length > 0)
@@ -138,13 +138,13 @@ namespace AIMLbot
 
                     if (reStrict.IsMatch(value))
                         // update the settings
-                        GlobalSettings.addSetting("adminemail", value);
+                        GlobalSettings.AddSetting("adminemail", value);
                     else
                         throw new Exception("The AdminEmail is not a valid email address");
                 }
                 else
                 {
-                    GlobalSettings.addSetting("adminemail", "");
+                    GlobalSettings.AddSetting("adminemail", "");
                 }
             }
         }
@@ -156,7 +156,7 @@ namespace AIMLbot
         {
             get
             {
-                var islogging = GlobalSettings.grabSetting("islogging");
+                var islogging = GlobalSettings.GrabSetting("islogging");
                 return islogging.ToLower() == "true";
             }
         }
@@ -169,7 +169,7 @@ namespace AIMLbot
         {
             get
             {
-                var willcallhome = GlobalSettings.grabSetting("willcallhome");
+                var willcallhome = GlobalSettings.GrabSetting("willcallhome");
                 return willcallhome.ToLower() == "true";
             }
         }
@@ -186,7 +186,7 @@ namespace AIMLbot
         {
             get
             {
-                var sex = Convert.ToInt32(GlobalSettings.grabSetting("gender"));
+                var sex = Convert.ToInt32(GlobalSettings.GrabSetting("gender"));
                 Gender result;
                 switch (sex)
                 {
@@ -211,17 +211,17 @@ namespace AIMLbot
         /// <summary>
         /// The directory to look in for the AIML files
         /// </summary>
-        public string PathToAiml => Path.Combine(_customPath, GlobalSettings.grabSetting("aimldirectory"));
+        public string PathToAiml => Path.Combine(_customPath, GlobalSettings.GrabSetting("aimldirectory"));
 
         /// <summary>
         /// The directory to look in for the various XML configuration files
         /// </summary>
-        public string PathToConfigFiles => Path.Combine(_customPath, GlobalSettings.grabSetting("configdirectory"));
+        public string PathToConfigFiles => Path.Combine(_customPath, GlobalSettings.GrabSetting("configdirectory"));
 
         /// <summary>
         /// The directory into which the various log files will be written
         /// </summary>
-        public string PathToLogs => Path.Combine(_customPath, GlobalSettings.grabSetting("logdirectory"));
+        public string PathToLogs => Path.Combine(_customPath, GlobalSettings.GrabSetting("logdirectory"));
 
         /// <summary>
         /// The number of categories this bot has in its graphmaster "brain"
@@ -281,8 +281,8 @@ namespace AIMLbot
         /// </summary>
         public void LoadAimlFromFiles()
         {
-            var loader = new AIMLLoader(this);
-            loader.loadAIML();
+            var loader = new AimlLoader(this);
+            loader.LoadAiml();
         }
 
         /// <summary>
@@ -292,8 +292,8 @@ namespace AIMLbot
         /// <param name="filename">The originator of the XML document</param>
         public void LoadAimlFromXML(XmlDocument newAiml, string filename)
         {
-            var loader = new AIMLLoader(this);
-            loader.loadAIMLFromXML(newAiml, filename);
+            var loader = new AimlLoader(this);
+            loader.LoadAimlFromXML(newAiml, filename);
         }
 
         /// <summary>
@@ -325,80 +325,80 @@ namespace AIMLbot
         /// <param name="pathToSettings">Path to the settings xml file</param>
         public void LoadSettings(string pathToSettings)
         {
-            GlobalSettings.loadSettings(pathToSettings);
+            GlobalSettings.LoadSettings(pathToSettings);
 
             // Checks for some important default settings
-            if (!GlobalSettings.containsSettingCalled("version"))
-                GlobalSettings.addSetting("version", Environment.Version.ToString());
-            if (!GlobalSettings.containsSettingCalled("name")) GlobalSettings.addSetting("name", "Unknown");
-            if (!GlobalSettings.containsSettingCalled("botmaster")) GlobalSettings.addSetting("botmaster", "Unknown");
-            if (!GlobalSettings.containsSettingCalled("master")) GlobalSettings.addSetting("botmaster", "Unknown");
-            if (!GlobalSettings.containsSettingCalled("author"))
-                GlobalSettings.addSetting("author", "Nicholas H.Tollervey");
-            if (!GlobalSettings.containsSettingCalled("location")) GlobalSettings.addSetting("location", "Unknown");
-            if (!GlobalSettings.containsSettingCalled("gender")) GlobalSettings.addSetting("gender", "-1");
-            if (!GlobalSettings.containsSettingCalled("birthday")) GlobalSettings.addSetting("birthday", "2006/11/08");
-            if (!GlobalSettings.containsSettingCalled("birthplace"))
-                GlobalSettings.addSetting("birthplace", "Towcester, Northamptonshire, UK");
-            if (!GlobalSettings.containsSettingCalled("website"))
-                GlobalSettings.addSetting("website", "http://sourceforge.net/projects/aimlbot");
-            if (GlobalSettings.containsSettingCalled("adminemail"))
+            if (!GlobalSettings.ContainsSettingCalled("version"))
+                GlobalSettings.AddSetting("version", Environment.Version.ToString());
+            if (!GlobalSettings.ContainsSettingCalled("name")) GlobalSettings.AddSetting("name", "Unknown");
+            if (!GlobalSettings.ContainsSettingCalled("botmaster")) GlobalSettings.AddSetting("botmaster", "Unknown");
+            if (!GlobalSettings.ContainsSettingCalled("master")) GlobalSettings.AddSetting("botmaster", "Unknown");
+            if (!GlobalSettings.ContainsSettingCalled("author"))
+                GlobalSettings.AddSetting("author", "Nicholas H.Tollervey");
+            if (!GlobalSettings.ContainsSettingCalled("location")) GlobalSettings.AddSetting("location", "Unknown");
+            if (!GlobalSettings.ContainsSettingCalled("gender")) GlobalSettings.AddSetting("gender", "-1");
+            if (!GlobalSettings.ContainsSettingCalled("birthday")) GlobalSettings.AddSetting("birthday", "2006/11/08");
+            if (!GlobalSettings.ContainsSettingCalled("birthplace"))
+                GlobalSettings.AddSetting("birthplace", "Towcester, Northamptonshire, UK");
+            if (!GlobalSettings.ContainsSettingCalled("website"))
+                GlobalSettings.AddSetting("website", "http://sourceforge.net/projects/aimlbot");
+            if (GlobalSettings.ContainsSettingCalled("adminemail"))
             {
-                var emailToCheck = GlobalSettings.grabSetting("adminemail");
+                var emailToCheck = GlobalSettings.GrabSetting("adminemail");
                 AdminEmail = emailToCheck;
             }
             else
             {
-                GlobalSettings.addSetting("adminemail", "");
+                GlobalSettings.AddSetting("adminemail", "");
             }
 
-            if (!GlobalSettings.containsSettingCalled("islogging")) GlobalSettings.addSetting("islogging", "False");
-            if (!GlobalSettings.containsSettingCalled("willcallhome"))
-                GlobalSettings.addSetting("willcallhome", "False");
-            if (!GlobalSettings.containsSettingCalled("timeout")) GlobalSettings.addSetting("timeout", "2000");
-            if (!GlobalSettings.containsSettingCalled("timeoutmessage"))
-                GlobalSettings.addSetting("timeoutmessage", "ERROR: The request has timed out.");
-            if (!GlobalSettings.containsSettingCalled("culture")) GlobalSettings.addSetting("culture", "en-US");
-            if (!GlobalSettings.containsSettingCalled("splittersfile"))
-                GlobalSettings.addSetting("splittersfile", "Splitters.xml");
-            if (!GlobalSettings.containsSettingCalled("person2substitutionsfile"))
-                GlobalSettings.addSetting("person2substitutionsfile", "Person2Substitutions.xml");
-            if (!GlobalSettings.containsSettingCalled("personsubstitutionsfile"))
-                GlobalSettings.addSetting("personsubstitutionsfile", "PersonSubstitutions.xml");
-            if (!GlobalSettings.containsSettingCalled("gendersubstitutionsfile"))
-                GlobalSettings.addSetting("gendersubstitutionsfile", "GenderSubstitutions.xml");
-            if (!GlobalSettings.containsSettingCalled("defaultpredicates"))
-                GlobalSettings.addSetting("defaultpredicates", "DefaultPredicates.xml");
-            if (!GlobalSettings.containsSettingCalled("substitutionsfile"))
-                GlobalSettings.addSetting("substitutionsfile", "Substitutions.xml");
-            if (!GlobalSettings.containsSettingCalled("aimldirectory"))
-                GlobalSettings.addSetting("aimldirectory", "aiml");
-            if (!GlobalSettings.containsSettingCalled("configdirectory"))
-                GlobalSettings.addSetting("configdirectory", "config");
-            if (!GlobalSettings.containsSettingCalled("logdirectory"))
-                GlobalSettings.addSetting("logdirectory", "logs");
-            if (!GlobalSettings.containsSettingCalled("maxlogbuffersize"))
-                GlobalSettings.addSetting("maxlogbuffersize", "64");
-            if (!GlobalSettings.containsSettingCalled("notacceptinguserinputmessage"))
-                GlobalSettings.addSetting("notacceptinguserinputmessage",
+            if (!GlobalSettings.ContainsSettingCalled("islogging")) GlobalSettings.AddSetting("islogging", "False");
+            if (!GlobalSettings.ContainsSettingCalled("willcallhome"))
+                GlobalSettings.AddSetting("willcallhome", "False");
+            if (!GlobalSettings.ContainsSettingCalled("timeout")) GlobalSettings.AddSetting("timeout", "2000");
+            if (!GlobalSettings.ContainsSettingCalled("timeoutmessage"))
+                GlobalSettings.AddSetting("timeoutmessage", "ERROR: The request has timed out.");
+            if (!GlobalSettings.ContainsSettingCalled("culture")) GlobalSettings.AddSetting("culture", "en-US");
+            if (!GlobalSettings.ContainsSettingCalled("splittersfile"))
+                GlobalSettings.AddSetting("splittersfile", "Splitters.xml");
+            if (!GlobalSettings.ContainsSettingCalled("person2substitutionsfile"))
+                GlobalSettings.AddSetting("person2substitutionsfile", "Person2Substitutions.xml");
+            if (!GlobalSettings.ContainsSettingCalled("personsubstitutionsfile"))
+                GlobalSettings.AddSetting("personsubstitutionsfile", "PersonSubstitutions.xml");
+            if (!GlobalSettings.ContainsSettingCalled("gendersubstitutionsfile"))
+                GlobalSettings.AddSetting("gendersubstitutionsfile", "GenderSubstitutions.xml");
+            if (!GlobalSettings.ContainsSettingCalled("defaultpredicates"))
+                GlobalSettings.AddSetting("defaultpredicates", "DefaultPredicates.xml");
+            if (!GlobalSettings.ContainsSettingCalled("substitutionsfile"))
+                GlobalSettings.AddSetting("substitutionsfile", "Substitutions.xml");
+            if (!GlobalSettings.ContainsSettingCalled("aimldirectory"))
+                GlobalSettings.AddSetting("aimldirectory", "aiml");
+            if (!GlobalSettings.ContainsSettingCalled("configdirectory"))
+                GlobalSettings.AddSetting("configdirectory", "config");
+            if (!GlobalSettings.ContainsSettingCalled("logdirectory"))
+                GlobalSettings.AddSetting("logdirectory", "logs");
+            if (!GlobalSettings.ContainsSettingCalled("maxlogbuffersize"))
+                GlobalSettings.AddSetting("maxlogbuffersize", "64");
+            if (!GlobalSettings.ContainsSettingCalled("notacceptinguserinputmessage"))
+                GlobalSettings.AddSetting("notacceptinguserinputmessage",
                     "This bot is currently set to not accept user input.");
-            if (!GlobalSettings.containsSettingCalled("stripperregex"))
-                GlobalSettings.addSetting("stripperregex", "[^0-9a-zA-Z]");
+            if (!GlobalSettings.ContainsSettingCalled("stripperregex"))
+                GlobalSettings.AddSetting("stripperregex", "[^0-9a-zA-Z]");
 
             // Load the dictionaries for this Bot from the various configuration files
-            Person2Substitutions.loadSettings(Path.Combine(PathToConfigFiles,
-                GlobalSettings.grabSetting("person2substitutionsfile")));
-            PersonSubstitutions.loadSettings(Path.Combine(PathToConfigFiles,
-                GlobalSettings.grabSetting("personsubstitutionsfile")));
-            GenderSubstitutions.loadSettings(Path.Combine(PathToConfigFiles,
-                GlobalSettings.grabSetting("gendersubstitutionsfile")));
-            DefaultPredicates.loadSettings(Path.Combine(PathToConfigFiles,
-                GlobalSettings.grabSetting("defaultpredicates")));
-            Substitutions.loadSettings(Path.Combine(PathToConfigFiles,
-                GlobalSettings.grabSetting("substitutionsfile")));
+            Person2Substitutions.LoadSettings(Path.Combine(PathToConfigFiles,
+                GlobalSettings.GrabSetting("person2substitutionsfile")));
+            PersonSubstitutions.LoadSettings(Path.Combine(PathToConfigFiles,
+                GlobalSettings.GrabSetting("personsubstitutionsfile")));
+            GenderSubstitutions.LoadSettings(Path.Combine(PathToConfigFiles,
+                GlobalSettings.GrabSetting("gendersubstitutionsfile")));
+            DefaultPredicates.LoadSettings(Path.Combine(PathToConfigFiles,
+                GlobalSettings.GrabSetting("defaultpredicates")));
+            Substitutions.LoadSettings(Path.Combine(PathToConfigFiles,
+                GlobalSettings.GrabSetting("substitutionsfile")));
 
             // Grab the splitters for this bot
-            LoadSplitters(Path.Combine(PathToConfigFiles, GlobalSettings.grabSetting("splittersfile")));
+            LoadSplitters(Path.Combine(PathToConfigFiles, GlobalSettings.GrabSetting("splittersfile")));
         }
 
         /// <summary>
@@ -538,13 +538,13 @@ namespace AIMLbot
             if (isAcceptingUserInput)
             {
                 // Normalize the input
-                var loader = new AIMLLoader(this);
+                var loader = new AimlLoader(this);
                 var splitter = new Normalize.SplitIntoSentences(this);
                 var rawSentences = splitter.Transform(request.rawInput);
                 foreach (var sentence in rawSentences)
                 {
                     result.InputSentences.Add(sentence);
-                    var path = loader.generatePath(sentence, request.user.getLastBotOutput(), request.user.Topic, true);
+                    var path = loader.GeneratePath(sentence, request.user.getLastBotOutput(), request.user.Topic, true);
                     result.NormalizedPaths.Add(path);
                 }
 
@@ -553,7 +553,7 @@ namespace AIMLbot
                 {
                     var query = new SubQuery(path);
                     query.Template =
-                        Graphmaster.evaluate(path, query, request, MatchState.UserInput, new StringBuilder());
+                        Graphmaster.Evaluate(path, query, request, MatchState.UserInput, new StringBuilder());
                     result.SubQueries.Add(query);
                 }
 
@@ -562,7 +562,7 @@ namespace AIMLbot
                     if (query.Template.Length > 0)
                         try
                         {
-                            var templateNode = AIMLTagHandler.getNode(query.Template);
+                            var templateNode = AIMLTagHandler.GetNode(query.Template);
                             var outputSentence = ProcessNode(templateNode, query, request, result, request.user);
                             if (outputSentence.Length > 0) result.OutputSentences.Add(outputSentence);
                         }
@@ -730,7 +730,7 @@ namespace AIMLbot
             }
 
             var resultNodeInnerXML = tagHandler.Transform();
-            var resultNode = AIMLTagHandler.getNode("<node>" + resultNodeInnerXML + "</node>");
+            var resultNode = AIMLTagHandler.GetNode("<node>" + resultNodeInnerXML + "</node>");
             if (resultNode.HasChildNodes)
             {
                 var recursiveResult = new StringBuilder();

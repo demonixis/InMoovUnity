@@ -123,7 +123,7 @@ namespace Demonixis.InMoov.Chatbots
         {
             try
             {
-                _user.Predicates.loadSettings(_pathToUserSettings);
+                _user.Predicates.LoadSettings(_pathToUserSettings);
                 Debug.Log("Brain loaded");
             }
             catch (Exception e)

@@ -52,13 +52,13 @@ namespace AIMLbot.AIMLTagHandlers
                         {
                             if (this.templateNode.InnerText.Length > 0)
                             {
-                                this.user.Predicates.addSetting(this.templateNode.Attributes[0].Value, this.templateNode.InnerText);
-                                return this.user.Predicates.grabSetting(this.templateNode.Attributes[0].Value);
+                                this.user.Predicates.AddSetting(this.templateNode.Attributes[0].Value, this.templateNode.InnerText);
+                                return this.user.Predicates.GrabSetting(this.templateNode.Attributes[0].Value);
                             }
                             else
                             {
                                 // remove the predicate
-                                this.user.Predicates.removeSetting(this.templateNode.Attributes[0].Value);
+                                this.user.Predicates.RemoveSetting(this.templateNode.Attributes[0].Value);
                                 return string.Empty;
                             }
                         }

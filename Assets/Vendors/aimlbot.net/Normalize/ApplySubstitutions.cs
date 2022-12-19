@@ -25,7 +25,7 @@ namespace AIMLbot.Normalize
         /// </summary>
         /// <param name="len">The length of the marker</param>
         /// <returns>the resulting marker</returns>
-        private static string getMarker(int len)
+        private static string GetMarker(int len)
         {
             var chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".ToCharArray();
             var result = new StringBuilder();
@@ -49,14 +49,14 @@ namespace AIMLbot.Normalize
         /// <returns>The processed string</returns>
         public static string Substitute(Bot bot, Utils.SettingsDictionary dictionary, string target)
         {
-            var marker = getMarker(5);
+            var marker = GetMarker(5);
             var result = target;
             foreach (var pattern in dictionary.SettingNames)
             {
-                var p2 = makeRegexSafe(pattern);
+                var p2 = MakeRegexSafe(pattern);
                 //string match = "\\b"+@p2.Trim().Replace(" ","\\s*")+"\\b";
                 var match = "\\b" + p2.TrimEnd().TrimStart() + "\\b";
-                var replacement = marker + dictionary.grabSetting(pattern).Trim() + marker;
+                var replacement = marker + dictionary.GrabSetting(pattern).Trim() + marker;
                 result = Regex.Replace(result, match, replacement, RegexOptions.IgnoreCase);
             }
 
@@ -69,7 +69,7 @@ namespace AIMLbot.Normalize
         /// </summary>
         /// <param name="input">The raw input</param>
         /// <returns>the safe version</returns>
-        private static string makeRegexSafe(string input)
+        private static string MakeRegexSafe(string input)
         {
             var result = input.Replace("\\", "");
             result = result.Replace(")", "\\)");

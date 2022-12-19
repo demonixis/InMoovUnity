@@ -44,19 +44,19 @@ namespace AIMLbot.Utils
         /// </summary>
         /// <param name="bot">The bot this transformer is a part of</param>
         /// <param name="inputString">The input string to be transformed</param>
-        public TextTransformer(Bot bot, string inputString)
+        public TextTransformer(Bot inBot, string inInputString)
         {
-            this.bot = bot;
-            this.inputString = inputString;
+            bot = inBot;
+            inputString = inInputString;
         }
 
         /// <summary>
         /// ctor
         /// </summary>
         /// <param name="bot">The bot this transformer is a part of</param>
-        public TextTransformer(Bot bot)
+        public TextTransformer(Bot inBot)
         {
-            this.bot = bot;
+            bot = inBot;
             inputString = string.Empty;
         }
 
@@ -86,10 +86,7 @@ namespace AIMLbot.Utils
         /// <returns>The resulting transformed string</returns>
         public string Transform()
         {
-            if (inputString.Length > 0)
-                return ProcessChange();
-            else
-                return string.Empty;
+            return inputString.Length > 0 ? ProcessChange() : string.Empty;
         }
 
         /// <summary>

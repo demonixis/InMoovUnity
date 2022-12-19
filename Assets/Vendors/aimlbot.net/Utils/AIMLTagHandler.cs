@@ -29,7 +29,9 @@ namespace AIMLbot.Utils
             this.request = request;
             this.result = result;
             this.templateNode = templateNode;
-            this.templateNode.Attributes.RemoveNamedItem("xmlns");
+            var templateNodeAttributes = this.templateNode.Attributes;
+            if (templateNodeAttributes != null)
+                templateNodeAttributes.RemoveNamedItem("xmlns");
         }
 
         /// <summary>
@@ -76,7 +78,7 @@ namespace AIMLbot.Utils
         /// </summary>
         /// <param name="outerXML">the string to XMLize</param>
         /// <returns>The XML node</returns>
-        public static XmlNode getNode(string outerXML)
+        public static XmlNode GetNode(string outerXML)
         {
             var temp = new XmlDocument();
             temp.LoadXml(outerXML);
