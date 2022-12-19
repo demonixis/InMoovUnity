@@ -89,7 +89,7 @@ namespace AIMLbot.AIMLTagHandlers
     /// AIML predicate, and a required attribute value, which contains a simple pattern expression. The 
     /// element may contain any AIML template elements. 
     /// </summary>
-    public class condition : AIMLbot.Utils.AIMLTagHandler
+    public class condition : Utils.AIMLTagHandler
     {
         /// <summary>
         /// Ctor
@@ -100,75 +100,62 @@ namespace AIMLbot.AIMLTagHandlers
         /// <param name="request">The request inputted into the system</param>
         /// <param name="result">The result to be passed to the user</param>
         /// <param name="templateNode">The node to be processed</param>
-        public condition(AIMLbot.Bot bot,
-                        AIMLbot.User user,
-                        AIMLbot.Utils.SubQuery query,
-                        AIMLbot.Request request,
-                        AIMLbot.Result result,
-                        XmlNode templateNode)
+        public condition(Bot bot,
+            User user,
+            Utils.SubQuery query,
+            Request request,
+            Result result,
+            XmlNode templateNode)
             : base(bot, user, query, request, result, templateNode)
         {
-            this.isRecursive = false;
+            isRecursive = false;
         }
 
         protected override string ProcessChange()
         {
-            if (this.templateNode.Name.ToLower() == "condition")
+            if (templateNode.Name.ToLower() == "condition")
             {
                 // heuristically work out the type of condition being processed
 
-                if (this.templateNode.Attributes.Count == 2) // block
+                if (templateNode.Attributes.Count == 2) // block
                 {
-                    string name = "";
-                    string value = "";
+                    var name = "";
+                    var value = "";
 
-                    if (this.templateNode.Attributes[0].Name == "name")
-                    {
-                        name = this.templateNode.Attributes[0].Value;
-                    }
-                    else if (this.templateNode.Attributes[0].Name == "value")
-                    {
-                        value = this.templateNode.Attributes[0].Value;
-                    }
+                    if (templateNode.Attributes[0].Name == "name")
+                        name = templateNode.Attributes[0].Value;
+                    else if (templateNode.Attributes[0].Name == "value") value = templateNode.Attributes[0].Value;
 
-                    if (this.templateNode.Attributes[1].Name == "name")
-                    {
-                        name = this.templateNode.Attributes[1].Value;
-                    }
-                    else if (this.templateNode.Attributes[1].Name == "value")
-                    {
-                        value = this.templateNode.Attributes[1].Value;
-                    }
+                    if (templateNode.Attributes[1].Name == "name")
+                        name = templateNode.Attributes[1].Value;
+                    else if (templateNode.Attributes[1].Name == "value") value = templateNode.Attributes[1].Value;
 
                     if ((name.Length > 0) & (value.Length > 0))
                     {
-                        string actualValue = this.user.Predicates.GrabSetting(name);
-                        Regex matcher = new Regex(value.Replace(" ", "\\s").Replace("*", "[\\sA-Z0-9]+"), RegexOptions.IgnoreCase);
-                        if (matcher.IsMatch(actualValue))
-                        {
-                            return this.templateNode.InnerXml;
-                        }
+                        var actualValue = user.Predicates.GrabSetting(name);
+                        var matcher = new Regex(value.Replace(" ", "\\s").Replace("*", "[\\sA-Z0-9]+"),
+                            RegexOptions.IgnoreCase);
+                        if (matcher.IsMatch(actualValue)) return templateNode.InnerXml;
                     }
                 }
-                else if (this.templateNode.Attributes.Count == 1) // single predicate
+                else if (templateNode.Attributes.Count == 1) // single predicate
                 {
-                    if (this.templateNode.Attributes[0].Name == "name")
+                    if (templateNode.Attributes[0].Name == "name")
                     {
-                        string name = this.templateNode.Attributes[0].Value;
-                        foreach (XmlNode childLINode in this.templateNode.ChildNodes)
-                        {
+                        var name = templateNode.Attributes[0].Value;
+                        foreach (XmlNode childLINode in templateNode.ChildNodes)
                             if (childLINode.Name.ToLower() == "li")
                             {
                                 if (childLINode.Attributes.Count == 1)
                                 {
                                     if (childLINode.Attributes[0].Name.ToLower() == "value")
                                     {
-                                        string actualValue = this.user.Predicates.GrabSetting(name);
-                                        Regex matcher = new Regex(childLINode.Attributes[0].Value.Replace(" ", "\\s").Replace("*", "[\\sA-Z0-9]+"), RegexOptions.IgnoreCase);
-                                        if (matcher.IsMatch(actualValue))
-                                        {
-                                            return childLINode.InnerXml;
-                                        }
+                                        var actualValue = user.Predicates.GrabSetting(name);
+                                        var matcher =
+                                            new Regex(
+                                                childLINode.Attributes[0].Value.Replace(" ", "\\s")
+                                                    .Replace("*", "[\\sA-Z0-9]+"), RegexOptions.IgnoreCase);
+                                        if (matcher.IsMatch(actualValue)) return childLINode.InnerXml;
                                     }
                                 }
                                 else if (childLINode.Attributes.Count == 0)
@@ -176,45 +163,33 @@ namespace AIMLbot.AIMLTagHandlers
                                     return childLINode.InnerXml;
                                 }
                             }
-                        }
                     }
                 }
-                else if (this.templateNode.Attributes.Count == 0) // multi-predicate
+                else if (templateNode.Attributes.Count == 0) // multi-predicate
                 {
-                    foreach (XmlNode childLINode in this.templateNode.ChildNodes)
-                    {
+                    foreach (XmlNode childLINode in templateNode.ChildNodes)
                         if (childLINode.Name.ToLower() == "li")
                         {
                             if (childLINode.Attributes.Count == 2)
                             {
-                                string name = "";
-                                string value = "";
+                                var name = "";
+                                var value = "";
                                 if (childLINode.Attributes[0].Name == "name")
-                                {
                                     name = childLINode.Attributes[0].Value;
-                                }
                                 else if (childLINode.Attributes[0].Name == "value")
-                                {
                                     value = childLINode.Attributes[0].Value;
-                                }
 
                                 if (childLINode.Attributes[1].Name == "name")
-                                {
                                     name = childLINode.Attributes[1].Value;
-                                }
                                 else if (childLINode.Attributes[1].Name == "value")
-                                {
                                     value = childLINode.Attributes[1].Value;
-                                }
 
                                 if ((name.Length > 0) & (value.Length > 0))
                                 {
-                                    string actualValue = this.user.Predicates.GrabSetting(name);
-                                    Regex matcher = new Regex(value.Replace(" ", "\\s").Replace("*", "[\\sA-Z0-9]+"), RegexOptions.IgnoreCase);
-                                    if (matcher.IsMatch(actualValue))
-                                    {
-                                        return childLINode.InnerXml;
-                                    }
+                                    var actualValue = user.Predicates.GrabSetting(name);
+                                    var matcher = new Regex(value.Replace(" ", "\\s").Replace("*", "[\\sA-Z0-9]+"),
+                                        RegexOptions.IgnoreCase);
+                                    if (matcher.IsMatch(actualValue)) return childLINode.InnerXml;
                                 }
                             }
                             else if (childLINode.Attributes.Count == 0)
@@ -222,9 +197,9 @@ namespace AIMLbot.AIMLTagHandlers
                                 return childLINode.InnerXml;
                             }
                         }
-                    }
                 }
             }
+
             return string.Empty;
         }
     }

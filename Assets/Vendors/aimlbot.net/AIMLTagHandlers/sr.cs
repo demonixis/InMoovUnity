@@ -9,7 +9,7 @@ namespace AIMLbot.AIMLTagHandlers
     /// 
     /// The atomic sr does not have any content. 
     /// </summary>
-    public class sr : AIMLbot.Utils.AIMLTagHandler
+    public class sr : Utils.AIMLTagHandler
     {
         /// <summary>
         /// Ctor
@@ -20,28 +20,29 @@ namespace AIMLbot.AIMLTagHandlers
         /// <param name="request">The request inputted into the system</param>
         /// <param name="result">The result to be passed to the user</param>
         /// <param name="templateNode">The node to be processed</param>
-        public sr(AIMLbot.Bot bot,
-                        AIMLbot.User user,
-                        AIMLbot.Utils.SubQuery query,
-                        AIMLbot.Request request,
-                        AIMLbot.Result result,
-                        XmlNode templateNode)
+        public sr(Bot bot,
+            User user,
+            Utils.SubQuery query,
+            Request request,
+            Result result,
+            XmlNode templateNode)
             : base(bot, user, query, request, result, templateNode)
         {
         }
 
         protected override string ProcessChange()
         {
-            if (this.templateNode.Name.ToLower() == "sr")
+            if (templateNode.Name.ToLower() == "sr")
             {
-                XmlNode starNode = Utils.AIMLTagHandler.GetNode("<star/>");
-                star recursiveStar = new star(this.bot, this.user, this.query, this.request, this.result, starNode);
-                string starContent = recursiveStar.Transform();
+                var starNode = GetNode("<star/>");
+                var recursiveStar = new star(bot, user, query, request, result, starNode);
+                var starContent = recursiveStar.Transform();
 
-                XmlNode sraiNode = AIMLbot.Utils.AIMLTagHandler.GetNode("<srai>" + starContent + "</srai>");
-                srai sraiHandler = new srai(this.bot, this.user, this.query, this.request, this.result, sraiNode);
+                var sraiNode = GetNode("<srai>" + starContent + "</srai>");
+                var sraiHandler = new srai(bot, user, query, request, result, sraiNode);
                 return sraiHandler.Transform();
             }
+
             return string.Empty;
         }
     }

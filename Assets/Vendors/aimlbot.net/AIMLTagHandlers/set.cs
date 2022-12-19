@@ -19,7 +19,7 @@ namespace AIMLbot.AIMLTagHandlers
     /// 
     /// A set element may contain any AIML template elements.
     /// </summary>
-    public class set : AIMLbot.Utils.AIMLTagHandler
+    public class set : Utils.AIMLTagHandler
     {
         /// <summary>
         /// Ctor
@@ -30,41 +30,36 @@ namespace AIMLbot.AIMLTagHandlers
         /// <param name="request">The request inputted into the system</param>
         /// <param name="result">The result to be passed to the user</param>
         /// <param name="templateNode">The node to be processed</param>
-        public set(AIMLbot.Bot bot,
-                        AIMLbot.User user,
-                        AIMLbot.Utils.SubQuery query,
-                        AIMLbot.Request request,
-                        AIMLbot.Result result,
-                        XmlNode templateNode)
+        public set(Bot bot,
+            User user,
+            Utils.SubQuery query,
+            Request request,
+            Result result,
+            XmlNode templateNode)
             : base(bot, user, query, request, result, templateNode)
         {
         }
 
         protected override string ProcessChange()
         {
-            if (this.templateNode.Name.ToLower() == "set")
-            {
-                if (this.bot.GlobalSettings.Count > 0)
-                {
-                    if (this.templateNode.Attributes.Count == 1)
-                    {
-                        if (this.templateNode.Attributes[0].Name.ToLower() == "name")
+            if (templateNode.Name.ToLower() == "set")
+                if (bot.GlobalSettings.Count > 0)
+                    if (templateNode.Attributes.Count == 1)
+                        if (templateNode.Attributes[0].Name.ToLower() == "name")
                         {
-                            if (this.templateNode.InnerText.Length > 0)
+                            if (templateNode.InnerText.Length > 0)
                             {
-                                this.user.Predicates.AddSetting(this.templateNode.Attributes[0].Value, this.templateNode.InnerText);
-                                return this.user.Predicates.GrabSetting(this.templateNode.Attributes[0].Value);
+                                user.Predicates.AddSetting(templateNode.Attributes[0].Value, templateNode.InnerText);
+                                return user.Predicates.GrabSetting(templateNode.Attributes[0].Value);
                             }
                             else
                             {
                                 // remove the predicate
-                                this.user.Predicates.RemoveSetting(this.templateNode.Attributes[0].Value);
+                                user.Predicates.RemoveSetting(templateNode.Attributes[0].Value);
                                 return string.Empty;
                             }
                         }
-                    }
-                }
-            }
+
             return string.Empty;
         }
     }

@@ -18,7 +18,7 @@ namespace AIMLbot.AIMLTagHandlers
     /// 
     /// The star element does not have any content. 
     /// </summary>
-    public class star : AIMLbot.Utils.AIMLTagHandler
+    public class star : Utils.AIMLTagHandler
     {
         /// <summary>
         /// Ctor
@@ -29,56 +29,52 @@ namespace AIMLbot.AIMLTagHandlers
         /// <param name="request">The request inputted into the system</param>
         /// <param name="result">The result to be passed to the user</param>
         /// <param name="templateNode">The node to be processed</param>
-        public star(AIMLbot.Bot bot,
-                        AIMLbot.User user,
-                        AIMLbot.Utils.SubQuery query,
-                        AIMLbot.Request request,
-                        AIMLbot.Result result,
-                        XmlNode templateNode)
+        public star(Bot bot,
+            User user,
+            Utils.SubQuery query,
+            Request request,
+            Result result,
+            XmlNode templateNode)
             : base(bot, user, query, request, result, templateNode)
         {
         }
 
         protected override string ProcessChange()
         {
-            if (this.templateNode.Name.ToLower() == "star")
+            if (templateNode.Name.ToLower() == "star")
             {
-                if (this.query.InputStar.Count > 0)
+                if (query.InputStar.Count > 0)
                 {
-                    if (this.templateNode.Attributes.Count == 0)
-                    {
+                    if (templateNode.Attributes.Count == 0)
                         // return the first (latest) star in the List<>
-                        return (string)this.query.InputStar[0];
-                    }
-                    else if (this.templateNode.Attributes.Count == 1)
-                    {
-                        if (this.templateNode.Attributes[0].Name.ToLower() == "index")
-                        {
+                        return (string) query.InputStar[0];
+                    else if (templateNode.Attributes.Count == 1)
+                        if (templateNode.Attributes[0].Name.ToLower() == "index")
                             try
                             {
-                                int index = Convert.ToInt32(this.templateNode.Attributes[0].Value);
+                                var index = Convert.ToInt32(templateNode.Attributes[0].Value);
                                 index--;
-                                if ((index >= 0) & (index < this.query.InputStar.Count))
-                                {
-                                    return (string)this.query.InputStar[index];
-                                }
+                                if ((index >= 0) & (index < query.InputStar.Count))
+                                    return (string) query.InputStar[index];
                                 else
-                                {
-                                    this.bot.WriteToLog("InputStar out of bounds reference caused by input: " + this.request.rawInput);
-                                }
+                                    bot.WriteToLog("InputStar out of bounds reference caused by input: " +
+                                                   request.rawInput);
                             }
                             catch
                             {
-                                this.bot.WriteToLog("Index set to non-integer value whilst processing star tag in response to the input: " + this.request.rawInput);
+                                bot.WriteToLog(
+                                    "Index set to non-integer value whilst processing star tag in response to the input: " +
+                                    request.rawInput);
                             }
-                        }
-                    }
                 }
                 else
                 {
-                    this.bot.WriteToLog("A star tag tried to reference an empty InputStar collection when processing the input: " + this.request.rawInput);
+                    bot.WriteToLog(
+                        "A star tag tried to reference an empty InputStar collection when processing the input: " +
+                        request.rawInput);
                 }
             }
+
             return string.Empty;
         }
     }

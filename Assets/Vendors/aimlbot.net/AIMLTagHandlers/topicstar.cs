@@ -13,7 +13,7 @@ namespace AIMLbot.AIMLTagHandlers
     /// 
     /// The topicstar element does not have any content. 
     /// </summary>
-    public class topicstar : AIMLbot.Utils.AIMLTagHandler
+    public class topicstar : Utils.AIMLTagHandler
     {
         /// <summary>
         /// Ctor
@@ -24,64 +24,61 @@ namespace AIMLbot.AIMLTagHandlers
         /// <param name="request">The request inputted into the system</param>
         /// <param name="result">The result to be passed to the user</param>
         /// <param name="templateNode">The node to be processed</param>
-        public topicstar(AIMLbot.Bot bot,
-                        AIMLbot.User user,
-                        AIMLbot.Utils.SubQuery query,
-                        AIMLbot.Request request,
-                        AIMLbot.Result result,
-                        XmlNode templateNode)
+        public topicstar(Bot bot,
+            User user,
+            Utils.SubQuery query,
+            Request request,
+            Result result,
+            XmlNode templateNode)
             : base(bot, user, query, request, result, templateNode)
         {
         }
 
         protected override string ProcessChange()
         {
-            if (this.templateNode.Name.ToLower() == "topicstar")
+            if (templateNode.Name.ToLower() == "topicstar")
             {
-                if (this.templateNode.Attributes.Count == 0)
+                if (templateNode.Attributes.Count == 0)
                 {
-                    if (this.query.TopicStar.Count > 0)
-                    {
-                        return (string)this.query.TopicStar[0];
-                    }
+                    if (query.TopicStar.Count > 0)
+                        return (string) query.TopicStar[0];
                     else
-                    {
-                        this.bot.WriteToLog("ERROR! An out of bounds index to topicstar was encountered when processing the input: " + this.request.rawInput);
-                    }
+                        bot.WriteToLog(
+                            "ERROR! An out of bounds index to topicstar was encountered when processing the input: " +
+                            request.rawInput);
                 }
-                else if (this.templateNode.Attributes.Count == 1)
+                else if (templateNode.Attributes.Count == 1)
                 {
-                    if (this.templateNode.Attributes[0].Name.ToLower() == "index")
-                    {
-                        if (this.templateNode.Attributes[0].Value.Length > 0)
-                        {
+                    if (templateNode.Attributes[0].Name.ToLower() == "index")
+                        if (templateNode.Attributes[0].Value.Length > 0)
                             try
                             {
-                                int result = Convert.ToInt32(this.templateNode.Attributes[0].Value.Trim());
-                                if (this.query.TopicStar.Count > 0)
+                                var result = Convert.ToInt32(templateNode.Attributes[0].Value.Trim());
+                                if (query.TopicStar.Count > 0)
                                 {
                                     if (result > 0)
-                                    {
-                                        return (string)this.query.TopicStar[result - 1];
-                                    }
+                                        return (string) query.TopicStar[result - 1];
                                     else
-                                    {
-                                        this.bot.WriteToLog("ERROR! An input tag with a bady formed index (" + this.templateNode.Attributes[0].Value + ") was encountered processing the input: " + this.request.rawInput);
-                                    }
+                                        bot.WriteToLog("ERROR! An input tag with a bady formed index (" +
+                                                       templateNode.Attributes[0].Value +
+                                                       ") was encountered processing the input: " + request.rawInput);
                                 }
                                 else
                                 {
-                                    this.bot.WriteToLog("ERROR! An out of bounds index to topicstar was encountered when processing the input: " + this.request.rawInput);
+                                    bot.WriteToLog(
+                                        "ERROR! An out of bounds index to topicstar was encountered when processing the input: " +
+                                        request.rawInput);
                                 }
                             }
                             catch
                             {
-                                this.bot.WriteToLog("ERROR! A thatstar tag with a bady formed index (" + this.templateNode.Attributes[0].Value + ") was encountered processing the input: " + this.request.rawInput);
+                                bot.WriteToLog("ERROR! A thatstar tag with a bady formed index (" +
+                                               templateNode.Attributes[0].Value +
+                                               ") was encountered processing the input: " + request.rawInput);
                             }
-                        }
-                    }
                 }
             }
+
             return string.Empty;
         }
     }

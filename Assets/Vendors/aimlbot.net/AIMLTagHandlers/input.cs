@@ -21,7 +21,7 @@ namespace AIMLbot.AIMLTagHandlers
     /// 
     /// The input element does not have any content. 
     /// </summary>
-    public class input : AIMLbot.Utils.AIMLTagHandler
+    public class input : Utils.AIMLTagHandler
     {
         /// <summary>
         /// Ctor
@@ -32,68 +32,59 @@ namespace AIMLbot.AIMLTagHandlers
         /// <param name="request">The request inputted into the system</param>
         /// <param name="result">The result to be passed to the user</param>
         /// <param name="templateNode">The node to be processed</param>
-        public input(AIMLbot.Bot bot,
-                        AIMLbot.User user,
-                        AIMLbot.Utils.SubQuery query,
-                        AIMLbot.Request request,
-                        AIMLbot.Result result,
-                        XmlNode templateNode)
+        public input(Bot bot,
+            User user,
+            Utils.SubQuery query,
+            Request request,
+            Result result,
+            XmlNode templateNode)
             : base(bot, user, query, request, result, templateNode)
         {
         }
 
         protected override string ProcessChange()
         {
-            if (this.templateNode.Name.ToLower() == "input")
+            if (templateNode.Name.ToLower() == "input")
             {
-                if (this.templateNode.Attributes.Count == 0)
-                {
-                    return this.user.getResultSentence();
-                }
-                else if (this.templateNode.Attributes.Count == 1)
-                {
-                    if (this.templateNode.Attributes[0].Name.ToLower() == "index")
-                    {
-                        if (this.templateNode.Attributes[0].Value.Length > 0)
-                        {
+                if (templateNode.Attributes.Count == 0)
+                    return user.getResultSentence();
+                else if (templateNode.Attributes.Count == 1)
+                    if (templateNode.Attributes[0].Name.ToLower() == "index")
+                        if (templateNode.Attributes[0].Value.Length > 0)
                             try
                             {
                                 // see if there is a split
-                                string[] dimensions = this.templateNode.Attributes[0].Value.Split(",".ToCharArray());
+                                var dimensions = templateNode.Attributes[0].Value.Split(",".ToCharArray());
                                 if (dimensions.Length == 2)
                                 {
-                                    int result = Convert.ToInt32(dimensions[0].Trim());
-                                    int sentence = Convert.ToInt32(dimensions[1].Trim());
+                                    var result = Convert.ToInt32(dimensions[0].Trim());
+                                    var sentence = Convert.ToInt32(dimensions[1].Trim());
                                     if ((result > 0) & (sentence > 0))
-                                    {
-                                        return this.user.getResultSentence(result - 1, sentence - 1);
-                                    }
+                                        return user.getResultSentence(result - 1, sentence - 1);
                                     else
-                                    {
-                                        this.bot.WriteToLog("ERROR! An input tag with a bady formed index (" + this.templateNode.Attributes[0].Value + ") was encountered processing the input: " + this.request.rawInput);
-                                    }
+                                        bot.WriteToLog("ERROR! An input tag with a bady formed index (" +
+                                                       templateNode.Attributes[0].Value +
+                                                       ") was encountered processing the input: " + request.rawInput);
                                 }
                                 else
                                 {
-                                    int result = Convert.ToInt32(this.templateNode.Attributes[0].Value.Trim());
+                                    var result = Convert.ToInt32(templateNode.Attributes[0].Value.Trim());
                                     if (result > 0)
-                                    {
-                                        return this.user.getResultSentence(result - 1);
-                                    }
+                                        return user.getResultSentence(result - 1);
                                     else
-                                    {
-                                        this.bot.WriteToLog("ERROR! An input tag with a bady formed index (" + this.templateNode.Attributes[0].Value + ") was encountered processing the input: " + this.request.rawInput);
-                                    }
+                                        bot.WriteToLog("ERROR! An input tag with a bady formed index (" +
+                                                       templateNode.Attributes[0].Value +
+                                                       ") was encountered processing the input: " + request.rawInput);
                                 }
                             }
                             catch
                             {
-                                this.bot.WriteToLog("ERROR! An input tag with a bady formed index (" + this.templateNode.Attributes[0].Value + ") was encountered processing the input: " + this.request.rawInput);
+                                bot.WriteToLog("ERROR! An input tag with a bady formed index (" +
+                                               templateNode.Attributes[0].Value +
+                                               ") was encountered processing the input: " + request.rawInput);
                             }
-                        }
-                    }
-                }
             }
+
             return string.Empty;
         }
     }

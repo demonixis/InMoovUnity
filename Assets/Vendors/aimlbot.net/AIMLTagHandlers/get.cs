@@ -18,7 +18,7 @@ namespace AIMLbot.AIMLTagHandlers
     /// 
     /// The get element does not have any content.
     /// </summary>
-    public class get : AIMLbot.Utils.AIMLTagHandler
+    public class get : Utils.AIMLTagHandler
     {
         /// <summary>
         /// Ctor
@@ -29,31 +29,23 @@ namespace AIMLbot.AIMLTagHandlers
         /// <param name="request">The request inputted into the system</param>
         /// <param name="result">The result to be passed to the user</param>
         /// <param name="templateNode">The node to be processed</param>
-        public get(AIMLbot.Bot bot,
-                        AIMLbot.User user,
-                        AIMLbot.Utils.SubQuery query,
-                        AIMLbot.Request request,
-                        AIMLbot.Result result,
-                        XmlNode templateNode)
+        public get(Bot bot,
+            User user,
+            Utils.SubQuery query,
+            Request request,
+            Result result,
+            XmlNode templateNode)
             : base(bot, user, query, request, result, templateNode)
         {
         }
 
         protected override string ProcessChange()
         {
-            if (this.templateNode.Name.ToLower() == "get")
-            {
-                if (this.bot.GlobalSettings.Count > 0)
-                {
-                    if (this.templateNode.Attributes.Count == 1)
-                    {
-                        if (this.templateNode.Attributes[0].Name.ToLower() == "name")
-                        {
-                            return this.user.Predicates.GrabSetting(this.templateNode.Attributes[0].Value);
-                        }
-                    }
-                }
-            }
+            if (templateNode.Name.ToLower() == "get")
+                if (bot.GlobalSettings.Count > 0)
+                    if (templateNode.Attributes.Count == 1)
+                        if (templateNode.Attributes[0].Name.ToLower() == "name")
+                            return user.Predicates.GrabSetting(templateNode.Attributes[0].Value);
             return string.Empty;
         }
     }

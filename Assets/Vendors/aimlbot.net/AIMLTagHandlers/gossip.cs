@@ -10,7 +10,7 @@ namespace AIMLbot.AIMLTagHandlers
     /// 
     /// The gossip element does not have any attributes. It may contain any AIML template elements.
     /// </summary>
-    public class gossip : AIMLbot.Utils.AIMLTagHandler
+    public class gossip : Utils.AIMLTagHandler
     {
         /// <summary>
         /// Ctor
@@ -21,26 +21,22 @@ namespace AIMLbot.AIMLTagHandlers
         /// <param name="request">The request inputted into the system</param>
         /// <param name="result">The result to be passed to the user</param>
         /// <param name="templateNode">The node to be processed</param>
-        public gossip(AIMLbot.Bot bot,
-                        AIMLbot.User user,
-                        AIMLbot.Utils.SubQuery query,
-                        AIMLbot.Request request,
-                        AIMLbot.Result result,
-                        XmlNode templateNode)
+        public gossip(Bot bot,
+            User user,
+            Utils.SubQuery query,
+            Request request,
+            Result result,
+            XmlNode templateNode)
             : base(bot, user, query, request, result, templateNode)
         {
         }
 
         protected override string ProcessChange()
         {
-            if (this.templateNode.Name.ToLower() == "gossip")
-            {
+            if (templateNode.Name.ToLower() == "gossip")
                 // gossip is merely logged by the bot and written to log files
-                if (this.templateNode.InnerText.Length > 0)
-                {
-                    this.bot.WriteToLog("GOSSIP from user: " + this.user.UserID + ", '" + this.templateNode.InnerText + "'");
-                }
-            }
+                if (templateNode.InnerText.Length > 0)
+                    bot.WriteToLog("GOSSIP from user: " + user.UserID + ", '" + templateNode.InnerText + "'");
             return string.Empty;
         }
     }

@@ -10,7 +10,7 @@ namespace AIMLbot.AIMLTagHandlers
     /// If no character in this string has a different uppercase version, based on the Unicode 
     /// standard, then the original string is returned. 
     /// </summary>
-    public class uppercase : AIMLbot.Utils.AIMLTagHandler
+    public class uppercase : Utils.AIMLTagHandler
     {
         /// <summary>
         /// Ctor
@@ -21,22 +21,19 @@ namespace AIMLbot.AIMLTagHandlers
         /// <param name="request">The request inputted into the system</param>
         /// <param name="result">The result to be passed to the user</param>
         /// <param name="templateNode">The node to be processed</param>
-        public uppercase(AIMLbot.Bot bot,
-                        AIMLbot.User user,
-                        AIMLbot.Utils.SubQuery query,
-                        AIMLbot.Request request,
-                        AIMLbot.Result result,
-                        XmlNode templateNode)
+        public uppercase(Bot bot,
+            User user,
+            Utils.SubQuery query,
+            Request request,
+            Result result,
+            XmlNode templateNode)
             : base(bot, user, query, request, result, templateNode)
         {
         }
 
         protected override string ProcessChange()
         {
-            if (this.templateNode.Name.ToLower() == "uppercase")
-            {
-                return this.templateNode.InnerText.ToUpper(this.bot.Locale);
-            }
+            if (templateNode.Name.ToLower() == "uppercase") return templateNode.InnerText.ToUpper(bot.Locale);
             return string.Empty;
         }
     }

@@ -7,7 +7,7 @@ namespace AIMLbot.AIMLTagHandlers
     /// The learn element instructs the AIML interpreter to retrieve a resource specified by a URI, 
     /// and to process its AIML object contents.
     /// </summary>
-    public class learn : AIMLbot.Utils.AIMLTagHandler
+    public class learn : Utils.AIMLTagHandler
     {
         /// <summary>
         /// Ctor
@@ -18,41 +18,42 @@ namespace AIMLbot.AIMLTagHandlers
         /// <param name="request">The request inputted into the system</param>
         /// <param name="result">The result to be passed to the user</param>
         /// <param name="templateNode">The node to be processed</param>
-        public learn(AIMLbot.Bot bot,
-                        AIMLbot.User user,
-                        AIMLbot.Utils.SubQuery query,
-                        AIMLbot.Request request,
-                        AIMLbot.Result result,
-                        XmlNode templateNode)
+        public learn(Bot bot,
+            User user,
+            Utils.SubQuery query,
+            Request request,
+            Result result,
+            XmlNode templateNode)
             : base(bot, user, query, request, result, templateNode)
         {
         }
 
         protected override string ProcessChange()
         {
-            if (this.templateNode.Name.ToLower() == "learn")
-            {
+            if (templateNode.Name.ToLower() == "learn")
                 // currently only AIML files in the local filesystem can be referenced
                 // ToDo: Network HTTP and web service based learning
-                if (this.templateNode.InnerText.Length > 0)
+                if (templateNode.InnerText.Length > 0)
                 {
-                    string path = this.templateNode.InnerText;
-                    FileInfo fi = new FileInfo(path);
+                    var path = templateNode.InnerText;
+                    var fi = new FileInfo(path);
                     if (fi.Exists)
                     {
-                        XmlDocument doc = new XmlDocument();
+                        var doc = new XmlDocument();
                         try
                         {
                             doc.Load(path);
-                            this.bot.LoadAimlFromXML(doc, path);
+                            bot.LoadAimlFromXML(doc, path);
                         }
                         catch
                         {
-                            this.bot.WriteToLog("ERROR! Attempted (but failed) to <learn> some new AIML from the following URI: " + path);
+                            bot.WriteToLog(
+                                "ERROR! Attempted (but failed) to <learn> some new AIML from the following URI: " +
+                                path);
                         }
                     }
                 }
-            }
+
             return string.Empty;
         }
     }

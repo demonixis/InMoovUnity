@@ -9,7 +9,7 @@ namespace AIMLbot.AIMLTagHandlers
     /// elements randomly. The random element must contain one or more li elements of type 
     /// defaultListItem, and cannot contain any other elements.
     /// </summary>
-    public class random : AIMLbot.Utils.AIMLTagHandler
+    public class random : Utils.AIMLTagHandler
     {
         /// <summary>
         /// Ctor
@@ -20,40 +20,35 @@ namespace AIMLbot.AIMLTagHandlers
         /// <param name="request">The request inputted into the system</param>
         /// <param name="result">The result to be passed to the user</param>
         /// <param name="templateNode">The node to be processed</param>
-        public random(AIMLbot.Bot bot,
-                        AIMLbot.User user,
-                        AIMLbot.Utils.SubQuery query,
-                        AIMLbot.Request request,
-                        AIMLbot.Result result,
-                        XmlNode templateNode)
+        public random(Bot bot,
+            User user,
+            Utils.SubQuery query,
+            Request request,
+            Result result,
+            XmlNode templateNode)
             : base(bot, user, query, request, result, templateNode)
         {
-            this.isRecursive = false;
+            isRecursive = false;
         }
 
         protected override string ProcessChange()
         {
-            if (this.templateNode.Name.ToLower() == "random")
-            {
-                if (this.templateNode.HasChildNodes)
+            if (templateNode.Name.ToLower() == "random")
+                if (templateNode.HasChildNodes)
                 {
                     // only grab <li> nodes
-                    List<XmlNode> listNodes = new List<XmlNode>();
-                    foreach (XmlNode childNode in this.templateNode.ChildNodes)
-                    {
+                    var listNodes = new List<XmlNode>();
+                    foreach (XmlNode childNode in templateNode.ChildNodes)
                         if (childNode.Name == "li")
-                        {
                             listNodes.Add(childNode);
-                        }
-                    }
                     if (listNodes.Count > 0)
                     {
-                        Random r = new Random();
-                        XmlNode chosenNode = (XmlNode)listNodes[r.Next(listNodes.Count)];
+                        var r = new Random();
+                        var chosenNode = (XmlNode) listNodes[r.Next(listNodes.Count)];
                         return chosenNode.InnerXml;
                     }
                 }
-            }
+
             return string.Empty;
         }
     }

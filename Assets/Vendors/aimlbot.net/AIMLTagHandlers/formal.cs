@@ -12,7 +12,7 @@ namespace AIMLbot.AIMLTagHandlers
     /// If no character in this string has a different uppercase version, based on the Unicode 
     /// standard, then the original string is returned.
     /// </summary>
-    public class formal : AIMLbot.Utils.AIMLTagHandler
+    public class formal : Utils.AIMLTagHandler
     {
         /// <summary>
         /// Ctor
@@ -23,37 +23,36 @@ namespace AIMLbot.AIMLTagHandlers
         /// <param name="request">The request inputted into the system</param>
         /// <param name="result">The result to be passed to the user</param>
         /// <param name="templateNode">The node to be processed</param>
-        public formal(AIMLbot.Bot bot,
-                        AIMLbot.User user,
-                        AIMLbot.Utils.SubQuery query,
-                        AIMLbot.Request request,
-                        AIMLbot.Result result,
-                        XmlNode templateNode)
+        public formal(Bot bot,
+            User user,
+            Utils.SubQuery query,
+            Request request,
+            Result result,
+            XmlNode templateNode)
             : base(bot, user, query, request, result, templateNode)
         {
         }
 
         protected override string ProcessChange()
         {
-            if (this.templateNode.Name.ToLower() == "formal")
+            if (templateNode.Name.ToLower() == "formal")
             {
-                StringBuilder result = new StringBuilder();
-                if (this.templateNode.InnerText.Length > 0)
+                var result = new StringBuilder();
+                if (templateNode.InnerText.Length > 0)
                 {
-                    string[] words = this.templateNode.InnerText.ToLower().Split();
-                    foreach (string word in words)
+                    var words = templateNode.InnerText.ToLower().Split();
+                    foreach (var word in words)
                     {
-                        string newWord = word.Substring(0, 1);
+                        var newWord = word.Substring(0, 1);
                         newWord = newWord.ToUpper();
-                        if (word.Length > 1)
-                        {
-                            newWord += word.Substring(1);
-                        }
+                        if (word.Length > 1) newWord += word.Substring(1);
                         result.Append(newWord + " ");
                     }
                 }
+
                 return result.ToString().Trim();
             }
+
             return string.Empty;
         }
     }

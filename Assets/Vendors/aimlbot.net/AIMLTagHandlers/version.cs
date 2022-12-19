@@ -8,7 +8,7 @@ namespace AIMLbot.AIMLTagHandlers
     /// 
     /// The version element does not have any content. 
     /// </summary>
-    public class version : AIMLbot.Utils.AIMLTagHandler
+    public class version : Utils.AIMLTagHandler
     {
         /// <summary>
         /// Ctor
@@ -19,22 +19,19 @@ namespace AIMLbot.AIMLTagHandlers
         /// <param name="request">The request inputted into the system</param>
         /// <param name="result">The result to be passed to the user</param>
         /// <param name="templateNode">The node to be processed</param>
-        public version(AIMLbot.Bot bot,
-                        AIMLbot.User user,
-                        AIMLbot.Utils.SubQuery query,
-                        AIMLbot.Request request,
-                        AIMLbot.Result result,
-                        XmlNode templateNode)
+        public version(Bot bot,
+            User user,
+            Utils.SubQuery query,
+            Request request,
+            Result result,
+            XmlNode templateNode)
             : base(bot, user, query, request, result, templateNode)
         {
         }
 
         protected override string ProcessChange()
         {
-            if (this.templateNode.Name.ToLower() == "version")
-            {
-                return this.bot.GlobalSettings.GrabSetting("version");
-            }
+            if (templateNode.Name.ToLower() == "version") return bot.GlobalSettings.GrabSetting("version");
             return string.Empty;
         }
     }

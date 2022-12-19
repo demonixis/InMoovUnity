@@ -23,7 +23,7 @@ namespace AIMLbot.AIMLTagHandlers
     /// that most AIML has been written in English. However, the decision about whether to transform 
     /// the person aspect of other words is left up to the implementation.
     /// </summary>
-    public class person2 : AIMLbot.Utils.AIMLTagHandler
+    public class person2 : Utils.AIMLTagHandler
     {
         /// <summary>
         /// Ctor
@@ -34,41 +34,39 @@ namespace AIMLbot.AIMLTagHandlers
         /// <param name="request">The request inputted into the system</param>
         /// <param name="result">The result to be passed to the user</param>
         /// <param name="templateNode">The node to be processed</param>
-        public person2(AIMLbot.Bot bot,
-                        AIMLbot.User user,
-                        AIMLbot.Utils.SubQuery query,
-                        AIMLbot.Request request,
-                        AIMLbot.Result result,
-                        XmlNode templateNode)
+        public person2(Bot bot,
+            User user,
+            Utils.SubQuery query,
+            Request request,
+            Result result,
+            XmlNode templateNode)
             : base(bot, user, query, request, result, templateNode)
         {
         }
 
         protected override string ProcessChange()
         {
-            if (this.templateNode.Name.ToLower() == "person2")
+            if (templateNode.Name.ToLower() == "person2")
             {
-                if (this.templateNode.InnerText.Length > 0)
+                if (templateNode.InnerText.Length > 0)
                 {
                     // non atomic version of the node
-                    return AIMLbot.Normalize.ApplySubstitutions.Substitute(this.bot, this.bot.Person2Substitutions, this.templateNode.InnerText);
+                    return Normalize.ApplySubstitutions.Substitute(bot, bot.Person2Substitutions,
+                        templateNode.InnerText);
                 }
                 else
                 {
                     // atomic version of the node
-                    XmlNode starNode = Utils.AIMLTagHandler.GetNode("<star/>");
-                    star recursiveStar = new star(this.bot, this.user, this.query, this.request, this.result, starNode);
-                    this.templateNode.InnerText = recursiveStar.Transform();
-                    if (this.templateNode.InnerText.Length > 0)
-                    {
-                        return this.ProcessChange();
-                    }
+                    var starNode = GetNode("<star/>");
+                    var recursiveStar = new star(bot, user, query, request, result, starNode);
+                    templateNode.InnerText = recursiveStar.Transform();
+                    if (templateNode.InnerText.Length > 0)
+                        return ProcessChange();
                     else
-                    {
                         return string.Empty;
-                    }
                 }
             }
+
             return string.Empty;
         }
     }

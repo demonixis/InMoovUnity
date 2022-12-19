@@ -13,7 +13,7 @@ namespace AIMLbot.AIMLTagHandlers
     /// 
     /// The bot element does not have any content. 
     /// </summary>
-    public class bot : AIMLbot.Utils.AIMLTagHandler
+    public class bot : Utils.AIMLTagHandler
     {
         /// <summary>
         /// Ctor
@@ -24,30 +24,23 @@ namespace AIMLbot.AIMLTagHandlers
         /// <param name="request">The request inputted into the system</param>
         /// <param name="result">The result to be passed to the user</param>
         /// <param name="templateNode">The node to be processed</param>
-        public bot(AIMLbot.Bot bot,
-                        AIMLbot.User user,
-                        AIMLbot.Utils.SubQuery query,
-                        AIMLbot.Request request,
-                        AIMLbot.Result result,
-                        XmlNode templateNode)
+        public bot(Bot bot,
+            User user,
+            Utils.SubQuery query,
+            Request request,
+            Result result,
+            XmlNode templateNode)
             : base(bot, user, query, request, result, templateNode)
         {
         }
 
         protected override string ProcessChange()
         {
-            if (this.templateNode.Name.ToLower() == "bot")
-            {
-                if (this.templateNode.Attributes.Count == 1)
-                {
-                    if (this.templateNode.Attributes[0].Name.ToLower() == "name")
-                    {
-                        string key = this.templateNode.Attributes["name"].Value;
-                        return (string)this.bot.GlobalSettings.GrabSetting(key);
-                    }
-                }
-            }
-            return string.Empty;
+            if (templateNode.Name.ToLower() != "bot") return string.Empty;
+            if (templateNode.Attributes.Count != 1) return string.Empty;
+            if (templateNode.Attributes[0].Name.ToLower() != "name") return string.Empty;
+            var key = templateNode.Attributes["name"].Value;
+            return bot.GlobalSettings.GrabSetting(key);
         }
     }
 }

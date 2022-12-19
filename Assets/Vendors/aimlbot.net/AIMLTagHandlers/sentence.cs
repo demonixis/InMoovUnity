@@ -15,7 +15,7 @@ namespace AIMLbot.AIMLTagHandlers
     /// If no character in this string has a different uppercase version, based on the Unicode 
     /// standard, then the original string is returned. 
     /// </summary>
-    public class sentence : AIMLbot.Utils.AIMLTagHandler
+    public class sentence : Utils.AIMLTagHandler
     {
         /// <summary>
         /// Ctor
@@ -26,45 +26,42 @@ namespace AIMLbot.AIMLTagHandlers
         /// <param name="request">The request inputted into the system</param>
         /// <param name="result">The result to be passed to the user</param>
         /// <param name="templateNode">The node to be processed</param>
-        public sentence(AIMLbot.Bot bot,
-                        AIMLbot.User user,
-                        AIMLbot.Utils.SubQuery query,
-                        AIMLbot.Request request,
-                        AIMLbot.Result result,
-                        XmlNode templateNode)
+        public sentence(Bot bot,
+            User user,
+            Utils.SubQuery query,
+            Request request,
+            Result result,
+            XmlNode templateNode)
             : base(bot, user, query, request, result, templateNode)
         {
         }
 
         protected override string ProcessChange()
         {
-            if (this.templateNode.Name.ToLower() == "sentence")
+            if (templateNode.Name.ToLower() == "sentence")
             {
-                if (this.templateNode.InnerText.Length > 0)
+                if (templateNode.InnerText.Length > 0)
                 {
-                    StringBuilder result = new StringBuilder();
-                    char[] letters = this.templateNode.InnerText.Trim().ToCharArray();
-                    bool doChange = true;
-                    for (int i = 0; i < letters.Length; i++)
+                    var result = new StringBuilder();
+                    var letters = templateNode.InnerText.Trim().ToCharArray();
+                    var doChange = true;
+                    for (var i = 0; i < letters.Length; i++)
                     {
-                        string letterAsString = Convert.ToString(letters[i]);
-                        if (this.bot.Splitters.Contains(letterAsString))
-                        {
-                            doChange = true;
-                        }
+                        var letterAsString = Convert.ToString(letters[i]);
+                        if (bot.Splitters.Contains(letterAsString)) doChange = true;
 
-                        Regex lowercaseLetter = new Regex("[a-zA-Z]");
+                        var lowercaseLetter = new Regex("[a-zA-Z]");
 
                         if (lowercaseLetter.IsMatch(letterAsString))
                         {
                             if (doChange)
                             {
-                                result.Append(letterAsString.ToUpper(this.bot.Locale));
+                                result.Append(letterAsString.ToUpper(bot.Locale));
                                 doChange = false;
                             }
                             else
                             {
-                                result.Append(letterAsString.ToLower(this.bot.Locale));
+                                result.Append(letterAsString.ToLower(bot.Locale));
                             }
                         }
                         else
@@ -72,22 +69,19 @@ namespace AIMLbot.AIMLTagHandlers
                             result.Append(letterAsString);
                         }
                     }
+
                     return result.ToString();
                 }
                 else
                 {
                     // atomic version of the node
-                    XmlNode starNode = Utils.AIMLTagHandler.GetNode("<star/>");
-                    star recursiveStar = new star(this.bot, this.user, this.query, this.request, this.result, starNode);
-                    this.templateNode.InnerText = recursiveStar.Transform();
-                    if (this.templateNode.InnerText.Length > 0)
-                    {
-                        return this.ProcessChange();
-                    }
+                    var starNode = GetNode("<star/>");
+                    var recursiveStar = new star(bot, user, query, request, result, starNode);
+                    templateNode.InnerText = recursiveStar.Transform();
+                    if (templateNode.InnerText.Length > 0)
+                        return ProcessChange();
                     else
-                    {
                         return string.Empty;
-                    }
                 }
             }
 

@@ -11,7 +11,7 @@ namespace AIMLbot.AIMLTagHandlers
     /// As with all AIML elements, nested forms should be parsed from inside out, so embedded srais are 
     /// perfectly acceptable. 
     /// </summary>
-    public class srai : AIMLbot.Utils.AIMLTagHandler
+    public class srai : Utils.AIMLTagHandler
     {
         /// <summary>
         /// Ctor
@@ -22,29 +22,28 @@ namespace AIMLbot.AIMLTagHandlers
         /// <param name="request">The request inputted into the system</param>
         /// <param name="result">The result to be passed to the user</param>
         /// <param name="templateNode">The node to be processed</param>
-        public srai(AIMLbot.Bot bot,
-                        AIMLbot.User user,
-                        AIMLbot.Utils.SubQuery query,
-                        AIMLbot.Request request,
-                        AIMLbot.Result result,
-                        XmlNode templateNode)
+        public srai(Bot bot,
+            User user,
+            Utils.SubQuery query,
+            Request request,
+            Result result,
+            XmlNode templateNode)
             : base(bot, user, query, request, result, templateNode)
         {
         }
 
         protected override string ProcessChange()
         {
-            if (this.templateNode.Name.ToLower() == "srai")
-            {
-                if (this.templateNode.InnerText.Length > 0)
+            if (templateNode.Name.ToLower() == "srai")
+                if (templateNode.InnerText.Length > 0)
                 {
-                    Request subRequest = new Request(this.templateNode.InnerText, this.user, this.bot);
-                    subRequest.StartedOn = this.request.StartedOn; // make sure we don't keep adding time to the request
-                    Result subQuery = this.bot.Chat(subRequest);
-                    this.request.hasTimedOut = subRequest.hasTimedOut;
+                    var subRequest = new Request(templateNode.InnerText, user, bot);
+                    subRequest.StartedOn = request.StartedOn; // make sure we don't keep adding time to the request
+                    var subQuery = bot.Chat(subRequest);
+                    request.hasTimedOut = subRequest.hasTimedOut;
                     return subQuery.Output;
                 }
-            }
+
             return string.Empty;
         }
     }

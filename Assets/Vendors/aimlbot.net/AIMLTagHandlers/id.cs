@@ -9,7 +9,7 @@ namespace AIMLbot.AIMLTagHandlers
     /// 
     /// The id element does not have any content.
     /// </summary>
-    public class id : AIMLbot.Utils.AIMLTagHandler
+    public class id : Utils.AIMLTagHandler
     {
         /// <summary>
         /// Ctor
@@ -20,22 +20,19 @@ namespace AIMLbot.AIMLTagHandlers
         /// <param name="request">The request inputted into the system</param>
         /// <param name="result">The result to be passed to the user</param>
         /// <param name="templateNode">The node to be processed</param>
-        public id(AIMLbot.Bot bot,
-                        AIMLbot.User user,
-                        AIMLbot.Utils.SubQuery query,
-                        AIMLbot.Request request,
-                        AIMLbot.Result result,
-                        XmlNode templateNode)
+        public id(Bot bot,
+            User user,
+            Utils.SubQuery query,
+            Request request,
+            Result result,
+            XmlNode templateNode)
             : base(bot, user, query, request, result, templateNode)
         {
         }
 
         protected override string ProcessChange()
         {
-            if (this.templateNode.Name.ToLower() == "id")
-            {
-                return this.user.UserID;
-            }
+            if (templateNode.Name.ToLower() == "id") return user.UserID;
             return string.Empty;
         }
     }
