@@ -11,7 +11,7 @@ namespace AIMLbot.Normalize
         /// <summary>
         /// The bot this sentence splitter is associated with
         /// </summary>
-        private AIMLbot.Bot bot;
+        private Bot bot;
 
         /// <summary>
         /// The raw input string
@@ -23,7 +23,7 @@ namespace AIMLbot.Normalize
         /// </summary>
         /// <param name="bot">The bot this sentence splitter is associated with</param>
         /// <param name="inputString">The raw input string to be processed</param>
-        public SplitIntoSentences(AIMLbot.Bot bot, string inputString)
+        public SplitIntoSentences(Bot bot, string inputString)
         {
             this.bot = bot;
             this.inputString = inputString;
@@ -33,7 +33,7 @@ namespace AIMLbot.Normalize
         /// Ctor
         /// </summary>
         /// <param name="bot">The bot this sentence splitter is associated with</param>
-        public SplitIntoSentences(AIMLbot.Bot bot)
+        public SplitIntoSentences(Bot bot)
         {
             this.bot = bot;
         }
@@ -47,7 +47,7 @@ namespace AIMLbot.Normalize
         public string[] Transform(string inputString)
         {
             this.inputString = inputString;
-            return this.Transform();
+            return Transform();
         }
 
         /// <summary>
@@ -57,18 +57,16 @@ namespace AIMLbot.Normalize
         /// <returns>An array of strings representing the constituent "sentences"</returns>
         public string[] Transform()
         {
-            string[] tokens = (string[])this.bot.Splitters.ToArray();
-            string[] rawResult = this.inputString.Split(tokens, System.StringSplitOptions.RemoveEmptyEntries);
-            List<string> tidyResult = new List<string>();
-            foreach (string rawSentence in rawResult)
+            var tokens = (string[]) bot.Splitters.ToArray();
+            var rawResult = inputString.Split(tokens, System.StringSplitOptions.RemoveEmptyEntries);
+            var tidyResult = new List<string>();
+            foreach (var rawSentence in rawResult)
             {
-                string tidySentence = rawSentence.Trim();
-                if (tidySentence.Length > 0)
-                {
-                    tidyResult.Add(tidySentence);
-                }
+                var tidySentence = rawSentence.Trim();
+                if (tidySentence.Length > 0) tidyResult.Add(tidySentence);
             }
-            return (string[])tidyResult.ToArray();
+
+            return (string[]) tidyResult.ToArray();
         }
     }
 }

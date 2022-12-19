@@ -6,7 +6,7 @@ namespace AIMLbot.Utils
     /// The template for all classes that handle the AIML tags found within template nodes of a
     /// category.
     /// </summary>
-    abstract public class AIMLTagHandler : TextTransformer
+    public abstract class AIMLTagHandler : TextTransformer
     {
         /// <summary>
         /// Ctor
@@ -17,12 +17,12 @@ namespace AIMLbot.Utils
         /// <param name="request">The request itself</param>
         /// <param name="result">The result to be passed back to the user</param>
         /// <param name="templateNode">The node to be processed</param>
-        public AIMLTagHandler(AIMLbot.Bot bot,
-                                    AIMLbot.User user,
-                                    AIMLbot.Utils.SubQuery query,
-                                    AIMLbot.Request request,
-                                    AIMLbot.Result result,
-                                    XmlNode templateNode) : base(bot, templateNode.OuterXml)
+        public AIMLTagHandler(Bot bot,
+            User user,
+            SubQuery query,
+            Request request,
+            Result result,
+            XmlNode templateNode) : base(bot, templateNode.OuterXml)
         {
             this.user = user;
             this.query = query;
@@ -47,22 +47,22 @@ namespace AIMLbot.Utils
         /// <summary>
         /// A representation of the user who made the request
         /// </summary>
-        public AIMLbot.User user;
+        public User user;
 
         /// <summary>
         /// The query that produced this node containing the wildcard matches
         /// </summary>
-        public AIMLbot.Utils.SubQuery query;
+        public SubQuery query;
 
         /// <summary>
         /// A representation of the input into the bot made by the user
         /// </summary>
-        public AIMLbot.Request request;
+        public Request request;
 
         /// <summary>
         /// A representation of the result to be returned to the user
         /// </summary>
-        public AIMLbot.Result result;
+        public Result result;
 
         /// <summary>
         /// The template node to be processed by the class
@@ -78,10 +78,11 @@ namespace AIMLbot.Utils
         /// <returns>The XML node</returns>
         public static XmlNode getNode(string outerXML)
         {
-            XmlDocument temp = new XmlDocument();
+            var temp = new XmlDocument();
             temp.LoadXml(outerXML);
             return temp.FirstChild;
         }
+
         #endregion
     }
 }

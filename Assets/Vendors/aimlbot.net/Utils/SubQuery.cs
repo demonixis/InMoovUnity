@@ -9,6 +9,7 @@ namespace AIMLbot.Utils
     public class SubQuery
     {
         #region Attributes
+
         /// <summary>
         /// The path that this query relates to
         /// </summary>
@@ -23,19 +24,20 @@ namespace AIMLbot.Utils
         /// If the raw input matches a wildcard then this attribute will contain the block of 
         /// text that the user has inputted that is matched by the wildcard.
         /// </summary>
-        public List<string> InputStar = new List<string>();
+        public List<string> InputStar = new();
 
         /// <summary>
         /// If the "that" part of the normalized path contains a wildcard then this attribute 
         /// will contain the block of text that the user has inputted that is matched by the wildcard.
         /// </summary>
-        public List<string> ThatStar = new List<string>();
+        public List<string> ThatStar = new();
 
         /// <summary>
         /// If the "topic" part of the normalized path contains a wildcard then this attribute 
         /// will contain the block of text that the user has inputted that is matched by the wildcard.
         /// </summary>
-        public List<string> TopicStar = new List<string>();
+        public List<string> TopicStar = new();
+
         #endregion
 
         /// <summary>
@@ -44,7 +46,7 @@ namespace AIMLbot.Utils
         /// <param name="fullPath">The path that this query relates to</param>
         public SubQuery(string fullPath)
         {
-            this.FullPath = fullPath;
+            FullPath = fullPath;
         }
     }
 }

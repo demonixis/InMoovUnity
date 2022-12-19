@@ -9,9 +9,10 @@ namespace AIMLbot.Utils
     /// The protected ProcessChange() method is abstract and should be overridden to contain 
     /// the code for transforming the input text into the output text.
     /// </summary>
-    abstract public class TextTransformer
+    public abstract class TextTransformer
     {
         #region Attributes
+
         /// <summary>
         /// GetInstance of the input string
         /// </summary>
@@ -20,24 +21,22 @@ namespace AIMLbot.Utils
         /// <summary>
         /// The bot that this transformation is connected with
         /// </summary>
-        public AIMLbot.Bot bot;
+        public Bot bot;
 
         /// <summary>
         /// The input string to be transformed in some way
         /// </summary>
         public string InputString
         {
-            get { return this.inputString; }
-            set { this.inputString = value; }
+            get => inputString;
+            set => inputString = value;
         }
 
         /// <summary>
         /// The transformed string
         /// </summary>
-        public string OutputString
-        {
-            get { return this.Transform(); }
-        }
+        public string OutputString => Transform();
+
         #endregion
 
         /// <summary>
@@ -45,7 +44,7 @@ namespace AIMLbot.Utils
         /// </summary>
         /// <param name="bot">The bot this transformer is a part of</param>
         /// <param name="inputString">The input string to be transformed</param>
-        public TextTransformer(AIMLbot.Bot bot, string inputString)
+        public TextTransformer(Bot bot, string inputString)
         {
             this.bot = bot;
             this.inputString = inputString;
@@ -55,10 +54,10 @@ namespace AIMLbot.Utils
         /// ctor
         /// </summary>
         /// <param name="bot">The bot this transformer is a part of</param>
-        public TextTransformer(AIMLbot.Bot bot)
+        public TextTransformer(Bot bot)
         {
             this.bot = bot;
-            this.inputString = string.Empty;
+            inputString = string.Empty;
         }
 
         /// <summary>
@@ -66,8 +65,8 @@ namespace AIMLbot.Utils
         /// </summary>
         public TextTransformer()
         {
-            this.bot = null;
-            this.inputString = string.Empty;
+            bot = null;
+            inputString = string.Empty;
         }
 
         /// <summary>
@@ -77,8 +76,8 @@ namespace AIMLbot.Utils
         /// <returns>The resulting output</returns>
         public string Transform(string input)
         {
-            this.inputString = input;
-            return this.Transform();
+            inputString = input;
+            return Transform();
         }
 
         /// <summary>
@@ -87,14 +86,10 @@ namespace AIMLbot.Utils
         /// <returns>The resulting transformed string</returns>
         public string Transform()
         {
-            if (this.inputString.Length > 0)
-            {
-                return this.ProcessChange();
-            }
+            if (inputString.Length > 0)
+                return ProcessChange();
             else
-            {
                 return string.Empty;
-            }
         }
 
         /// <summary>

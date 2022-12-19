@@ -18,36 +18,27 @@ namespace AIMLbot
         /// <summary>
         /// The bot this user is using
         /// </summary>
-        public AIMLbot.Bot bot;
+        public Bot bot;
 
         /// <summary>
         /// The GUID that identifies this user to the bot
         /// </summary>
-        public string UserID
-        {
-            get { return this.id; }
-        }
+        public string UserID => id;
 
         /// <summary>
         /// A collection of all the result objects returned to the user in this session
         /// </summary>
-        private List<Result> Results = new List<Result>();
+        private List<Result> Results = new();
 
         /// <summary>
         /// the value of the "topic" predicate
         /// </summary>
-        public string Topic
-        {
-            get
-            {
-                return this.Predicates.grabSetting("topic");
-            }
-        }
+        public string Topic => Predicates.grabSetting("topic");
 
         /// <summary>
         /// the predicates associated with this particular user
         /// </summary>
-        public AIMLbot.Utils.SettingsDictionary Predicates;
+        public Utils.SettingsDictionary Predicates;
 
         /// <summary>
         /// The most recent result to be returned by the bot
@@ -56,14 +47,10 @@ namespace AIMLbot
         {
             get
             {
-                if (this.Results.Count > 0)
-                {
-                    return (Result)this.Results[0];
-                }
+                if (Results.Count > 0)
+                    return (Result) Results[0];
                 else
-                {
                     return null;
-                }
             }
         }
 
@@ -76,15 +63,15 @@ namespace AIMLbot
         /// </summary>
         /// <param name="UserID">The GUID of the user</param>
         /// <param name="bot">the bot the user is connected to</param>
-        public User(string UserID, AIMLbot.Bot bot)
+        public User(string UserID, Bot bot)
         {
             if (UserID.Length > 0)
             {
                 id = UserID;
                 this.bot = bot;
-                this.Predicates = new AIMLbot.Utils.SettingsDictionary(this.bot);
-                this.bot.DefaultPredicates.Clone(this.Predicates);
-                this.Predicates.addSetting("topic", "*");
+                Predicates = new Utils.SettingsDictionary(this.bot);
+                this.bot.DefaultPredicates.Clone(Predicates);
+                Predicates.addSetting("topic", "*");
             }
             else
             {
@@ -98,14 +85,10 @@ namespace AIMLbot
         /// <returns>the string to use for that</returns>
         public string getLastBotOutput()
         {
-            if (this.Results.Count > 0)
-            {
-                return ((Result)Results[0]).RawOutput;
-            }
+            if (Results.Count > 0)
+                return ((Result) Results[0]).RawOutput;
             else
-            {
                 return "*";
-            }
         }
 
         /// <summary>
@@ -114,7 +97,7 @@ namespace AIMLbot
         /// <returns>the first sentence of the last output from the bot</returns>
         public string getThat()
         {
-            return this.getThat(0, 0);
+            return getThat(0, 0);
         }
 
         /// <summary>
@@ -124,7 +107,7 @@ namespace AIMLbot
         /// <returns>the first sentence of the output "n" steps ago from the bot</returns>
         public string getThat(int n)
         {
-            return this.getThat(n, 0);
+            return getThat(n, 0);
         }
 
         /// <summary>
@@ -135,14 +118,13 @@ namespace AIMLbot
         /// <returns>the sentence numbered by "sentence" of the output "n" steps ago from the bot</returns>
         public string getThat(int n, int sentence)
         {
-            if ((n >= 0) & (n < this.Results.Count))
+            if ((n >= 0) & (n < Results.Count))
             {
-                Result historicResult = (Result)this.Results[n];
+                var historicResult = (Result) Results[n];
                 if ((sentence >= 0) & (sentence < historicResult.OutputSentences.Count))
-                {
-                    return (string)historicResult.OutputSentences[sentence];
-                }
+                    return (string) historicResult.OutputSentences[sentence];
             }
+
             return string.Empty;
         }
 
@@ -152,7 +134,7 @@ namespace AIMLbot
         /// <returns>the first sentence of the last output from the bot</returns>
         public string getResultSentence()
         {
-            return this.getResultSentence(0, 0);
+            return getResultSentence(0, 0);
         }
 
         /// <summary>
@@ -162,7 +144,7 @@ namespace AIMLbot
         /// <returns>the first sentence from the output from the bot "n" steps ago</returns>
         public string getResultSentence(int n)
         {
-            return this.getResultSentence(n, 0);
+            return getResultSentence(n, 0);
         }
 
         /// <summary>
@@ -173,14 +155,13 @@ namespace AIMLbot
         /// <returns>the identified sentence number from the output from the bot "n" steps ago</returns>
         public string getResultSentence(int n, int sentence)
         {
-            if ((n >= 0) & (n < this.Results.Count))
+            if ((n >= 0) & (n < Results.Count))
             {
-                Result historicResult = (Result)this.Results[n];
+                var historicResult = (Result) Results[n];
                 if ((sentence >= 0) & (sentence < historicResult.InputSentences.Count))
-                {
-                    return (string)historicResult.InputSentences[sentence];
-                }
+                    return (string) historicResult.InputSentences[sentence];
             }
+
             return string.Empty;
         }
 
@@ -190,8 +171,9 @@ namespace AIMLbot
         /// <param name="latestResult">the latest result from the bot</param>
         public void addResult(Result latestResult)
         {
-            this.Results.Insert(0, latestResult);
+            Results.Insert(0, latestResult);
         }
+
         #endregion
     }
 }

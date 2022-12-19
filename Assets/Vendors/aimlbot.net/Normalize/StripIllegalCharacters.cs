@@ -4,18 +4,20 @@ namespace AIMLbot.Normalize
     /// Strips any illegal characters found within the input string. Illegal characters are referenced from
     /// the bot's Strippers regex that is defined in the setup XML file.
     /// </summary>
-    public class StripIllegalCharacters : AIMLbot.Utils.TextTransformer
+    public class StripIllegalCharacters : Utils.TextTransformer
     {
-        public StripIllegalCharacters(AIMLbot.Bot bot, string inputString) : base(bot, inputString)
-        { }
+        public StripIllegalCharacters(Bot bot, string inputString) : base(bot, inputString)
+        {
+        }
 
-        public StripIllegalCharacters(AIMLbot.Bot bot)
+        public StripIllegalCharacters(Bot bot)
             : base(bot)
-        { }
+        {
+        }
 
         protected override string ProcessChange()
         {
-            return this.bot.Strippers.Replace(this.inputString, " ");
+            return bot.Strippers.Replace(inputString, " ");
         }
     }
 }

@@ -70,7 +70,7 @@ namespace AIMLbot.AIMLTagHandlers
                                     }
                                     else
                                     {
-                                        this.bot.writeToLog("ERROR! An input tag with a bady formed index (" + this.templateNode.Attributes[0].Value + ") was encountered processing the input: " + this.request.rawInput);
+                                        this.bot.WriteToLog("ERROR! An input tag with a bady formed index (" + this.templateNode.Attributes[0].Value + ") was encountered processing the input: " + this.request.rawInput);
                                     }
                                 }
                                 else
@@ -82,13 +82,13 @@ namespace AIMLbot.AIMLTagHandlers
                                     }
                                     else
                                     {
-                                        this.bot.writeToLog("ERROR! An input tag with a bady formed index (" + this.templateNode.Attributes[0].Value + ") was encountered processing the input: " + this.request.rawInput);
+                                        this.bot.WriteToLog("ERROR! An input tag with a bady formed index (" + this.templateNode.Attributes[0].Value + ") was encountered processing the input: " + this.request.rawInput);
                                     }
                                 }
                             }
                             catch
                             {
-                                this.bot.writeToLog("ERROR! An input tag with a bady formed index (" + this.templateNode.Attributes[0].Value + ") was encountered processing the input: " + this.request.rawInput);
+                                this.bot.WriteToLog("ERROR! An input tag with a bady formed index (" + this.templateNode.Attributes[0].Value + ") was encountered processing the input: " + this.request.rawInput);
                             }
                         }
                     }

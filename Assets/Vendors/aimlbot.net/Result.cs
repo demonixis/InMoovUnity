@@ -48,22 +48,21 @@ namespace AIMLbot
             {
                 if (OutputSentences.Count > 0)
                 {
-                    return this.RawOutput;
+                    return RawOutput;
                 }
                 else
                 {
-                    if (this.request.hasTimedOut)
+                    if (request.hasTimedOut)
                     {
                         return bot.TimeOutMessage;
                     }
                     else
                     {
-                        StringBuilder paths = new StringBuilder();
-                        foreach (string pattern in this.NormalizedPaths)
-                        {
-                            paths.Append(pattern + Environment.NewLine);
-                        }
-                        this.bot.writeToLog("The bot could not find any response for the input: " + this.RawInput + " with the path(s): " + Environment.NewLine + paths.ToString() + " from the user with an id: " + this.user.UserID);
+                        var paths = new StringBuilder();
+                        foreach (var pattern in NormalizedPaths) paths.Append(pattern + Environment.NewLine);
+                        bot.WriteToLog("The bot could not find any response for the input: " + RawInput +
+                                       " with the path(s): " + Environment.NewLine + paths.ToString() +
+                                       " from the user with an id: " + user.UserID);
                         return string.Empty;
                     }
                 }
@@ -78,15 +77,13 @@ namespace AIMLbot
             get
             {
                 var result = new StringBuilder();
-                foreach (string sentence in OutputSentences)
+                foreach (var sentence in OutputSentences)
                 {
-                    string sentenceForOutput = sentence.Trim();
-                    if (!this.CheckEndsAsSentence(sentenceForOutput))
-                    {
-                        sentenceForOutput += ".";
-                    }
+                    var sentenceForOutput = sentence.Trim();
+                    if (!CheckEndsAsSentence(sentenceForOutput)) sentenceForOutput += ".";
                     result.Append(sentenceForOutput + " ");
                 }
+
                 return result.ToString().Trim();
             }
         }
@@ -137,13 +134,9 @@ namespace AIMLbot
         /// <returns>True if ends with an appropriate sentence splitter</returns>
         private bool CheckEndsAsSentence(string sentence)
         {
-            foreach (string splitter in this.bot.Splitters)
-            {
+            foreach (var splitter in bot.Splitters)
                 if (sentence.Trim().EndsWith(splitter))
-                {
                     return true;
-                }
-            }
             return false;
         }
     }

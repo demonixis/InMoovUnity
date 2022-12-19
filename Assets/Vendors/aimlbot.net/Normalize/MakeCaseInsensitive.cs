@@ -3,17 +3,19 @@ namespace AIMLbot.Normalize
     /// <summary>
     /// Normalizes the input text into upper case
     /// </summary>
-    public class MakeCaseInsensitive : AIMLbot.Utils.TextTransformer
+    public class MakeCaseInsensitive : Utils.TextTransformer
     {
-        public MakeCaseInsensitive(AIMLbot.Bot bot, string inputString) : base(bot, inputString)
-        { }
+        public MakeCaseInsensitive(Bot bot, string inputString) : base(bot, inputString)
+        {
+        }
 
-        public MakeCaseInsensitive(AIMLbot.Bot bot) : base(bot)
-        { }
+        public MakeCaseInsensitive(Bot bot) : base(bot)
+        {
+        }
 
         protected override string ProcessChange()
         {
-            return this.inputString.ToUpper();
+            return inputString.ToUpper();
         }
 
         /// <summary>

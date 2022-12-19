@@ -64,19 +64,19 @@ namespace AIMLbot.AIMLTagHandlers
                                 }
                                 else
                                 {
-                                    this.bot.writeToLog("InputStar out of bounds reference caused by input: " + this.request.rawInput);
+                                    this.bot.WriteToLog("InputStar out of bounds reference caused by input: " + this.request.rawInput);
                                 }
                             }
                             catch
                             {
-                                this.bot.writeToLog("Index set to non-integer value whilst processing star tag in response to the input: " + this.request.rawInput);
+                                this.bot.WriteToLog("Index set to non-integer value whilst processing star tag in response to the input: " + this.request.rawInput);
                             }
                         }
                     }
                 }
                 else
                 {
-                    this.bot.writeToLog("A star tag tried to reference an empty InputStar collection when processing the input: " + this.request.rawInput);
+                    this.bot.WriteToLog("A star tag tried to reference an empty InputStar collection when processing the input: " + this.request.rawInput);
                 }
             }
             return string.Empty;

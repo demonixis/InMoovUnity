@@ -8,15 +8,17 @@ namespace AIMLbot.Normalize
     /// Checks the text for any matches in the bot's substitutions dictionary and makes
     /// any appropriate changes.
     /// </summary>
-    public class ApplySubstitutions : AIMLbot.Utils.TextTransformer
+    public class ApplySubstitutions : Utils.TextTransformer
     {
-        public ApplySubstitutions(AIMLbot.Bot bot, string inputString)
+        public ApplySubstitutions(Bot bot, string inputString)
             : base(bot, inputString)
-        { }
+        {
+        }
 
-        public ApplySubstitutions(AIMLbot.Bot bot)
+        public ApplySubstitutions(Bot bot)
             : base(bot)
-        { }
+        {
+        }
 
         /// <summary>
         /// Produces a random "marker" string that tags text that is already the result of a substitution
@@ -25,19 +27,16 @@ namespace AIMLbot.Normalize
         /// <returns>the resulting marker</returns>
         private static string getMarker(int len)
         {
-            char[] chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".ToCharArray();
-            StringBuilder result = new StringBuilder();
-            Random r = new Random();
-            for (int i = 0; i < len; i++)
-            {
-                result.Append(chars[r.Next(chars.Length)]);
-            }
+            var chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".ToCharArray();
+            var result = new StringBuilder();
+            var r = new Random();
+            for (var i = 0; i < len; i++) result.Append(chars[r.Next(chars.Length)]);
             return result.ToString();
         }
 
         protected override string ProcessChange()
         {
-            return ApplySubstitutions.Substitute(this.bot, this.bot.Substitutions, this.inputString);
+            return Substitute(bot, bot.Substitutions, inputString);
         }
 
         /// <summary>
@@ -48,16 +47,16 @@ namespace AIMLbot.Normalize
         /// <param name="dictionary">The dictionary containing the substitutions</param>
         /// <param name="target">the target string to which the substitutions are to be applied</param>
         /// <returns>The processed string</returns>
-        public static string Substitute(AIMLbot.Bot bot, AIMLbot.Utils.SettingsDictionary dictionary, string target)
+        public static string Substitute(Bot bot, Utils.SettingsDictionary dictionary, string target)
         {
-            string marker = ApplySubstitutions.getMarker(5);
-            string result = target;
-            foreach (string pattern in dictionary.SettingNames)
+            var marker = getMarker(5);
+            var result = target;
+            foreach (var pattern in dictionary.SettingNames)
             {
-                string p2 = ApplySubstitutions.makeRegexSafe(pattern);
+                var p2 = makeRegexSafe(pattern);
                 //string match = "\\b"+@p2.Trim().Replace(" ","\\s*")+"\\b";
-                string match = "\\b" + p2.TrimEnd().TrimStart() + "\\b";
-                string replacement = marker + dictionary.grabSetting(pattern).Trim() + marker;
+                var match = "\\b" + p2.TrimEnd().TrimStart() + "\\b";
+                var replacement = marker + dictionary.grabSetting(pattern).Trim() + marker;
                 result = Regex.Replace(result, match, replacement, RegexOptions.IgnoreCase);
             }
 
@@ -72,7 +71,7 @@ namespace AIMLbot.Normalize
         /// <returns>the safe version</returns>
         private static string makeRegexSafe(string input)
         {
-            string result = input.Replace("\\", "");
+            var result = input.Replace("\\", "");
             result = result.Replace(")", "\\)");
             result = result.Replace("(", "\\(");
             result = result.Replace(".", "\\.");

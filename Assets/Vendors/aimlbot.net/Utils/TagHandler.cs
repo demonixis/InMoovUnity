@@ -31,11 +31,11 @@ namespace AIMLbot.Utils
         /// <returns>The instantiated class</returns>
         public AIMLTagHandler Instantiate(Dictionary<string, Assembly> Assemblies)
         {
-            if (Assemblies.ContainsKey(this.AssemblyName))
+            if (Assemblies.ContainsKey(AssemblyName))
             {
-                Assembly tagDLL = (Assembly)Assemblies[this.AssemblyName];
-                Type[] tagDLLTypes = tagDLL.GetTypes();
-                return (AIMLTagHandler)tagDLL.CreateInstance(this.ClassName);
+                var tagDLL = (Assembly) Assemblies[AssemblyName];
+                var tagDLLTypes = tagDLL.GetTypes();
+                return (AIMLTagHandler) tagDLL.CreateInstance(ClassName);
             }
             else
             {

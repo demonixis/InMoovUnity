@@ -8,6 +8,7 @@ namespace AIMLbot
     public class Request
     {
         #region Attributes
+
         /// <summary>
         /// The raw input from the user
         /// </summary>
@@ -51,7 +52,7 @@ namespace AIMLbot
             this.rawInput = rawInput;
             this.user = user;
             this.bot = bot;
-            this.StartedOn = DateTime.Now;
+            StartedOn = DateTime.Now;
         }
     }
 }
