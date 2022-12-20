@@ -13,6 +13,7 @@ public static partial class UnitySAM
         int[] intarray = new int[256];
         for (int i = 0; i < bytes.Length; i++)
         {
+            if (i > intarray.Length - 1) continue;
             intarray[i] = bytes[i];
         }
 

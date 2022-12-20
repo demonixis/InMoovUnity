@@ -43,6 +43,7 @@ namespace Demonixis.InMoov.Systems
 
             var speechSynthesis = robot.GetService<SpeechSynthesisService>();
             speechSynthesis.SpeechStarted += SpeechSynthesisOnSpeechStarted;
+            speechSynthesis.SpeechFinished += SpeechSynthesisOnSpeechFinished;
             
             _initialized = true;
         }
@@ -51,6 +52,11 @@ namespace Demonixis.InMoov.Systems
         {
             StopAllCoroutines();
             StartCoroutine(MoveJaw(_phraseTarget));
+        }
+
+        private void SpeechSynthesisOnSpeechFinished()
+        {
+            
         }
 
         private void InternalShutdown()

@@ -6,7 +6,9 @@ namespace Demonixis.InMoov.Chatbots
 {
     public abstract class ChatbotService : RobotService
     {
+        [NonSerialized]
         public List<string> DetectedObjects = new();
+        [NonSerialized]
         public List<string> DetectedPersons = new();
         
         public event Action<string> ResponseReady;
@@ -31,7 +33,7 @@ namespace Demonixis.InMoov.Chatbots
 
         protected abstract void SubmitResponseToBot(string phrase);
 
-        public void NotifyResponseReady(string response)
+        protected void NotifyResponseReady(string response)
         {
             ResponseReady?.Invoke(response);
         }

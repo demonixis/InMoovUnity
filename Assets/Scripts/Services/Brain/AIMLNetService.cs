@@ -34,7 +34,6 @@ namespace Demonixis.InMoov.Chatbots
         private User _user;
         private AIMLNetServiceData _data;
         private string _pathToUserSettings;
-        private string _lastWords;
 
         public override void Initialize()
         {
@@ -85,17 +84,10 @@ namespace Demonixis.InMoov.Chatbots
         {
             if (Paused) return;
 
-            if (inputSpeech.ToLower() == _lastWords)
-            {
-                Debug.Log("Prevent the robot to respond to itself");
-                return;
-            }
-
             var request = new Request(inputSpeech, _user, _aimlBot);
             var result = _aimlBot.Chat(request);
-            _lastWords = result.Output;
-            
-            NotifyResponseReady(_lastWords);
+
+            NotifyResponseReady(result.Output);
         }
 
         public override void Shutdown()
