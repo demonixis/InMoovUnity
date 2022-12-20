@@ -5,7 +5,7 @@ namespace Demonixis.InMoov.Services.Speech
 {
     public class SpeechSynthesisService : RobotService
     {
-        public event Action SpeechStarted;
+        public event Action<string> SpeechStarted;
         public event Action SpeechFinished;
         
         public virtual void SetCulture(string culture)
@@ -16,10 +16,16 @@ namespace Demonixis.InMoov.Services.Speech
         {
         }
 
-        protected void NotifySpeechState(bool started)
+        public float GetSpeakTime(string sentence, int wordsPerMinute = 40)
+        {
+            var words = sentence.Split(' ');
+            return words.Length * 60.0f / wordsPerMinute;
+        }
+
+        protected void NotifySpeechState(bool started, string message)
         {
             if (started)
-                SpeechStarted?.Invoke();
+                SpeechStarted?.Invoke(message);
             else
                 SpeechFinished?.Invoke();
         }

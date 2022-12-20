@@ -12,6 +12,7 @@ namespace Demonixis.InMoov.Systems
         private ServoMixerService _servoMixerService;
         private bool _initialized;
         private string _phraseTarget;
+        private bool _isSpeaking;
 
         [SerializeField] private float _jawOpenTime = 0.25f;
         [SerializeField] private float _jawCloseTime = 0.15f;
@@ -22,12 +23,7 @@ namespace Demonixis.InMoov.Systems
         {
             InternalInitialize();
         }
-
-        public override void Dispose()
-        {
-            InternalShutdown();
-        }
-
+        
         private void InternalInitialize()
         {
             base.Initialize();
@@ -37,10 +33,6 @@ namespace Demonixis.InMoov.Systems
             var robot = Robot.Instance;
             _servoMixerService = robot.GetService<ServoMixerService>();
 
-            var chatbot = robot.GetService<ChatbotService>();
-            chatbot.ResponseReady += OnChatBotResponse;
-            robot.ServiceChanged += OnRobotServiceChanged;
-
             var speechSynthesis = robot.GetService<SpeechSynthesisService>();
             speechSynthesis.SpeechStarted += SpeechSynthesisOnSpeechStarted;
             speechSynthesis.SpeechFinished += SpeechSynthesisOnSpeechFinished;
@@ -48,67 +40,38 @@ namespace Demonixis.InMoov.Systems
             _initialized = true;
         }
 
-        private void SpeechSynthesisOnSpeechStarted()
+        private void SpeechSynthesisOnSpeechStarted(string message)
         {
-            StopAllCoroutines();
-            StartCoroutine(MoveJaw(_phraseTarget));
+            if (_isSpeaking)
+            {
+                StopAllCoroutines();
+            }
+            
+            StartCoroutine(MoveJaw(message));
         }
 
         private void SpeechSynthesisOnSpeechFinished()
         {
-            
-        }
-
-        private void InternalShutdown()
-        {
-            base.Dispose();
-            
-            if (!_initialized) return;
-
-            var robot = Robot.Instance;
-            var chatbot = robot.GetService<ChatbotService>();
-            if (chatbot == null) return;
-            chatbot.ResponseReady -= OnChatBotResponse;
-            robot.ServiceChanged -= OnRobotServiceChanged;
-
-            _initialized = false;
-        }
-
-        private void OnChatBotResponse(string response)
-        {
-            _phraseTarget = response;
-        }
-
-        private void OnRobotServiceChanged(RobotService oldService, RobotService newService)
-        {
-            if (oldService is not ChatbotService oldChatbot) return;
-
-            oldChatbot.ResponseReady -= OnChatBotResponse;
-
-            var newChatbot = (ChatbotService) newService;
-            newChatbot.ResponseReady += OnChatBotResponse;
+            _isSpeaking = false;
         }
 
         private IEnumerator MoveJaw(string sentence)
         {
             if (string.IsNullOrEmpty(sentence)) yield break;
+
+            _isSpeaking = true;
             
-            var words = sentence.Split(' ');
-            var targetTime = words.Length * 60.0f / _wordsPerMinute;
             var data = _servoMixerService.GetServoData(ServoIdentifier.Jaw);
-            var elapsedTime = 0.0f;
             var openMouthValue = (byte) (data.Neutral + _jawAmplitude);
-            var startTime = Time.time;
 
             _servoMixerService.SetServoValueInServo(ServoIdentifier.Jaw, data.Neutral);
 
-            while (elapsedTime < targetTime)
+            while (_isSpeaking)
             {
                 _servoMixerService.SetServoValueInServo(ServoIdentifier.Jaw, openMouthValue);
                 yield return CoroutineFactory.WaitForSeconds(_jawOpenTime);
                 _servoMixerService.SetServoValueInServo(ServoIdentifier.Jaw, data.Neutral);
                 yield return CoroutineFactory.WaitForSeconds(_jawCloseTime);
-                elapsedTime += Time.time - startTime;
             }
         }
     }

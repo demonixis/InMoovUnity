@@ -7,6 +7,8 @@ namespace Demonixis.InMoov.Services.Speech
     public sealed class SAMSpeechSynthesis : SpeechSynthesisService
     {
         private AudioSource _audioSource;
+        
+        [SerializeField] private int _samplerate = 44100;
 
         private void Start()
         {
@@ -30,24 +32,24 @@ namespace Demonixis.InMoov.Services.Speech
                 return;
             }
 
-            var audioClip = AudioClip.Create("TemporaryAC", buffer.Size, 1, 22050, false);
+            var audioClip = AudioClip.Create("TemporaryAC", buffer.Size, 1, _samplerate, false);
             audioClip.SetData(buffer.GetFloats(), 0);
 
             _audioSource.clip = audioClip;
             _audioSource.Play();
-            StartCoroutine(SpeechLoop());
+            StartCoroutine(SpeechLoop(message));
         }
         
-        private IEnumerator SpeechLoop()
+        private IEnumerator SpeechLoop(string message)
         {
-            NotifySpeechState(true);
+            NotifySpeechState(true, message);
             
             while (_audioSource.isPlaying)
             {
                 yield return null;
             }
             
-            NotifySpeechState(false);
+            NotifySpeechState(false, null);
         }
     }
 }

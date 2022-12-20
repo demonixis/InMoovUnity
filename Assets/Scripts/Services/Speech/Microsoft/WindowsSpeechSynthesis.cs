@@ -70,13 +70,11 @@ namespace Demonixis.InMoov.Services.Speech
 
         private IEnumerator SpeechLoop(string message)
         {
-            NotifySpeechState(true);
-
-            var words = message.Split(' ');
-            // FIXME
-            yield return CoroutineFactory.WaitForSeconds(words.Length * 0.1f);
+            NotifySpeechState(true, message);
             
-            NotifySpeechState(false);
+            yield return CoroutineFactory.WaitForSeconds(GetSpeakTime(message));
+            
+            NotifySpeechState(false, null);
         }
     }
 }

@@ -23,6 +23,8 @@ namespace Demonixis.InMoov.Services.Speech
 
         public override void SetPaused(bool paused)
         {
+            base.SetPaused(paused);
+            
             var vosk = GetComponent<VoskListener>();
             if (paused)
                 vosk.StopListening();
@@ -32,7 +34,7 @@ namespace Demonixis.InMoov.Services.Speech
 
         private void Vosk_ResultFound(object sender, VoskResultEventArgs e)
         {
-            if (_isLocked) return;
+            if (!CanListen) return;
             NotifyPhraseDetected(e.Result.Text);
         }
 

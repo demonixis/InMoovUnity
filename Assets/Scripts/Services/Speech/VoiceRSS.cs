@@ -36,7 +36,21 @@ namespace Demonixis.InMoov.Services.Speech
 
         public override void SetCulture(string culture)
         {
-           
+            switch (culture)
+            {
+                case "fr-FR":
+                case "fr-CA":
+                    _language = Language.French_France;
+                    break;
+                case "en-GB":
+                    _language = Language.English_GreatBritain;
+                    break;
+                case "en-US":
+                    _language = Language.English_UnitedStates;
+                    break;
+            }
+
+            // Feel free to continue this list ;)      
         }
 
         public override void Speak(string text)
@@ -57,7 +71,7 @@ namespace Demonixis.InMoov.Services.Speech
             {
                 _audioSource.clip = clip;
                 _audioSource.Play();
-                StartCoroutine(SpeechLoop());
+                StartCoroutine(SpeechLoop(text));
             }
             else
             {
@@ -69,16 +83,16 @@ namespace Demonixis.InMoov.Services.Speech
             }
         }
 
-        private IEnumerator SpeechLoop()
+        private IEnumerator SpeechLoop(string message)
         {
-            NotifySpeechState(true);
-            
+            NotifySpeechState(true, message);
+
             while (_audioSource.isPlaying)
             {
                 yield return null;
             }
-            
-            NotifySpeechState(false);
+
+            NotifySpeechState(false, null);
         }
     }
 }

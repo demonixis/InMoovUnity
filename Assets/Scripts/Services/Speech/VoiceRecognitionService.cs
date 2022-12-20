@@ -6,6 +6,8 @@ namespace Demonixis.InMoov.Services.Speech
     {
         protected bool _isLocked;
 
+        public bool CanListen => !_isLocked && !Paused;
+
         public event Action<string> PhraseDetected;
 
         public override void Initialize()
@@ -18,7 +20,7 @@ namespace Demonixis.InMoov.Services.Speech
         {
             var robot = Robot.Instance;
             var speech = robot.GetService<SpeechSynthesisService>();
-            speech.SpeechStarted += () => OnSpeechLocked(true);
+            speech.SpeechStarted += _ => OnSpeechLocked(true);
             speech.SpeechFinished += () => OnSpeechLocked(false);
         }
 
