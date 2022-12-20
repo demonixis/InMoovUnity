@@ -56,10 +56,10 @@ namespace Demonixis.InMoov.Chatbots
 
             _pathToUserSettings = Path.Combine(SaveGame.GetSavePath("Brain"), $"aiml-{_data.Language}-graphmaster.xml");
 
-            _aimlBot.ChangeMyPath = Path.Combine(Application.streamingAssetsPath, "AIML.Net", _data.Language);
-            _aimlBot.loadSettings();
+            _aimlBot.CustomResourcePath = Path.Combine(Application.streamingAssetsPath, "AIML.Net", _data.Language);
+            _aimlBot.LoadSettings();
             _aimlBot.isAcceptingUserInput = false;
-            _aimlBot.loadAIMLFromFiles();
+            _aimlBot.LoadAimlFromFiles();
             _aimlBot.isAcceptingUserInput = true;
         }
 
@@ -115,7 +115,7 @@ namespace Demonixis.InMoov.Chatbots
         {
             try
             {
-                _user.Predicates.loadSettings(_pathToUserSettings);
+                _user.Predicates.LoadSettings(_pathToUserSettings);
                 Debug.Log("Brain loaded");
             }
             catch (Exception e)
