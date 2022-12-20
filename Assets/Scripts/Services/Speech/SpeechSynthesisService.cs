@@ -8,15 +8,22 @@ namespace Demonixis.InMoov.Services.Speech
         public event Action<string> SpeechStarted;
         public event Action SpeechFinished;
         
-        public virtual void SetCulture(string culture)
+        public virtual void SetLanguage(string culture)
         {
+        }
+
+        public virtual string[] GetVoices() => null;
+
+        public virtual void SelectVoice(string voiceName)
+        {
+            
         }
 
         public virtual void Speak(string message)
         {
         }
 
-        public float GetSpeakTime(string sentence, int wordsPerMinute = 40)
+        public float GetSpeakTime(string sentence, int wordsPerMinute = 100)
         {
             var words = sentence.Split(' ');
             return words.Length * 60.0f / wordsPerMinute;

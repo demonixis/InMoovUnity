@@ -1470,6 +1470,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b842c3e13cce4feeb4d1390f5e39ce03, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _samplerate: 22000
 --- !u!82 &1033768237
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1711,61 +1712,61 @@ MonoBehaviour:
     Min: 75
     Max: 135
     Sequence: 
-    Frequency: 2
+    Frequency: 3
   - Servo: 1
     RandomRange: 1
     Min: 75
     Max: 135
     Sequence: 
-    Frequency: 2
+    Frequency: 3
   - Servo: 5
     RandomRange: 1
     Min: 75
     Max: 115
     Sequence: 
-    Frequency: 2
+    Frequency: 5
   - Servo: 6
     RandomRange: 1
     Min: 75
     Max: 115
     Sequence: 
-    Frequency: 2
+    Frequency: 5
   - Servo: 13
     RandomRange: 1
     Min: 70
     Max: 120
     Sequence: 
-    Frequency: 4
+    Frequency: 5
   - Servo: 19
     RandomRange: 1
     Min: 0
     Max: 180
     Sequence: 
-    Frequency: 4
+    Frequency: 5
   - Servo: 18
     RandomRange: 1
     Min: 0
     Max: 180
     Sequence: 
-    Frequency: 2.5
+    Frequency: 5
   - Servo: 15
     RandomRange: 1
     Min: 80
     Max: 110
     Sequence: 
-    Frequency: 3
+    Frequency: 5
   - Servo: 16
     RandomRange: 1
     Min: 80
     Max: 110
     Sequence: 
-    Frequency: 3
+    Frequency: 5
   - Servo: 17
     RandomRange: 1
     Min: 120
     Max: 140
     Sequence: 
-    Frequency: 3
+    Frequency: 5
 --- !u!1 &1314284959
 GameObject:
   m_ObjectHideFlags: 0

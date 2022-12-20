@@ -63,7 +63,7 @@ namespace Demonixis.InMoov.Chatbots
             _aimlBot.isAcceptingUserInput = true;
         }
 
-        public override void SetCulture(string culture)
+        public override void SetLanguage(string culture)
         {
             if (!IsLanguageSupported(culture))
             {

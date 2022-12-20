@@ -247,6 +247,12 @@ namespace Yetibyte.Unity.SpeechRecognition
 
         }
 
+        public void ReloadModel(string modelName)
+        {
+            _modelName = modelName;
+            LoadModel();
+        }
+
         [ContextMenu("Load Model")]
         public virtual bool LoadModel()
         {

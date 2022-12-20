@@ -71,8 +71,9 @@ namespace Demonixis.InMoov.Services.Speech
         private IEnumerator SpeechLoop(string message)
         {
             NotifySpeechState(true, message);
-            
-            yield return CoroutineFactory.WaitForSeconds(GetSpeakTime(message));
+
+            var waitTime = GetSpeakTime(message);
+            yield return CoroutineFactory.WaitForSeconds(waitTime);
             
             NotifySpeechState(false, null);
         }

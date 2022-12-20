@@ -25,7 +25,7 @@ namespace Demonixis.InMoov.Services.Speech
         {
             base.Initialize();
 
-            var settings = GlobalSettings.GetInstance();
+            var settings = GlobalSettings.Get();
             _ttsManager.APIKey = settings.VoiceRSSKey;
 
             if (string.IsNullOrEmpty(_ttsManager.APIKey))
@@ -34,7 +34,7 @@ namespace Demonixis.InMoov.Services.Speech
             }
         }
 
-        public override void SetCulture(string culture)
+        public override void SetLanguage(string culture)
         {
             switch (culture)
             {

@@ -4,6 +4,7 @@ using Demonixis.InMoov.Navigation;
 using Demonixis.InMoov.Services.Speech;
 using Demonixis.InMoov.Servos;
 using System;
+using System.Data.Common;
 using UnityEngine;
 
 namespace Demonixis.InMoov.Settings
@@ -14,27 +15,39 @@ namespace Demonixis.InMoov.Settings
         private const string GlobalSettingsFilename = "global-settings.json";
         private static GlobalSettings _instance;
 
-        private static readonly SystemLanguage[] SupportedLanguages =
+        public static readonly string[] SupportedLanguages =
         {
-            SystemLanguage.French,
-            SystemLanguage.English
+            "en-US",
+            "fr-FR"
         };
 
-        public SystemLanguage Language;
-
-        [Header("Settings")] public byte LeftEyeCameraIndex;
-        public byte RightEyeCameraIndex;
-        public float VRStereoOffset;
+        public string Language;
 
         [Header("Keys")] public string VoiceRSSKey;
         public string OpenAIKey;
 
         public GlobalSettings()
         {
-            Language = SystemLanguage.English;
+            Language = SupportedLanguages[0];
         }
 
-        public static GlobalSettings GetInstance()
+        public int GetLanguageIndex()
+        {
+            return Array.IndexOf(SupportedLanguages, Language);
+        }
+
+        public void SetLanguageByIndex(int index)
+        {
+            if (index < 0 || index >= SupportedLanguages.Length)
+            {
+                Debug.Log($"Error the language index is not valid, entered {index} but maximum is {SupportedLanguages.Length}");
+                return;
+            }
+            
+            Language = SupportedLanguages[index];
+        }
+
+        public static GlobalSettings Get()
         {
             if (_instance == null)
             {
@@ -50,7 +63,7 @@ namespace Demonixis.InMoov.Settings
 
         public static void Save()
         {
-            SaveGame.SaveRawData(SaveGame.GetPreferredStorageMode(), GetInstance(), GlobalSettingsFilename, "Config");
+            SaveGame.SaveRawData(SaveGame.GetPreferredStorageMode(), Get(), GlobalSettingsFilename, "Config");
         }
     }
 

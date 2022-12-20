@@ -8,7 +8,7 @@ namespace Demonixis.InMoov.Services.Speech
     {
         private AudioSource _audioSource;
         
-        [SerializeField] private int _samplerate = 44100;
+        [SerializeField] private int _samplerate = 22000;
 
         private void Start()
         {

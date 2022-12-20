@@ -16,8 +16,6 @@ namespace Demonixis.InMoov
         private static Robot _instance;
         private const string ServiceListFilename = "services.json";
         private const string SystemListFilename = "systems.json";
-
-        private BrainSpeechProxy _brainSpeechProxy;
         private List<RobotService> _currentServices;
         private List<Action> _waitingStartCallbacks;
 
@@ -52,6 +50,7 @@ namespace Demonixis.InMoov
         /// </summary>
         public RobotService[] AllServices => FindObjectsOfType<RobotService>(true);
 
+        public BrainSpeechProxy BrainSpeechProxy { get; private set; }
         public bool Started { get; private set; }
 
         public event Action<Robot> RobotInitialized;
@@ -67,7 +66,7 @@ namespace Demonixis.InMoov
                 return;
             }
 
-            _brainSpeechProxy = new BrainSpeechProxy();
+            BrainSpeechProxy = new BrainSpeechProxy();
             _currentServices = new List<RobotService>();
             _waitingStartCallbacks = new List<Action>();
         }
@@ -115,7 +114,7 @@ namespace Demonixis.InMoov
 
             if (!serviceList.IsValid())
                 serviceList = ServiceList.New();
-
+            
             // Select service selected by the user
             var chatbotService = SelectService<ChatbotService>(serviceList.Chatbot);
             var voiceRecognition = SelectService<VoiceRecognitionService>(serviceList.VoiceRecognition);
@@ -125,7 +124,7 @@ namespace Demonixis.InMoov
             SelectService<NavigationService>(serviceList.Navigation);
             SelectService<ComputerVisionService>(serviceList.ComputerVision);
 
-            _brainSpeechProxy.Setup(chatbotService, voiceRecognition, speechSynthesis);
+            BrainSpeechProxy.Setup(chatbotService, voiceRecognition, speechSynthesis);
         }
 
         /// <summary>

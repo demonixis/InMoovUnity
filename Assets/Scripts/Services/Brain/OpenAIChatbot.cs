@@ -14,7 +14,7 @@ namespace Demonixis.InMoov.Chatbots
 
         public override void Initialize()
         {
-            var settings = GlobalSettings.GetInstance();
+            var settings = GlobalSettings.Get();
             var key = settings.OpenAIKey;
 
             if (string.IsNullOrEmpty(key))
@@ -28,7 +28,7 @@ namespace Demonixis.InMoov.Chatbots
             base.Initialize();
         }
 
-        public override void SetCulture(string culture)
+        public override void SetLanguage(string culture)
         {
         }
 

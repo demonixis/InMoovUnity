@@ -20,17 +20,12 @@ namespace Demonixis.InMoov.Services.Speech
         {
             var robot = Robot.Instance;
             var speech = robot.GetService<SpeechSynthesisService>();
-            speech.SpeechStarted += _ => OnSpeechLocked(true);
-            speech.SpeechFinished += () => OnSpeechLocked(false);
+            speech.SpeechStarted += _ => _isLocked = true;
+            speech.SpeechFinished += () => _isLocked = false;
         }
 
-        public virtual void SetCulture(string culture)
+        public virtual void SetLanguage(string culture)
         {
-        }
-
-        protected virtual void OnSpeechLocked(bool locked)
-        {
-            _isLocked = locked;
         }
 
         protected void NotifyPhraseDetected(string phrase)

@@ -1,4 +1,5 @@
 ﻿using Demonixis.InMoov.Chatbots;
+using Demonixis.InMoov.Settings;
 
 namespace Demonixis.InMoov.Services.Speech
 {
@@ -17,6 +18,16 @@ namespace Demonixis.InMoov.Services.Speech
 
             _chatbot.ResponseReady += OnChatbotResponse;
             _voiceRecognition.PhraseDetected += OnVoiceRecognized;
+            
+            var settings = GlobalSettings.Get();
+            SetLanguage(settings.Language);
+        }
+
+        public void SetLanguage(string language)
+        {
+            _chatbot.SetLanguage(language);
+            _voiceRecognition.SetLanguage(language);
+            _speechSynthesis.SetLanguage(language);
         }
 
         private void OnChatbotResponse(string response)
