@@ -23,6 +23,8 @@ namespace Demonixis.InMoov.Services.Speech
 
         public override void Initialize()
         {
+            base.Initialize();
+
 #if MS_SPEECH_SYNTHESIS
             _dictationRecognizer = new DictationRecognizer();
             _dictationRecognizer.DictationComplete += cause => Debug.Log($"[DictationComplete] {cause}");
@@ -30,8 +32,7 @@ namespace Demonixis.InMoov.Services.Speech
             _dictationRecognizer.DictationHypothesis += text => Debug.Log($"[DictationHypothesis] {text}");
             _dictationRecognizer.DictationResult += (text, confidence) =>
             {
-                Debug.Log($"[DictationResult] {text} - {confidence}");
-                if (Paused) return;
+                if (Paused || _isLocked) return;
                 NotifyPhraseDetected(text);
             };
             _dictationRecognizer.Start();

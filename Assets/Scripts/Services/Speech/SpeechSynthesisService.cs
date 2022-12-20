@@ -8,7 +8,7 @@ namespace Demonixis.InMoov.Services.Speech
         public event Action SpeechStarted;
         public event Action SpeechFinished;
         
-        public void SetCulture(string culture)
+        public virtual void SetCulture(string culture)
         {
         }
 

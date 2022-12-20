@@ -34,6 +34,11 @@ namespace Demonixis.InMoov.Services.Speech
             }
         }
 
+        public override void SetCulture(string culture)
+        {
+           
+        }
+
         public override void Speak(string text)
         {
             if (Paused) return;
@@ -43,7 +48,7 @@ namespace Demonixis.InMoov.Services.Speech
         private IEnumerator SpeakCoroutine(string text)
         {
             var url = _ttsManager.GetTextToSpeechAudioWithIndex(text, (int) _language, (int) _audioCodecs, _voice);
-            var www = new WWW(url);
+            var www = new WWW(url); // FIXME need to switch to UnityWebRequest
             yield return www;
 
             var clip = www.GetAudioClip(false, false, _ttsManager.GetCurrentAudioTypeWithIndex((int) _audioCodecs));

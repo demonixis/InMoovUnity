@@ -27,6 +27,7 @@ namespace Demonixis.InMoov.Settings
         public float VRStereoOffset;
 
         [Header("Keys")] public string VoiceRSSKey;
+        public string OpenAIKey;
 
         public GlobalSettings()
         {
