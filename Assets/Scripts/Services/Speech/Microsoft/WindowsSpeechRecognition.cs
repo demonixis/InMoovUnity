@@ -15,6 +15,7 @@ namespace Demonixis.InMoov.Services.Speech
         {
             RuntimePlatform.WindowsEditor,
             RuntimePlatform.WindowsPlayer,
+            RuntimePlatform.WSAPlayerX64
         };
 
 #if MS_SPEECH_SYNTHESIS
@@ -32,7 +33,7 @@ namespace Demonixis.InMoov.Services.Speech
             _dictationRecognizer.DictationHypothesis += text => Debug.Log($"[DictationHypothesis] {text}");
             _dictationRecognizer.DictationResult += (text, confidence) =>
             {
-                if (Paused || _isLocked) return;
+                if (!CanListen) return;
                 NotifyPhraseDetected(text);
             };
             _dictationRecognizer.Start();

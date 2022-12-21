@@ -16,9 +16,9 @@ namespace Demonixis.InMoov.Systems
 
         [SerializeField] private float _jawOpenTime = 0.25f;
         [SerializeField] private float _jawCloseTime = 0.15f;
-        [SerializeField] private byte _jawAmplitude = 25;
-        [SerializeField] private byte _wordsPerMinute = 40;
-        
+        [SerializeField] private byte _jawAmplitude = 40;
+        [SerializeField] private byte _jawNeutralOffset = 10;
+
         public override void Initialize()
         {
             InternalInitialize();
@@ -63,6 +63,7 @@ namespace Demonixis.InMoov.Systems
             
             var data = _servoMixerService.GetServoData(ServoIdentifier.Jaw);
             var openMouthValue = (byte) (data.Neutral + _jawAmplitude);
+            var closeMouthValue = (byte) (data.Neutral + _jawNeutralOffset);
 
             _servoMixerService.SetServoValueInServo(ServoIdentifier.Jaw, data.Neutral);
 
@@ -70,9 +71,11 @@ namespace Demonixis.InMoov.Systems
             {
                 _servoMixerService.SetServoValueInServo(ServoIdentifier.Jaw, openMouthValue);
                 yield return CoroutineFactory.WaitForSeconds(_jawOpenTime);
-                _servoMixerService.SetServoValueInServo(ServoIdentifier.Jaw, data.Neutral);
+                _servoMixerService.SetServoValueInServo(ServoIdentifier.Jaw, closeMouthValue);
                 yield return CoroutineFactory.WaitForSeconds(_jawCloseTime);
             }
+            
+            _servoMixerService.SetServoValueInServo(ServoIdentifier.Jaw, data.Neutral);
         }
     }
 }

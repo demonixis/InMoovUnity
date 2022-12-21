@@ -1,5 +1,4 @@
 ﻿using System;
-using AIMLbot.AIMLTagHandlers;
 
 namespace Demonixis.InMoov.Services.Speech
 {
@@ -14,9 +13,14 @@ namespace Demonixis.InMoov.Services.Speech
 
         public virtual string[] GetVoices() => null;
 
-        public virtual void SelectVoice(string voiceName)
+        public virtual int GetVoiceIndex() => 0;
+
+        public virtual void SetVoice(string voiceName)
         {
-            
+        }
+
+        public virtual void SetVoice(int voiceIndex)
+        {
         }
 
         public virtual void Speak(string message)

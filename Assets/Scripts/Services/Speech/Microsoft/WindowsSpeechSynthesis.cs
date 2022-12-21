@@ -30,6 +30,12 @@ namespace Demonixis.InMoov.Services.Speech
 
         [DllImport("WindowsVoice")]
         public static extern void statusMessage(StringBuilder str, int length);
+
+        [DllImport("WindowsVoice")]
+        public static extern void changeVoice(int vIdx);
+
+        [DllImport("WindowsVoice")]
+        public static extern bool isSpeaking();
 #else
         public static void initSpeech () {}
         public static void destroySpeech () {}
@@ -43,7 +49,8 @@ namespace Demonixis.InMoov.Services.Speech
         public override RuntimePlatform[] SupportedPlateforms => new[]
         {
             RuntimePlatform.WindowsEditor,
-            RuntimePlatform.WindowsPlayer
+            RuntimePlatform.WindowsPlayer,
+            RuntimePlatform.WSAPlayerX64
         };
 
         public override void Initialize()

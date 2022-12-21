@@ -8,17 +8,20 @@ namespace Demonixis.InMoov.Services.Speech
     [RequireComponent(typeof(AudioSource))]
     public sealed class VoiceRSS : SpeechSynthesisService
     {
-        public enum Voices
+        public const string VoiceRSSFilename = "voicerss.json";
+        
+        public readonly string[] Voices =
         {
-            enUS_Linda,
-            enUS_Amy,
-            enUS_Mary,
-            enUS_John,
-            frFR_Bette,
-            frFR_Iva,
-            frFR_Zola,
-            frFR_Axel
-        }
+            "Default",
+            "en-US_Linda",
+            "en-US_Amy",
+            "en-US_Mary",
+            "en-US_John",
+            "fr-FR_Bette",
+            "fr-FR_Iva",
+            "fr-FR_Zola",
+            "fr-FR_Axel"
+        };
 
         private TextToSpeechManager _ttsManager;
         private AudioSource _audioSource;
@@ -65,8 +68,14 @@ namespace Demonixis.InMoov.Services.Speech
             // Feel free to continue this list ;)      
         }
 
-        public override void SelectVoice(string voiceName)
+        public override void SetVoice(string voiceName)
         {
+            if (voiceName == "Default")
+            {
+                _voice = null;
+                return;
+            }
+
             // voiceName is like frFR_VoiceName
             var tmp = voiceName.Split('_');
             if (tmp.Length != 2)
@@ -78,15 +87,53 @@ namespace Demonixis.InMoov.Services.Speech
             _voice = tmp[1];
         }
 
+        public override void SetVoice(int voiceIndex)
+        {
+            if (voiceIndex < 0 || voiceIndex >= Voices.Length)
+            {
+                Debug.LogError($"[VoiceRSS] The VoiceIndex is not valid: {voiceIndex}");
+                return;
+            }
+
+            if (voiceIndex == 0)
+            {
+                _voice = null;
+                return;
+            }
+
+            var tmp = Voices[voiceIndex].Split('_');
+
+            _voice = tmp[1];
+        }
+
+        public override string[] GetVoices()
+        {
+            return Voices;
+        }
+
+        public override int GetVoiceIndex()
+        {
+            if (string.IsNullOrEmpty(_voice))
+                return 0;
+
+            for (var i = 0; i < Voices.Length; i++)
+            {
+                if (!Voices[i].Contains(_voice)) continue;
+                return i;
+            }
+
+            return 0;
+        }
+
         public override void Speak(string text)
         {
             if (Paused) return;
             StartCoroutine(SpeakCoroutine(text));
         }
 
-        private IEnumerator SpeakCoroutine(string text)
+        private IEnumerator SpeakCoroutine(string message)
         {
-            var url = _ttsManager.GetTextToSpeechAudioWithIndex(text, (int) _language, (int) _audioCodecs, _voice);
+            var url = _ttsManager.GetTextToSpeechAudioWithIndex(message, (int) _language, (int) _audioCodecs, _voice);
             var www = new WWW(url); // FIXME need to switch to UnityWebRequest
             yield return www;
 
@@ -96,28 +143,20 @@ namespace Demonixis.InMoov.Services.Speech
             {
                 _audioSource.clip = clip;
                 _audioSource.Play();
-                StartCoroutine(SpeechLoop(text));
+
+                NotifySpeechState(true, message);
+
+                while (_audioSource.isPlaying)
+                {
+                    yield return null;
+                }
+
+                NotifySpeechState(false, null);
             }
             else
             {
                 Debug.Log(www.text);
-                Debug.LogError("Failed to get the voice. Please try:\n" +
-                               "1.Try it in other languages.\n" +
-                               "2.Fill in something in text field.\n" +
-                               "3.Choose the correct audio format.");
             }
-        }
-
-        private IEnumerator SpeechLoop(string message)
-        {
-            NotifySpeechState(true, message);
-
-            while (_audioSource.isPlaying)
-            {
-                yield return null;
-            }
-
-            NotifySpeechState(false, null);
         }
     }
 }

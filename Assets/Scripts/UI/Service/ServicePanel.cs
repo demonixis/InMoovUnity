@@ -10,26 +10,30 @@ using UnityEngine.UI;
 
 public sealed class ServicePanel : MonoBehaviour
 {
-    [Header("Brain")]
-    [SerializeField] private TMP_Dropdown _botServiceList;
+    [Header("Brain")] [SerializeField] private TMP_Dropdown _botServiceList;
     [SerializeField] private Toggle _botServiceStatus;
     [SerializeField] private TMP_Dropdown _speechRecognitionServiceList;
     [SerializeField] private Toggle _speechRecognitionServiceStatus;
     [SerializeField] private TMP_Dropdown _speechSynthesisServiceList;
     [SerializeField] private TMP_Dropdown _speechSynthesisVoiceList;
     [SerializeField] private Toggle _speechSynthesisServiceStatus;
-    
-    [Header("Body")]
-    [SerializeField] private TMP_Dropdown _servoMixerServiceList;
+
+    [Header("Body")] [SerializeField] private TMP_Dropdown _servoMixerServiceList;
     [SerializeField] private Toggle _servoMixerServiceStatus;
     [SerializeField] private TMP_Dropdown _navigationServiceList;
     [SerializeField] private Toggle _navigationServiceStatus;
-    
-    [Header("Perception")]
-    [SerializeField] private TMP_Dropdown _computerVisionServiceList;
+
+    [Header("Perception")] [SerializeField]
+    private TMP_Dropdown _computerVisionServiceList;
+
     [SerializeField] private Toggle _computerVisionServiceStatus;
 
     private void Start()
+    {
+        Robot.Instance.WhenStarted(InternalInitialize);
+    }
+
+    private void InternalInitialize()
     {
         SetupService<ChatbotService>(_botServiceList, _botServiceStatus);
         SetupService<SpeechSynthesisService>(_speechSynthesisServiceList, _speechSynthesisServiceStatus);
@@ -37,6 +41,24 @@ public sealed class ServicePanel : MonoBehaviour
         SetupService<NavigationService>(_navigationServiceList, _navigationServiceStatus);
         SetupService<ComputerVisionService>(_computerVisionServiceList, _computerVisionServiceStatus);
         SetupService<ServoMixerService>(_servoMixerServiceList, _servoMixerServiceStatus);
+
+        var speechSynthesis = Robot.Instance.GetService<SpeechSynthesisService>();
+        var voices = speechSynthesis.GetVoices();
+        
+        _speechSynthesisVoiceList.options.Clear();
+
+        if (voices == null || voices.Length == 0) return;
+        
+        foreach (var voice in voices)
+            _speechSynthesisVoiceList.options.Add(new TMP_Dropdown.OptionData(voice));
+        
+        _speechSynthesisVoiceList.SetValueWithoutNotify(speechSynthesis.GetVoiceIndex());
+        _speechSynthesisVoiceList.RefreshShownValue();
+        _speechSynthesisVoiceList.onValueChanged.AddListener(i =>
+        {
+            var service = Robot.Instance.GetService<SpeechSynthesisService>();
+            service.SetVoice(i);
+        });
     }
 
     private void SetupService<T>(TMP_Dropdown dropdown, Toggle toggle) where T : RobotService
