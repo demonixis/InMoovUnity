@@ -8,6 +8,18 @@ namespace Demonixis.InMoov.Services.Speech
     [RequireComponent(typeof(AudioSource))]
     public sealed class VoiceRSS : SpeechSynthesisService
     {
+        public enum Voices
+        {
+            enUS_Linda,
+            enUS_Amy,
+            enUS_Mary,
+            enUS_John,
+            frFR_Bette,
+            frFR_Iva,
+            frFR_Zola,
+            frFR_Axel
+        }
+
         private TextToSpeechManager _ttsManager;
         private AudioSource _audioSource;
 
@@ -51,6 +63,19 @@ namespace Demonixis.InMoov.Services.Speech
             }
 
             // Feel free to continue this list ;)      
+        }
+
+        public override void SelectVoice(string voiceName)
+        {
+            // voiceName is like frFR_VoiceName
+            var tmp = voiceName.Split('_');
+            if (tmp.Length != 2)
+            {
+                Debug.LogError($"[VoiceRSS] SelectVoice/Bad voice format: {voiceName}");
+                return;
+            }
+
+            _voice = tmp[1];
         }
 
         public override void Speak(string text)

@@ -10,18 +10,24 @@ using UnityEngine.UI;
 
 public sealed class ServicePanel : MonoBehaviour
 {
+    [Header("Brain")]
     [SerializeField] private TMP_Dropdown _botServiceList;
     [SerializeField] private Toggle _botServiceStatus;
     [SerializeField] private TMP_Dropdown _speechRecognitionServiceList;
     [SerializeField] private Toggle _speechRecognitionServiceStatus;
     [SerializeField] private TMP_Dropdown _speechSynthesisServiceList;
+    [SerializeField] private TMP_Dropdown _speechSynthesisVoiceList;
     [SerializeField] private Toggle _speechSynthesisServiceStatus;
+    
+    [Header("Body")]
     [SerializeField] private TMP_Dropdown _servoMixerServiceList;
     [SerializeField] private Toggle _servoMixerServiceStatus;
-    [SerializeField] private TMP_Dropdown _computerVisionServiceList;
-    [SerializeField] private Toggle _computerVisionServiceStatus;
     [SerializeField] private TMP_Dropdown _navigationServiceList;
     [SerializeField] private Toggle _navigationServiceStatus;
+    
+    [Header("Perception")]
+    [SerializeField] private TMP_Dropdown _computerVisionServiceList;
+    [SerializeField] private Toggle _computerVisionServiceStatus;
 
     private void Start()
     {
