@@ -42,18 +42,37 @@ public sealed class ServicePanel : MonoBehaviour
         SetupService<ComputerVisionService>(_computerVisionServiceList, _computerVisionServiceStatus);
         SetupService<ServoMixerService>(_servoMixerServiceList, _servoMixerServiceStatus);
 
+        SetupSpeechVoices();
+    }
+
+    private void SetupSpeechVoices()
+    {
         var speechSynthesis = Robot.Instance.GetService<SpeechSynthesisService>();
         var voices = speechSynthesis.GetVoices();
-        
+
         _speechSynthesisVoiceList.options.Clear();
 
-        if (voices == null || voices.Length == 0) return;
-        
+        if (voices == null || voices.Length == 0)
+        {
+            if (speechSynthesis is WindowsSpeechSynthesisWS)
+                SpeechLink.Instance.VoicesReceived += _ =>
+                {
+                    SetupSpeechVoices();
+                };
+
+            return;
+        }
+
         foreach (var voice in voices)
             _speechSynthesisVoiceList.options.Add(new TMP_Dropdown.OptionData(voice));
-        
-        _speechSynthesisVoiceList.SetValueWithoutNotify(speechSynthesis.GetVoiceIndex());
-        _speechSynthesisVoiceList.RefreshShownValue();
+
+        var selectedIndex = speechSynthesis.GetVoiceIndex();
+        if (selectedIndex > -1)
+        {
+            _speechSynthesisVoiceList.SetValueWithoutNotify(selectedIndex);
+            _speechSynthesisVoiceList.RefreshShownValue();
+        }
+
         _speechSynthesisVoiceList.onValueChanged.AddListener(i =>
         {
             var service = Robot.Instance.GetService<SpeechSynthesisService>();

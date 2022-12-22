@@ -15,13 +15,7 @@ namespace Demonixis.InMoov.Services.Speech
 
         public override void SetVoice(int voiceIndex)
         {
-            var voices = SpeechLink.Instance.Voices;
-
-            if (voices == null) return;
-            if (voiceIndex < 0 || voiceIndex >= voices.Length) return;
-            
-            var voice = voices[voiceIndex];
-            SpeechLink.Instance.SetVoice(voice);
+            SpeechLink.Instance.SetVoice(voiceIndex);
         }
 
         public override void SetVoice(string voiceName)

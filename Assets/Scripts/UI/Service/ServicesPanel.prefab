@@ -2177,7 +2177,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 584.2811, y: 142.7246}
+  m_SizeDelta: {x: 790, y: 142.7246}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &696550004120229303
 MonoBehaviour:
@@ -2199,7 +2199,7 @@ MonoBehaviour:
   m_ChildAlignment: 0
   m_StartCorner: 0
   m_StartAxis: 0
-  m_CellSize: {x: 250, y: 30}
+  m_CellSize: {x: 350, y: 30}
   m_Spacing: {x: 0, y: 10}
   m_Constraint: 1
   m_ConstraintCount: 3
@@ -2412,7 +2412,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 595, y: 40}
+  m_SizeDelta: {x: 800, y: 40}
   m_Pivot: {x: 0, y: 1}
 --- !u!222 &1757238865658259795
 CanvasRenderer:
@@ -5394,7 +5394,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
   m_AnchoredPosition: {x: 25, y: 0}
-  m_SizeDelta: {x: 600, y: 530}
+  m_SizeDelta: {x: 800, y: 590}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &3017678415660525955
 MonoBehaviour:
@@ -6523,7 +6523,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 584.2811, y: 233.1547}
+  m_SizeDelta: {x: 790, y: 233.1547}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &6598898424615156904
 MonoBehaviour:
@@ -6545,7 +6545,7 @@ MonoBehaviour:
   m_ChildAlignment: 0
   m_StartCorner: 0
   m_StartAxis: 0
-  m_CellSize: {x: 250, y: 30}
+  m_CellSize: {x: 350, y: 30}
   m_Spacing: {x: 0, y: 10}
   m_Constraint: 1
   m_ConstraintCount: 3
@@ -8683,7 +8683,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 584.2811, y: 112.4612}
+  m_SizeDelta: {x: 790, y: 112.4612}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1499558218180644181
 MonoBehaviour:
@@ -8705,7 +8705,7 @@ MonoBehaviour:
   m_ChildAlignment: 0
   m_StartCorner: 0
   m_StartAxis: 0
-  m_CellSize: {x: 250, y: 30}
+  m_CellSize: {x: 350, y: 30}
   m_Spacing: {x: 0, y: 10}
   m_Constraint: 1
   m_ConstraintCount: 3

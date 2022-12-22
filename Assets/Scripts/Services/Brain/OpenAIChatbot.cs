@@ -12,6 +12,8 @@ namespace Demonixis.InMoov.Chatbots
 
         private Engine _engine = Engine.Davinci;
 
+        [SerializeField] public int _maxToken = 50;
+
         public override void Initialize()
         {
             var settings = GlobalSettings.Get();
@@ -38,7 +40,7 @@ namespace Demonixis.InMoov.Chatbots
 
             var request = new CompletionRequestBuilder()
                 .WithPrompt(inputSpeech)
-                .WithMaxTokens(50)
+                .WithMaxTokens(_maxToken)
                 .Build();
 
             var result = await _openAIAPI.Completions.CreateCompletionAsync(request);

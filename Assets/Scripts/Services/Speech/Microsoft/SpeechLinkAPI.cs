@@ -6,12 +6,12 @@ namespace MSSpeechLink
     public enum MessageType
     {
         None = 0,
-        VoiceRecognized,
-        TextToSpeech,
-        SelectLang,
-        ListVoices,
-        SelectVoice,
-        SelectVoiceInt,
+        VoiceRecognitionResult,
+        Speak,
+        SetLanguage,
+        GetVoices,
+        SetVoice,
+        SetVoiceByIndex
     }
 
     [Serializable]
