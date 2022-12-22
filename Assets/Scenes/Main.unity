@@ -1114,6 +1114,7 @@ GameObject:
   m_Component:
   - component: {fileID: 835129785}
   - component: {fileID: 835129786}
+  - component: {fileID: 835129787}
   m_Layer: 0
   m_Name: Microsoft.Speech WebSocket (Windows Only)
   m_TagString: Untagged
@@ -1148,6 +1149,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a728a6b6f9b2a864f8024a0ef96ad6b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &835129787
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 835129784}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 19c24c3f71e4cdd4197412ebae9cb5fb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _bypassProcessStart: 1
 --- !u!1 &921530816
 GameObject:
   m_ObjectHideFlags: 0
@@ -2341,6 +2355,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f50ec522ce8545439242c12b5696635, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _maxToken: 20
 --- !u!1 &1665414420
 GameObject:
   m_ObjectHideFlags: 0
@@ -2728,8 +2743,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1367671925}
   - {fileID: 835129785}
+  - {fileID: 1367671925}
   - {fileID: 1033768235}
   - {fileID: 348550591}
   m_Father: {fileID: 996090396}
