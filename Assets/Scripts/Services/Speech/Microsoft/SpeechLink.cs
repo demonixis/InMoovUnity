@@ -23,6 +23,8 @@ namespace Demonixis.InMoov.Services.Speech
         private bool _needReconnection;
         private List<MessageData> _messageQueue;
 
+        [SerializeField] private bool _bypassProcessStart = false;
+
         public static SpeechLink Instance
         {
             get
@@ -42,6 +44,8 @@ namespace Demonixis.InMoov.Services.Speech
         }
 
         public string[] Voices { get; private set; }
+        public bool IsSpeaking { get; private set; }
+        public int VoiceIndex { get; private set; }
 
         public event Action<string> VoiceRecognized;
         public event Action<string[]> VoicesReceived;
@@ -54,10 +58,7 @@ namespace Demonixis.InMoov.Services.Speech
             {
                 Debug.LogError($"Only one instance of WindowsSpeechWebSocket is allowed. Destroying {name}");
                 Destroy(this);
-                return;
             }
-
-            DontDestroyOnLoad(gameObject);
         }
 
         private void Start()
@@ -101,8 +102,26 @@ namespace Demonixis.InMoov.Services.Speech
                                     break;
 
                                 case MessageType.GetVoices:
-                                    Voices = data.Message.Split('|');
+                                    // VoiceIndex_VoiceName#Culture|VoiceName1#Culture
+                                    var tmp = data.Message.Split('_');
+                                    if (tmp.Length != 2)
+                                    {
+                                        Debug.LogError($"[SpeechLink] Voice data has not the correct size.");
+                                        break;
+                                    }
+
+                                    var voiceIndex = tmp[0];
+                                    var voices = tmp[1];
+                                    
+                                    VoiceIndex = int.Parse(voiceIndex);
+                                    Voices = voices.Split('|');
                                     VoicesReceived?.Invoke(Voices);
+                                    break;
+                                case MessageType.SpeakStart:
+                                    IsSpeaking = true;
+                                    break;
+                                case MessageType.SpeakEnd:
+                                    IsSpeaking = false;
                                     break;
                             }
                         }
@@ -138,6 +157,7 @@ namespace Demonixis.InMoov.Services.Speech
 
         public void Speak(string words)
         {
+            IsSpeaking = true;
             SendMessage(MessageType.Speak, words);
         }
         
@@ -181,7 +201,7 @@ namespace Demonixis.InMoov.Services.Speech
 
         private IEnumerator TryJoinWebSocketServerCoroutine()
         {
-            if (!IsSpeechLinkStarted())
+            if (!IsSpeechLinkStarted() && !_bypassProcessStart)
             {
                 var exec = Path.Combine(Application.streamingAssetsPath, "ThirdParty",
                     "SpeechLink", ProcessName);

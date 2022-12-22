@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using Demonixis.InMoov.Settings;
+using Demonixis.InMoov.Utils;
 using TextToSpeech;
 using UnityEngine;
 
@@ -150,6 +151,8 @@ namespace Demonixis.InMoov.Services.Speech
                 {
                     yield return null;
                 }
+                
+                yield return CoroutineFactory.WaitForSeconds(1.0f);
 
                 NotifySpeechState(false, null);
             }

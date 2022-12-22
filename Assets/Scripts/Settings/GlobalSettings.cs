@@ -4,7 +4,6 @@ using Demonixis.InMoov.Navigation;
 using Demonixis.InMoov.Services.Speech;
 using Demonixis.InMoov.Servos;
 using System;
-using System.Data.Common;
 using UnityEngine;
 
 namespace Demonixis.InMoov.Settings
@@ -40,10 +39,11 @@ namespace Demonixis.InMoov.Settings
         {
             if (index < 0 || index >= SupportedLanguages.Length)
             {
-                Debug.Log($"Error the language index is not valid, entered {index} but maximum is {SupportedLanguages.Length}");
+                Debug.Log(
+                    $"Error the language index is not valid, entered {index} but maximum is {SupportedLanguages.Length}");
                 return;
             }
-            
+
             Language = SupportedLanguages[index];
         }
 
@@ -92,7 +92,11 @@ namespace Demonixis.InMoov.Settings
                 // Services
                 Chatbot = nameof(AIMLNetService),
                 VoiceRecognition = nameof(VoskVoiceRecognitionService),
+#if UNITY_STANDALONE_WIN || UNITY_WSA
+                SpeechSynthesis = nameof(WindowsSpeechSynthesisWS),
+#else
                 SpeechSynthesis = nameof(SAMSpeechSynthesis),
+#endif
                 Navigation = nameof(NavigationService),
                 ServoMixer = nameof(ServoMixerService),
                 ComputerVision = nameof(ComputerVisionService),

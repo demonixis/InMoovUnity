@@ -9,9 +9,12 @@ namespace MSSpeechLink
         VoiceRecognitionResult,
         Speak,
         SetLanguage,
+        GetVoiceIndex,
         GetVoices,
         SetVoice,
-        SetVoiceByIndex
+        SetVoiceByIndex,
+        SpeakStart,
+        SpeakEnd
     }
 
     [Serializable]

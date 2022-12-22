@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using Demonixis.InMoov.Utils;
 using UnityEngine;
 
 namespace Demonixis.InMoov.Services.Speech
@@ -48,6 +49,8 @@ namespace Demonixis.InMoov.Services.Speech
             {
                 yield return null;
             }
+            
+            yield return CoroutineFactory.WaitForSeconds(1.0f);
             
             NotifySpeechState(false, null);
         }

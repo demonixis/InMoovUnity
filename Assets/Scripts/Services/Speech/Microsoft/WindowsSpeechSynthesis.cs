@@ -80,7 +80,7 @@ namespace Demonixis.InMoov.Services.Speech
             NotifySpeechState(true, message);
 
             var waitTime = GetSpeakTime(message);
-            yield return CoroutineFactory.WaitForSeconds(waitTime);
+            yield return CoroutineFactory.WaitForSeconds(waitTime + 1.0f);
             
             NotifySpeechState(false, null);
         }

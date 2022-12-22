@@ -48,15 +48,28 @@ namespace Demonixis.InMoov.Services.Speech
             return null;
         }
 
+        private void SetListening(bool listening)
+        {
+            if (listening)
+                _voskListener.StartListening();
+            else
+                _voskListener.StopListening();
+
+            Debug.Log($"[Vosk] Listening: {listening}");
+        }
+
         public override void SetPaused(bool paused)
         {
             base.SetPaused(paused);
+            SetListening(!paused);
+        }
 
-            var vosk = GetComponent<VoskListener>();
-            if (paused)
-                vosk.StopListening();
-            else
-                vosk.StartListening();
+        protected override void SetLocked(bool locked)
+        {
+            base.SetLocked(locked);
+
+            if (!Paused)
+                SetListening(!locked);
         }
 
         private void Vosk_ResultFound(object sender, VoskResultEventArgs e)
