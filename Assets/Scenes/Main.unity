@@ -493,7 +493,7 @@ MonoBehaviour:
   _maxAlternatives: 0
   _autoLoadModel: 0
   _autoStart: 0
-  _audioChunkSize: 4096
+  _audioChunkSize: 1024
   _sampleRate: 16000
   _audioClipBufferSeconds: 1
   _listeningDevice: 
@@ -502,6 +502,7 @@ MonoBehaviour:
     _logPartialResults: 0
     _logModelLoad: 0
     _logRecording: 0
+  _checkTime: 0.25
 --- !u!114 &115404856
 MonoBehaviour:
   m_ObjectHideFlags: 0

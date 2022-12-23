@@ -73,6 +73,8 @@ namespace Demonixis.InMoov
 
         private void Start()
         {
+            Application.targetFrameRate = 30;
+
             if (_autoStartRobot)
                 InitializeRobot();
         }
