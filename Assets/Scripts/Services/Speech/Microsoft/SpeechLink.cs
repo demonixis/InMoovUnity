@@ -1,3 +1,6 @@
+#if UNITY_STANDALONE_WIN || UNITY_EDITOR_WIN
+#define MS_SPEECH_SYNTHESIS
+#endif
 using MSSpeechLink;
 using Newtonsoft.Json;
 using System;
@@ -14,15 +17,18 @@ namespace Demonixis.InMoov.Services.Speech
 {
     public class SpeechLink : MonoBehaviour
     {
+#if MS_SPEECH_SYNTHESIS
         private static SpeechLink _instance;
-        private static object _locker = new ();
+        private static object _locker = new();
         private const string ProcessName = "MSSpeechLink";
         private WebSocketSharp.WebSocket _websocket;
         private Coroutine _coroutine;
         private Process _speechLinkProcess;
         private bool _needReconnection;
         private List<MessageData> _messageQueue;
-
+        private bool _checkMessages;
+        private bool _enableVoiceRecongition;
+#endif
         [SerializeField] private bool _bypassProcessStart = false;
 
         public static SpeechLink Instance
@@ -47,11 +53,23 @@ namespace Demonixis.InMoov.Services.Speech
         public bool IsSpeaking { get; private set; }
         public int VoiceIndex { get; private set; }
 
+        public bool EnableVoiceRecognition
+        {
+            get => _enableVoiceRecongition;
+            set
+            {
+                _enableVoiceRecongition = value;
+                SendMessage(MessageType.EnableVoiceRecognition, (value ? 1 : 0).ToString());
+            }
+        }
+
         public event Action<string> VoiceRecognized;
         public event Action<string[]> VoicesReceived;
+        
+#if MS_SPEECH_SYNTHESIS
 
         #region Unity Pattern
-        
+
         private void Awake()
         {
             if (_instance != null && _instance != this)
@@ -61,8 +79,10 @@ namespace Demonixis.InMoov.Services.Speech
             }
         }
 
-        private void Start()
+        public void Initialize()
         {
+            if (_messageQueue != null) return;
+            
             _messageQueue = new List<MessageData>();
             StartCoroutine(TryJoinWebSocketServerCoroutine());
             StartCoroutine(CheckMessageQueue());
@@ -72,68 +92,13 @@ namespace Demonixis.InMoov.Services.Speech
         {
             if (_speechLinkProcess != null)
                 _speechLinkProcess.Kill();
-            
+
             StopAllCoroutines();
             StopWebSocketConnection();
         }
-        
+
         #endregion
 
-        private IEnumerator CheckMessageQueue()
-        {
-            while (true)
-            {
-                if (_needReconnection)
-                {
-                    TryJoinWebSocketServer();
-                    _needReconnection = false;
-                }
-                
-                lock (_locker)
-                {
-                    if (_messageQueue.Count > 0)
-                    {
-                        foreach (var data in _messageQueue)
-                        {
-                            switch (data.MessageType)
-                            {
-                                case MessageType.VoiceRecognitionResult:
-                                    VoiceRecognized?.Invoke(data.Message);
-                                    break;
-
-                                case MessageType.GetVoices:
-                                    // VoiceIndex_VoiceName#Culture|VoiceName1#Culture
-                                    var tmp = data.Message.Split('_');
-                                    if (tmp.Length != 2)
-                                    {
-                                        Debug.LogError($"[SpeechLink] Voice data has not the correct size.");
-                                        break;
-                                    }
-
-                                    var voiceIndex = tmp[0];
-                                    var voices = tmp[1];
-                                    
-                                    VoiceIndex = int.Parse(voiceIndex);
-                                    Voices = voices.Split('|');
-                                    VoicesReceived?.Invoke(Voices);
-                                    break;
-                                case MessageType.SpeakStart:
-                                    IsSpeaking = true;
-                                    break;
-                                case MessageType.SpeakEnd:
-                                    IsSpeaking = false;
-                                    break;
-                            }
-                        }
-
-                        _messageQueue.Clear();
-                    }
-                }
-
-                yield return CoroutineFactory.WaitForSeconds(1.0f);
-            }
-        }
-        
         #region Public API
 
         public void SetVoice(string voice)
@@ -160,8 +125,70 @@ namespace Demonixis.InMoov.Services.Speech
             IsSpeaking = true;
             SendMessage(MessageType.Speak, words);
         }
-        
+
         #endregion
+
+        #region Messages Management
+
+        private IEnumerator CheckMessageQueue()
+        {
+            while (true)
+            {
+                if (_needReconnection)
+                {
+                    TryJoinWebSocketServer();
+                    _needReconnection = false;
+                }
+
+                if (_checkMessages)
+                {
+                    lock (_locker)
+                    {
+                        if (_messageQueue.Count > 0)
+                        {
+                            foreach (var data in _messageQueue)
+                            {
+                                switch (data.MessageType)
+                                {
+                                    case MessageType.VoiceRecognitionResult:
+                                        VoiceRecognized?.Invoke(data.Message);
+                                        break;
+
+                                    case MessageType.GetVoices:
+                                        // VoiceIndex_VoiceName#Culture|VoiceName1#Culture
+                                        var tmp = data.Message.Split('_');
+                                        if (tmp.Length != 2)
+                                        {
+                                            Debug.LogError($"[SpeechLink] Voice data has not the correct size.");
+                                            break;
+                                        }
+
+                                        var voiceIndex = tmp[0];
+                                        var voices = tmp[1];
+
+                                        VoiceIndex = int.Parse(voiceIndex);
+                                        Voices = voices.Split('|');
+                                        VoicesReceived?.Invoke(Voices);
+                                        break;
+                                    case MessageType.SpeakStart:
+                                        IsSpeaking = true;
+                                        break;
+                                    case MessageType.SpeakEnd:
+                                        IsSpeaking = false;
+                                        break;
+                                }
+                            }
+
+                            _messageQueue.Clear();
+                        }
+                    }
+
+                    _checkMessages = false;
+                }
+
+                yield return CoroutineFactory.WaitForSeconds(1.0f);
+            }
+        }
 
         private void SendMessage(MessageType type, string data)
         {
@@ -174,6 +201,10 @@ namespace Demonixis.InMoov.Services.Speech
             if (_websocket != null && _websocket.IsAlive)
                 _websocket.Send(json);
         }
+
+        #endregion
+
+        #region WebSocket Management
 
         private void StartWebSocketConnection()
         {
@@ -190,7 +221,7 @@ namespace Demonixis.InMoov.Services.Speech
             if (_websocket is {IsAlive: true})
                 _websocket.Close();
         }
-        
+
         private void TryJoinWebSocketServer(bool force = false)
         {
             if (_coroutine == null || force)
@@ -201,18 +232,21 @@ namespace Demonixis.InMoov.Services.Speech
 
         private IEnumerator TryJoinWebSocketServerCoroutine()
         {
+#if !UNITY_EDITOR
+        _bypassProcessStart = false;
+#endif
             if (!IsSpeechLinkStarted() && !_bypassProcessStart)
             {
                 var exec = Path.Combine(Application.streamingAssetsPath, "ThirdParty",
                     "SpeechLink", ProcessName);
                 _speechLinkProcess = new Process();
                 _speechLinkProcess.StartInfo.FileName = exec;
-                _speechLinkProcess.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                _speechLinkProcess.StartInfo.WindowStyle = ProcessWindowStyle.Minimized;
                 _speechLinkProcess.Start();
-                
+
                 yield return new WaitForSeconds(0.5f);
             }
-            
+
             StopWebSocketConnection();
             StartWebSocketConnection();
 
@@ -225,6 +259,10 @@ namespace Demonixis.InMoov.Services.Speech
             TryJoinWebSocketServer();
         }
 
+        #endregion
+
+        #region Process Management
+
         private bool IsSpeechLinkStarted()
         {
             var process = Process.GetProcesses();
@@ -236,7 +274,9 @@ namespace Demonixis.InMoov.Services.Speech
 
             return false;
         }
-        
+
+        #endregion
+
         #region Event Handlers
 
         private void _websocket_OnError(object sender, WebSocketSharp.ErrorEventArgs e)
@@ -268,8 +308,12 @@ namespace Demonixis.InMoov.Services.Speech
 
             lock (_locker)
                 _messageQueue.Add(data);
+
+            _checkMessages = true;
         }
-        
+
         #endregion
+
+#endif
     }
 }

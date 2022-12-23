@@ -11,7 +11,6 @@ using Yetibyte.Unity.SpeechRecognition.Util;
 
 namespace Yetibyte.Unity.SpeechRecognition
 {
-
     public class VoskListener : MonoBehaviour
     {
         #region Constants
@@ -25,7 +24,7 @@ namespace Yetibyte.Unity.SpeechRecognition
 
         #region Fields
 
-        #pragma warning disable CS0649
+#pragma warning disable CS0649
 
         [SerializeField]
         [Header("Speech Recognition Settings")]
@@ -33,41 +32,28 @@ namespace Yetibyte.Unity.SpeechRecognition
         [ModelPath]
         private string _modelName;
 
-        [SerializeField]
-        [Tooltip("Whether or not the speech recognizer should be executed in word detection mode.")]
+        [SerializeField] [Tooltip("Whether or not the speech recognizer should be executed in word detection mode.")]
         private bool _isWordMode = true;
 
-        [SerializeField]
-        [Min(0)]
-        private int _maxAlternatives = 0;
+        [SerializeField] [Min(0)] private int _maxAlternatives = 0;
 
-        [SerializeField]
-        [Header("Behavior")]
-        private bool _autoLoadModel = true;
+        [SerializeField] [Header("Behavior")] private bool _autoLoadModel = true;
 
-        [SerializeField]
-        private bool _autoStart = false;
+        [SerializeField] private bool _autoStart = false;
 
-        [SerializeField]
-        [Header("Audio Settings")]
+        [SerializeField] [Header("Audio Settings")]
         private int _audioChunkSize = DEFAULT_AUDIO_CHUNK_SIZE;
 
-        [SerializeField]
-        private int _sampleRate = DEFAULT_SAMPLE_RATE;
+        [SerializeField] private int _sampleRate = DEFAULT_SAMPLE_RATE;
 
-        [SerializeField]
-        [Min(1)]
-        private int _audioClipBufferSeconds = 1;
+        [SerializeField] [Min(1)] private int _audioClipBufferSeconds = 1;
 
-        [SerializeField]
-        [RecordingDevice]
-        private string _listeningDevice = null;
+        [SerializeField] [RecordingDevice] private string _listeningDevice = null;
 
-        [SerializeField]
-        [Header("Misc.")]
+        [SerializeField] [Header("Misc.")]
         private VoskListenerDebugOptions _debugOptions = VoskListenerDebugOptions.CreateAllDisabled();
 
-        #pragma warning restore CS0649
+#pragma warning restore CS0649
 
         private VoskRecognizer _voskRecognizer;
         private Model _model;
@@ -152,31 +138,30 @@ namespace Yetibyte.Unity.SpeechRecognition
         {
             if (_autoLoadModel)
             {
-               LoadModel();
-
+                LoadModel();
             }
-            
-            if(IsReady && _autoStart)
+
+            if (IsReady && _autoStart)
             {
                 StartListening();
             }
         }
 
-        protected virtual void Update()
+        private void Update()
         {
             if (IsListening && IsReady)
             {
                 int micPos = Microphone.GetPosition(_listeningDevice);
 
-                int sampleDelta = micPos >= _previousMicPosition ? 
-                    (micPos - _previousMicPosition) 
+                int sampleDelta = micPos >= _previousMicPosition
+                    ? (micPos - _previousMicPosition)
                     : (_microphoneAudio.samples * _microphoneAudio.channels - (_previousMicPosition - micPos));
 
                 if (sampleDelta * FLOAT_BYTE_SIZE >= AudioChunkSize)
                 {
                     byte[] waveData = _microphoneAudio.GetWavData(sampleDelta, _previousMicPosition);
 
-                    int bufferCount = Mathf.CeilToInt(waveData.Length / (float)AudioChunkSize);
+                    int bufferCount = Mathf.CeilToInt(waveData.Length / (float) AudioChunkSize);
 
                     bool cancel = false;
 
@@ -203,12 +188,12 @@ namespace Yetibyte.Unity.SpeechRecognition
 
                             VoskPartialResult partialResult = _partialResultDeserializer.Deserialize(result);
 
-                            if(partialResult != null && partialResult.Text != _previousPartialResult?.Text)
+                            if (partialResult != null && partialResult.Text != _previousPartialResult?.Text)
                             {
                                 cancel = OnPartialResultFound(partialResult);
                                 _previousPartialResult = partialResult;
 
-                                if(cancel)
+                                if (cancel)
                                 {
                                     result = _voskRecognizer.FinalResult();
 
@@ -218,7 +203,6 @@ namespace Yetibyte.Unity.SpeechRecognition
                                     OnResultFound(voskResult);
                                 }
                             }
-
                         }
                     }
 
@@ -234,7 +218,6 @@ namespace Yetibyte.Unity.SpeechRecognition
         [ContextMenu("Toggle Listening")]
         public virtual void ToggleListening()
         {
-
             bool success = IsListening ? StopListening() : StartListening();
 
             if (UnityEngine.Application.isEditor)
@@ -244,7 +227,6 @@ namespace Yetibyte.Unity.SpeechRecognition
                 else
                     Debug.LogError("Error toggling listening mode.");
             }
-
         }
 
         public void ReloadModel(string modelName)
@@ -266,7 +248,8 @@ namespace Yetibyte.Unity.SpeechRecognition
 
                 //if (!VoskModelManagerSettings.GetOrCreateSettings().ModelExists(ModelName))
                 if (!ModelUtil.ModelPathExists(ModelName))
-                    throw new Exception($"Model '{ModelName}' does not exist at path '{ModelUtil.GetAbsoluteModelPathByRelativePath(ModelName)}'.");
+                    throw new Exception(
+                        $"Model '{ModelName}' does not exist at path '{ModelUtil.GetAbsoluteModelPathByRelativePath(ModelName)}'.");
 
                 Model model = new Model(AbsoluteModelPath);
                 _model = model;
@@ -275,7 +258,7 @@ namespace Yetibyte.Unity.SpeechRecognition
                 _voskRecognizer.SetMaxAlternatives(MaxAlternatives);
                 _voskRecognizer.SetWords(IsWordMode);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Debug.LogException(ex);
 
@@ -284,11 +267,10 @@ namespace Yetibyte.Unity.SpeechRecognition
                 return false;
             }
 
-            if(DebugOptions.LogModelLoad)
+            if (DebugOptions.LogModelLoad)
                 Debug.Log("Successfully loaded Vosk model.");
 
             return true;
-
         }
 
         public bool StartListening()
@@ -300,12 +282,14 @@ namespace Yetibyte.Unity.SpeechRecognition
 
             if (_microphoneAudio == null)
             {
-                Debug.LogError($"An error occurred while trying to start recording from {(string.IsNullOrWhiteSpace(_listeningDevice) ? "default device" : ("device '" + _listeningDevice + "'"))}.");
+                Debug.LogError(
+                    $"An error occurred while trying to start recording from {(string.IsNullOrWhiteSpace(_listeningDevice) ? "default device" : ("device '" + _listeningDevice + "'"))}.");
                 return false;
             }
 
             if (DebugOptions.LogRecording)
-                Debug.Log($"Vosk Listener started recording audio from {(string.IsNullOrWhiteSpace(_listeningDevice) ? "default device" : ("device '" + _listeningDevice + "'"))}.");
+                Debug.Log(
+                    $"Vosk Listener started recording audio from {(string.IsNullOrWhiteSpace(_listeningDevice) ? "default device" : ("device '" + _listeningDevice + "'"))}.");
 
             return true;
         }
@@ -317,8 +301,9 @@ namespace Yetibyte.Unity.SpeechRecognition
 
             Microphone.End(_listeningDevice);
 
-            if(DebugOptions.LogRecording)
-                Debug.Log($"Vosk Listener stopped recording audio from {(string.IsNullOrWhiteSpace(_listeningDevice) ? "default device" : ("device '" + _listeningDevice + "'"))}.");
+            if (DebugOptions.LogRecording)
+                Debug.Log(
+                    $"Vosk Listener stopped recording audio from {(string.IsNullOrWhiteSpace(_listeningDevice) ? "default device" : ("device '" + _listeningDevice + "'"))}.");
 
             return true;
         }
@@ -336,7 +321,6 @@ namespace Yetibyte.Unity.SpeechRecognition
 
             if (DebugOptions.LogModelLoad && willUnload)
                 Debug.Log("Vosk model unloaded.");
-
         }
 
         protected virtual void OnResultFound(VoskResult result)
@@ -360,7 +344,7 @@ namespace Yetibyte.Unity.SpeechRecognition
             if (partialResult is null || partialResult.IsEmpty)
                 return false;
 
-            if(DebugOptions.LogPartialResults)
+            if (DebugOptions.LogPartialResults)
                 Debug.Log($"Raising PartialResultFound event. Result: {partialResult}");
 
             LastResult = LastPartialResult = partialResult;
@@ -374,6 +358,5 @@ namespace Yetibyte.Unity.SpeechRecognition
         }
 
         #endregion
-
     }
 }

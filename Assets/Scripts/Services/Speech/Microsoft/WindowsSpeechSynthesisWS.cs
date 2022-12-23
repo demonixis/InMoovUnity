@@ -1,23 +1,32 @@
-﻿using System.Collections;
+﻿#if UNITY_STANDALONE_WIN || UNITY_EDITOR_WIN
+#define MS_SPEECH_SYNTHESIS
+#endif
+
+#if MS_SPEECH_SYNTHESIS
+using System.Collections;
 using Demonixis.InMoov.Utils;
+#endif
 using UnityEngine;
 
 namespace Demonixis.InMoov.Services.Speech
 {
     public class WindowsSpeechSynthesisWS : SpeechSynthesisService
     {
+#if MS_SPEECH_SYNTHESIS
         private SpeechLink _speechLink;
-
+#endif
         public override RuntimePlatform[] SupportedPlateforms => new[]
         {
             RuntimePlatform.WindowsEditor,
             RuntimePlatform.WindowsPlayer
         };
 
+#if MS_SPEECH_SYNTHESIS
         public override void Initialize()
         {
             base.Initialize();
             _speechLink = SpeechLink.Instance;
+            _speechLink.Initialize();
         }
 
         public override void SetVoice(int voiceIndex)
@@ -58,5 +67,6 @@ namespace Demonixis.InMoov.Services.Speech
 
             NotifySpeechState(false, null);
         }
+#endif
     }
 }

@@ -14,7 +14,8 @@ namespace MSSpeechLink
         SetVoice,
         SetVoiceByIndex,
         SpeakStart,
-        SpeakEnd
+        SpeakEnd,
+        EnableVoiceRecognition
     }
 
     [Serializable]

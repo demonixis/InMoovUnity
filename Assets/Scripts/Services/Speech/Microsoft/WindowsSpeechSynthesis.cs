@@ -15,35 +15,6 @@ namespace Demonixis.InMoov.Services.Speech
 {
     public class WindowsSpeechSynthesis : SpeechSynthesisService
     {
-#if MS_SPEECH_SYNTHESIS
-        [DllImport("WindowsVoice")]
-        public static extern void initSpeech();
-
-        [DllImport("WindowsVoice")]
-        public static extern void destroySpeech();
-
-        [DllImport("WindowsVoice")]
-        public static extern void addToSpeechQueue(string s);
-
-        [DllImport("WindowsVoice")]
-        public static extern void clearSpeechQueue();
-
-        [DllImport("WindowsVoice")]
-        public static extern void statusMessage(StringBuilder str, int length);
-
-        [DllImport("WindowsVoice")]
-        public static extern void changeVoice(int vIdx);
-
-        [DllImport("WindowsVoice")]
-        public static extern bool isSpeaking();
-#else
-        public static void initSpeech () {}
-        public static void destroySpeech () {}
-        public static void addToSpeechQueue (string s) {}
-        public static void clearSpeechQueue () {}
-        public static void statusMessage (StringBuilder str, int length) {}
-#endif
-
         [SerializeField] private bool _logOutput = true;
 
         public override RuntimePlatform[] SupportedPlateforms => new[]
@@ -52,6 +23,8 @@ namespace Demonixis.InMoov.Services.Speech
             RuntimePlatform.WindowsPlayer,
             RuntimePlatform.WSAPlayerX64
         };
+        
+#if MS_SPEECH_SYNTHESIS
 
         public override void Initialize()
         {
@@ -74,15 +47,37 @@ namespace Demonixis.InMoov.Services.Speech
         {
             destroySpeech();
         }
-
+        
         private IEnumerator SpeechLoop(string message)
         {
             NotifySpeechState(true, message);
 
             var waitTime = GetSpeakTime(message);
             yield return CoroutineFactory.WaitForSeconds(waitTime + 1.0f);
-            
+
             NotifySpeechState(false, null);
         }
+        
+        [DllImport("WindowsVoice")]
+        public static extern void initSpeech();
+
+        [DllImport("WindowsVoice")]
+        public static extern void destroySpeech();
+
+        [DllImport("WindowsVoice")]
+        public static extern void addToSpeechQueue(string s);
+
+        [DllImport("WindowsVoice")]
+        public static extern void clearSpeechQueue();
+
+        [DllImport("WindowsVoice")]
+        public static extern void statusMessage(StringBuilder str, int length);
+
+        [DllImport("WindowsVoice")]
+        public static extern void changeVoice(int vIdx);
+
+        [DllImport("WindowsVoice")]
+        public static extern bool isSpeaking();
+#endif
     }
 }

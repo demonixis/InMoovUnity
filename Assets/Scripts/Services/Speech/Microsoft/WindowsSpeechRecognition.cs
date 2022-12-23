@@ -20,13 +20,11 @@ namespace Demonixis.InMoov.Services.Speech
 
 #if MS_SPEECH_SYNTHESIS
         private DictationRecognizer _dictationRecognizer;
-#endif
 
         public override void Initialize()
         {
             base.Initialize();
 
-#if MS_SPEECH_SYNTHESIS
             _dictationRecognizer = new DictationRecognizer();
             _dictationRecognizer.DictationComplete += cause => Debug.Log($"[DictationComplete] {cause}");
             _dictationRecognizer.DictationError += (error, hresult) => Debug.Log($"[DictationError] {error}");
@@ -37,16 +35,16 @@ namespace Demonixis.InMoov.Services.Speech
                 NotifyPhraseDetected(text);
             };
             _dictationRecognizer.Start();
-#endif
+
             base.Initialize();
         }
 
         public override void Shutdown()
         {
-#if MS_SPEECH_SYNTHESIS
-            _dictationRecognizer.Dispose();
-#endif
+            _dictationRecognizer?.Dispose();
             base.Shutdown();
         }
+
+#endif
     }
 }

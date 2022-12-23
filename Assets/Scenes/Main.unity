@@ -1161,7 +1161,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19c24c3f71e4cdd4197412ebae9cb5fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _bypassProcessStart: 1
+  _bypassProcessStart: 0
 --- !u!1 &921530816
 GameObject:
   m_ObjectHideFlags: 0
