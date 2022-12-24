@@ -1,4 +1,6 @@
 ﻿using Demonixis.InMoov.Servos;
+using System;
+using TMPro;
 using UnityEngine;
 
 namespace Demonixis.InMoov.UI
@@ -26,9 +28,11 @@ namespace Demonixis.InMoov.UI
     public sealed class AnimationPosePanel : MonoBehaviour
     {
         private ServoMixerService _servoMixerService;
-        private ServoIdentifier _currentServo;
-        private ServoData _currentData;
-        
+
+        [SerializeField] private Transform _leftHandGesturesContainer;
+        [SerializeField] private GameObject _handGesturePrefab;
+
+
         private void Start()
         {
             Robot.Instance.WhenStarted(Initialize);
@@ -36,45 +40,65 @@ namespace Demonixis.InMoov.UI
 
         private void Initialize()
         {
-            _currentData = ServoData.New(ServoIdentifier.None);
             _servoMixerService = FindObjectOfType<ServoMixerService>();
+
+            foreach (Transform child in _leftHandGesturesContainer)
+                Destroy(child.gameObject);
+
+            var names = Enum.GetNames(typeof(HandGestures));
+
+            for (var i = 0; i < names.Length; i++)
+            {
+                var item = Instantiate(_handGesturePrefab, _leftHandGesturesContainer);
+                ServoMixerPanel.ResetTransform(item.transform);
+
+                var handGestureItem = item.AddComponent<HandGestureItem>();
+                handGestureItem.Setup((HandGestures)i);
+                handGestureItem.Clicked += OnHandGestureClicked; ;
+            }
         }
 
-        public void ApplyHandGestion(bool left, HandGestures gesture)
+        private void OnHandGestureClicked(HandGestures obj)
+        {
+            ApplyHandGesture(true, obj);
+            ApplyHandGesture(false, obj);
+        }
+
+        public void ApplyHandGesture(bool left, HandGestures gesture)
         {
             switch (gesture)
             {
                 case HandGestures.Close:
-                    ApplyHandGestion(left, 0, 0, 0, 0, 0);
+                    ApplyHandGesture(left, 1, 1, 1, 1, 1);
                     break;
                 case HandGestures.Open:
-                    ApplyHandGestion(left, 1, 1, 1, 1, 1);
+                    ApplyHandGesture(left, 0, 0, 0, 0, 0);
                     break;
                 case HandGestures.Point:
-                    ApplyHandGestion(left, 0, 1, 0, 0, 0);
+                    ApplyHandGesture(left, 1, 0, 1, 1, 1);
                     break;
                 case HandGestures.Rock:
-                    ApplyHandGestion(left, 1, 1, 0, 0, 1);
+                    ApplyHandGesture(left, 0, 0, 1, 1, 0);
                     break;
                 case HandGestures.ThumbUp:
-                    ApplyHandGestion(left, 0, 1, 0, 0, 0);
+                    ApplyHandGesture(left, 0, 1, 1, 1, 1);
                     break;
                 case HandGestures.ThumbIndexUp:
-                    ApplyHandGestion(left, 1, 1, 0, 0, 0);
+                    ApplyHandGesture(left, 0, 0, 1, 1, 1);
                     break;
                 case HandGestures.Fuck:
-                    ApplyHandGestion(left, 0, 0, 1, 0, 0);
+                    ApplyHandGesture(left, 1, 1, 0, 1, 1);
                     break;
                 case HandGestures.Grab:
-                    ApplyHandGestion(left, 0, 0, 1, 0, 0);
+                    ApplyHandGesture(left, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f);
                     break;
                 case HandGestures.Bunny:
-                    ApplyHandGestion(left, 0, 1, 1, 0, 0);
+                    ApplyHandGesture(left, 1, 0, 0, 1, 1);
                     break;
             }
         }
 
-        private void ApplyHandGestion(bool left, byte thumb, byte index, byte middle, byte ring, byte pinky)
+        private void ApplyHandGesture(bool left, float thumb, float index, float middle, float ring, float pinky)
         {
             var fingers = new[]
             {
@@ -85,9 +109,9 @@ namespace Demonixis.InMoov.UI
                 left ? ServoIdentifier.LeftFingerPinky : ServoIdentifier.RightFingerPinky
             };
 
-            var values = new byte[] {thumb, index, middle, ring, pinky};
+            var values = new float [] { thumb, index, middle, ring, pinky };
             for (var i = 0; i < fingers.Length; i++)
-                _servoMixerService.SetServoValueInServo(fingers[i], values[i]);
+                _servoMixerService.SetServoValueInServo(fingers[i], (byte)(values[i] * 180));
         }
     }
 }

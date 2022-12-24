@@ -221,7 +221,7 @@ namespace Demonixis.InMoov.UI
             return 0;
         }
 
-        private void ResetTransform(Transform target)
+        public static void ResetTransform(Transform target)
         {
             target.localPosition = Vector3.zero;
             target.localRotation = Quaternion.identity;

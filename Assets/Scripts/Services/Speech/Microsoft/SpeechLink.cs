@@ -17,8 +17,8 @@ namespace Demonixis.InMoov.Services.Speech
 {
     public class SpeechLink : MonoBehaviour
     {
-#if MS_SPEECH_SYNTHESIS
         private static SpeechLink _instance;
+#if MS_SPEECH_SYNTHESIS
         private static object _locker = new();
         private const string ProcessName = "MSSpeechLink";
         private WebSocketSharp.WebSocket _websocket;
@@ -55,12 +55,16 @@ namespace Demonixis.InMoov.Services.Speech
 
         public bool EnableVoiceRecognition
         {
+#if MS_SPEECH_SYNTHESIS
             get => _enableVoiceRecongition;
             set
             {
                 _enableVoiceRecongition = value;
                 SendMessage(MessageType.EnableVoiceRecognition, (value ? 1 : 0).ToString());
             }
+#else
+            get; set;
+#endif
         }
 
         public event Action<string> VoiceRecognized;
@@ -68,7 +72,7 @@ namespace Demonixis.InMoov.Services.Speech
         
 #if MS_SPEECH_SYNTHESIS
 
-        #region Unity Pattern
+#region Unity Pattern
 
         private void Awake()
         {
@@ -97,9 +101,9 @@ namespace Demonixis.InMoov.Services.Speech
             StopWebSocketConnection();
         }
 
-        #endregion
+#endregion
 
-        #region Public API
+#region Public API
 
         public void SetVoice(string voice)
         {
@@ -126,9 +130,9 @@ namespace Demonixis.InMoov.Services.Speech
             SendMessage(MessageType.Speak, words);
         }
 
-        #endregion
+#endregion
 
-        #region Messages Management
+#region Messages Management
 
         private IEnumerator CheckMessageQueue()
         {
@@ -202,9 +206,9 @@ namespace Demonixis.InMoov.Services.Speech
                 _websocket.Send(json);
         }
 
-        #endregion
+#endregion
 
-        #region WebSocket Management
+#region WebSocket Management
 
         private void StartWebSocketConnection()
         {
@@ -259,9 +263,9 @@ namespace Demonixis.InMoov.Services.Speech
             TryJoinWebSocketServer();
         }
 
-        #endregion
+#endregion
 
-        #region Process Management
+#region Process Management
 
         private bool IsSpeechLinkStarted()
         {
@@ -275,9 +279,9 @@ namespace Demonixis.InMoov.Services.Speech
             return false;
         }
 
-        #endregion
+#endregion
 
-        #region Event Handlers
+#region Event Handlers
 
         private void _websocket_OnError(object sender, WebSocketSharp.ErrorEventArgs e)
         {
@@ -312,7 +316,7 @@ namespace Demonixis.InMoov.Services.Speech
             _checkMessages = true;
         }
 
-        #endregion
+#endregion
 
 #endif
     }
