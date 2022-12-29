@@ -229,6 +229,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7beef8c0512f02f49b52c97953a889cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _wordTrigger: Robot
 --- !u!1 &58121852
 GameObject:
   m_ObjectHideFlags: 0
@@ -305,6 +306,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ac44cb54645d974d939d08f8148feff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _wordTrigger: Robot
 --- !u!1 &101045438
 GameObject:
   m_ObjectHideFlags: 0
@@ -515,6 +517,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 739f144d9186cfe4bb057e0e1968887d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _wordTrigger: hey
 --- !u!1 &181660024
 GameObject:
   m_ObjectHideFlags: 0

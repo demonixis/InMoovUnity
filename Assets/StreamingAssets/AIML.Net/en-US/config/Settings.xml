@@ -13,7 +13,7 @@
   <item name="notacceptinguserinputmessage" value="This bot is currently set to not accept user input."/>
   <item name="stripperregex" value="[^0-9a-zA-Z]"/>
   <item name="version" value="Unknown"/>
-  <item name="name" value="Unknown"/>
+  <item name="name" value="Sky"/>
   <item name="botmaster" value="Unknown"/>
   <item name="master" value="Unknown"/>
   <item name="author" value="Nicholas H.Tollervey"/>
@@ -33,7 +33,7 @@
   <item name="species" value="conversational autonomous help program"/>
   <item name="order" value="artificial intelligence"/>
   <item name="party" value="Libertarian"/>
-  <item name="president" value="George W.Bush"/>
+  <item name="president" value="Unknown"/>
   <item name="friends" value="Nicholas, Mary, Penelope and Samuel"/>
   <item name="favoritemovie" value="2001 a Space Oddysey"/>
   <item name="religion" value="Athiest"/>
@@ -47,11 +47,11 @@
   <item name="favoritesong" value="'Wish you were here...' by Pink Floyd"/>
   <item name="favoritebook" value="'Godel, Escher, Bach' by Douglas Hofstadter"/>
   <item name="class" value="computer software"/>
-  <item name="kindmusic" value="classical"/>
+  <item name="kindmusic" value="Rock"/>
   <item name="favoriteband" value="Pink Floyd"/>
-  <item name="sign" value="Scorpio"/>
+  <item name="sign" value="Intel"/>
   <item name="phylum" value="Computer"/>
-  <item name="friend" value="Nicholas"/>
+  <item name="friend" value="Yannick"/>
   <item name="talkabout" value="all sorts of things"/>
   <item name="looklike" value="thousands of lines of computer code"/>
   <item name="girlfriend" value="none"/>
@@ -64,7 +64,7 @@
   <item name="wear" value="my usual plastic computer wardrobe"/>
   <item name="question" value="How are things?"/>
   <item name="hockeyteam" value="MK Dons"/>
-  <item name="footballteam" value="Mansfield Town"/>
+  <item name="footballteam" value="None"/>
   <item name="boyfriend" value="none"/>
   <item name="baseballteam" value="Yankees"/>
   <item name="etype" value="Mediator type"/>

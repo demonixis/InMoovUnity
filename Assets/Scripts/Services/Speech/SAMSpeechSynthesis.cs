@@ -43,16 +43,18 @@ namespace Demonixis.InMoov.Services.Speech
         
         private IEnumerator SpeechLoop(string message)
         {
-            NotifySpeechState(true, message);
+            NotifySpeechStarted(message);
             
             while (_audioSource.isPlaying)
             {
                 yield return null;
             }
-            
+
+            NotifySpeechState(false);
+
             yield return CoroutineFactory.WaitForSeconds(1.0f);
             
-            NotifySpeechState(false, null);
+            NotifySpeechState(true);
         }
     }
 }

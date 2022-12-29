@@ -4,9 +4,12 @@ namespace Demonixis.InMoov.Services.Speech
 {
     public class SpeechSynthesisService : RobotService
     {
+        public override string SerializationFilename => "voice-synthesis";
+
         public event Action<string> SpeechStarted;
-        public event Action SpeechFinished;
-        
+        public event Action SpeechJustFinished;
+        public event Action SpeechFinishedSafe;
+
         public virtual void SetLanguage(string culture)
         {
         }
@@ -21,6 +24,7 @@ namespace Demonixis.InMoov.Services.Speech
 
         public virtual void SetVoice(int voiceIndex)
         {
+            AddSetting("VoiceIndex", $"{voiceIndex}");
         }
 
         public virtual void Speak(string message)
@@ -33,12 +37,18 @@ namespace Demonixis.InMoov.Services.Speech
             return words.Length * 60.0f / wordsPerMinute;
         }
 
-        protected void NotifySpeechState(bool started, string message)
+        protected void NotifySpeechStarted(string message)
         {
-            if (started)
-                SpeechStarted?.Invoke(message);
+            SpeechStarted?.Invoke(message);
+        }
+
+        protected void NotifySpeechState(bool safe)
+        {
+            if (safe)
+                SpeechFinishedSafe?.Invoke();
             else
-                SpeechFinished?.Invoke();
+                SpeechJustFinished?.Invoke();
+
         }
     }
 }

@@ -50,12 +50,15 @@ namespace Demonixis.InMoov.Services.Speech
         
         private IEnumerator SpeechLoop(string message)
         {
-            NotifySpeechState(true, message);
+            NotifySpeechStarted(message);
 
             var waitTime = GetSpeakTime(message);
+
+            NotifySpeechState(false);
+
             yield return CoroutineFactory.WaitForSeconds(waitTime + 1.0f);
 
-            NotifySpeechState(false, null);
+            NotifySpeechState(true);
         }
         
         [DllImport("WindowsVoice")]

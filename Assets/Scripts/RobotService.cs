@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Demonixis.InMoov.Settings;
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Demonixis.InMoov
@@ -20,12 +22,21 @@ namespace Demonixis.InMoov
             RuntimePlatform.OSXPlayer
         };
 
+        protected Dictionary<string, string> _customSettings;
+
+        public virtual string SerializationFilename { get; }
+
         public string ServiceName => GetType().Name;
         public bool Started { get; protected set; }
         public bool Paused { get; protected set; }
 
         public virtual void Initialize()
         {
+            if (!string.IsNullOrEmpty(SerializationFilename))
+                _customSettings = SaveGame.LoadRawData<Dictionary<string, string>>(SaveGame.GetPreferredStorageMode(), SerializationFilename, "Config");
+
+            _customSettings ??= new Dictionary<string, string>();
+
             Started = true;
         }
 
@@ -36,12 +47,29 @@ namespace Demonixis.InMoov
 
         public virtual void Shutdown()
         {
+            if (!string.IsNullOrEmpty(SerializationFilename))
+                SaveGame.SaveRawData(SaveGame.GetPreferredStorageMode(), _customSettings, SerializationFilename, "Config");
+
             Started = false;
         }
 
         public bool IsSupported()
         {
             return Array.IndexOf(SupportedPlateforms, Application.platform) > -1;
+        }
+
+        protected void AddSetting(string key, string value)
+        {
+            if (!_customSettings.ContainsKey(key))
+                _customSettings.Add(key, value);
+            else
+                _customSettings[key] = value;
+        }
+
+        protected void RemoveSetting(string key)
+        {
+            if (_customSettings.ContainsKey(key))
+                _customSettings.Remove(key);
         }
     }
 }

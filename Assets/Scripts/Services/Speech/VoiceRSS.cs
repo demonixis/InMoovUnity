@@ -9,7 +9,7 @@ namespace Demonixis.InMoov.Services.Speech
     [RequireComponent(typeof(AudioSource))]
     public sealed class VoiceRSS : SpeechSynthesisService
     {
-        public const string VoiceRSSFilename = "voicerss.json";
+        public const string VoiceNameKey = "voicerss.voicename";
         
         public readonly string[] Voices =
         {
@@ -48,6 +48,9 @@ namespace Demonixis.InMoov.Services.Speech
             {
                 Debug.LogError("You need a valid API key to use the VoiceRSS service.");
             }
+
+            if (_customSettings.ContainsKey(VoiceNameKey))
+                _voice = _customSettings[VoiceNameKey];
         }
 
         public override void SetLanguage(string culture)
@@ -86,6 +89,8 @@ namespace Demonixis.InMoov.Services.Speech
             }
 
             _voice = tmp[1];
+
+            AddSetting(VoiceNameKey, _voice);
         }
 
         public override void SetVoice(int voiceIndex)
@@ -145,16 +150,18 @@ namespace Demonixis.InMoov.Services.Speech
                 _audioSource.clip = clip;
                 _audioSource.Play();
 
-                NotifySpeechState(true, message);
+                NotifySpeechStarted(message);
 
                 while (_audioSource.isPlaying)
                 {
                     yield return null;
                 }
-                
+
+                NotifySpeechState(false);
+
                 yield return CoroutineFactory.WaitForSeconds(1.0f);
 
-                NotifySpeechState(false, null);
+                NotifySpeechState(true);
             }
             else
             {

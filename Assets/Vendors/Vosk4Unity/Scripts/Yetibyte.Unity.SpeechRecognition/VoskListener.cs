@@ -33,25 +33,28 @@ namespace Yetibyte.Unity.SpeechRecognition
         [ModelPath]
         private string _modelName;
 
-        [SerializeField] [Tooltip("Whether or not the speech recognizer should be executed in word detection mode.")]
+        [SerializeField]
+        [Tooltip("Whether or not the speech recognizer should be executed in word detection mode.")]
         private bool _isWordMode = true;
 
-        [SerializeField] [Min(0)] private int _maxAlternatives = 0;
+        [SerializeField][Min(0)] private int _maxAlternatives = 0;
 
-        [SerializeField] [Header("Behavior")] private bool _autoLoadModel = true;
+        [SerializeField][Header("Behavior")] private bool _autoLoadModel = true;
 
         [SerializeField] private bool _autoStart = false;
 
-        [SerializeField] [Header("Audio Settings")]
+        [SerializeField]
+        [Header("Audio Settings")]
         private int _audioChunkSize = DEFAULT_AUDIO_CHUNK_SIZE;
 
         [SerializeField] private int _sampleRate = DEFAULT_SAMPLE_RATE;
 
-        [SerializeField] [Min(1)] private int _audioClipBufferSeconds = 1;
+        [SerializeField][Min(1)] private int _audioClipBufferSeconds = 1;
 
-        [SerializeField] [RecordingDevice] private string _listeningDevice = null;
+        [SerializeField][RecordingDevice] private string _listeningDevice = null;
 
-        [SerializeField] [Header("Misc.")]
+        [SerializeField]
+        [Header("Misc.")]
         private VoskListenerDebugOptions _debugOptions = VoskListenerDebugOptions.CreateAllDisabled();
 
         [SerializeField] private float _checkTime = 0.25f;
@@ -148,78 +151,69 @@ namespace Yetibyte.Unity.SpeechRecognition
             {
                 StartListening();
             }
-
-            StartCoroutine(UpdateLoop());
         }
 
-        private IEnumerator UpdateLoop()
+        private void Update()
         {
-            var wait = new WaitForSeconds(_checkTime);
-            
-            while (true)
+            if (IsListening && IsReady)
             {
-                if (IsListening && IsReady)
+                int micPos = Microphone.GetPosition(_listeningDevice);
+
+                int sampleDelta = micPos >= _previousMicPosition
+                    ? (micPos - _previousMicPosition)
+                    : (_microphoneAudio.samples * _microphoneAudio.channels - (_previousMicPosition - micPos));
+
+                if (sampleDelta * FLOAT_BYTE_SIZE >= AudioChunkSize)
                 {
-                    int micPos = Microphone.GetPosition(_listeningDevice);
+                    byte[] waveData = _microphoneAudio.GetWavData(sampleDelta, _previousMicPosition);
 
-                    int sampleDelta = micPos >= _previousMicPosition
-                        ? (micPos - _previousMicPosition)
-                        : (_microphoneAudio.samples * _microphoneAudio.channels - (_previousMicPosition - micPos));
+                    int bufferCount = Mathf.CeilToInt(waveData.Length / (float)AudioChunkSize);
 
-                    if (sampleDelta * FLOAT_BYTE_SIZE >= AudioChunkSize)
+                    bool cancel = false;
+
+                    for (int i = 0; i < bufferCount; i++)
                     {
-                        byte[] waveData = _microphoneAudio.GetWavData(sampleDelta, _previousMicPosition);
+                        byte[] buffer = waveData.Skip(i * AudioChunkSize).Take(AudioChunkSize).ToArray();
 
-                        int bufferCount = Mathf.CeilToInt(waveData.Length / (float) AudioChunkSize);
+                        string result = string.Empty;
 
-                        bool cancel = false;
-
-                        for (int i = 0; i < bufferCount; i++)
+                        if (_voskRecognizer.AcceptWaveform(buffer, buffer.Length))
                         {
-                            byte[] buffer = waveData.Skip(i * AudioChunkSize).Take(AudioChunkSize).ToArray();
+                            _previousPartialResult = null;
 
-                            string result = string.Empty;
+                            result = _voskRecognizer.Result();
 
-                            if (_voskRecognizer.AcceptWaveform(buffer, buffer.Length))
+                            _resultDeserializer.UseAlternatives = MaxAlternatives > 0;
+                            VoskResult voskResult = _resultDeserializer.Deserialize(result);
+
+                            OnResultFound(voskResult);
+                        }
+                        else
+                        {
+                            result = _voskRecognizer.PartialResult();
+
+                            VoskPartialResult partialResult = _partialResultDeserializer.Deserialize(result);
+
+                            if (partialResult != null && partialResult.Text != _previousPartialResult?.Text)
                             {
-                                _previousPartialResult = null;
+                                cancel = OnPartialResultFound(partialResult);
+                                _previousPartialResult = partialResult;
 
-                                result = _voskRecognizer.Result();
-
-                                _resultDeserializer.UseAlternatives = MaxAlternatives > 0;
-                                VoskResult voskResult = _resultDeserializer.Deserialize(result);
-
-                                OnResultFound(voskResult);
-                            }
-                            else
-                            {
-                                result = _voskRecognizer.PartialResult();
-
-                                VoskPartialResult partialResult = _partialResultDeserializer.Deserialize(result);
-
-                                if (partialResult != null && partialResult.Text != _previousPartialResult?.Text)
+                                if (cancel)
                                 {
-                                    cancel = OnPartialResultFound(partialResult);
-                                    _previousPartialResult = partialResult;
+                                    result = _voskRecognizer.FinalResult();
 
-                                    if (cancel)
-                                    {
-                                        result = _voskRecognizer.FinalResult();
+                                    _resultDeserializer.UseAlternatives = MaxAlternatives > 0;
+                                    VoskResult voskResult = _resultDeserializer.Deserialize(result);
 
-                                        _resultDeserializer.UseAlternatives = MaxAlternatives > 0;
-                                        VoskResult voskResult = _resultDeserializer.Deserialize(result);
-
-                                        OnResultFound(voskResult);
-                                    }
+                                    OnResultFound(voskResult);
                                 }
                             }
                         }
-
-                        _previousMicPosition = micPos;
                     }
-                }
 
-                yield return wait;
+                    _previousMicPosition = micPos;
+                }
             }
         }
 

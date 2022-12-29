@@ -101,7 +101,7 @@ namespace Demonixis.InMoov.Servos
                         }
                     }
 
-                    _serialDataBuffer[cardIndex].SetValue(data.PinId, data.Value, data.Enabled);
+                    _serialDataBuffer[cardIndex].SetValue(data.PinId, data.Value, data.Enabled && !data.Sleeping);
                 }
 
                 // Send values.

@@ -24,6 +24,13 @@ namespace Demonixis.InMoov.Servos
         public bool Enabled;
         public byte Value;
         public byte ScaleValueTo180;
+        public byte AutoDisableDelay;
+
+        [NonSerialized]
+        public bool Sleeping;
+        [NonSerialized]
+        public bool Timestamp;
+
         public ServoIdentifier MixedServo;
         public ServoMixageType MixageType;
 
@@ -85,7 +92,11 @@ namespace Demonixis.InMoov.Servos
         LeftShoulderYaw,
         LeftShoulderPitch,
         LeftShoulderRoll,
+        //LeftElbowYaw,
         LeftElbowPitch,
+        // LeftElbowRoll
+        // LeftWristYaw,
+        // LeftWristPitch,
         LeftWristRoll,
 
         // Left Hand
@@ -99,7 +110,11 @@ namespace Demonixis.InMoov.Servos
         RightShoulderYaw,
         RightShoulderPitch,
         RightShoulderRoll,
+        //RightElbowYaw,
         RightElbowPitch,
+        // RightElbowRoll
+        // RightWristYaw,
+        // RightWristPitch,
         RightWristRoll,
 
         // Right Hand
