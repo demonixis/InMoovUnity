@@ -50,7 +50,7 @@ namespace Demonixis.InMoov
         /// </summary>
         public RobotService[] AllServices => FindObjectsOfType<RobotService>(true);
 
-        public BrainSpeechProxy BrainSpeechProxy { get; private set; }
+        public BrainWorldContext WorldContext { get; private set; }
         public bool Started { get; private set; }
 
         public event Action<Robot> RobotInitialized;
@@ -66,7 +66,7 @@ namespace Demonixis.InMoov
                 return;
             }
 
-            BrainSpeechProxy = new BrainSpeechProxy();
+            WorldContext = new BrainWorldContext();
             _currentServices = new List<RobotService>();
             _waitingStartCallbacks = new List<Action>();
         }
@@ -126,7 +126,7 @@ namespace Demonixis.InMoov
             SelectService<NavigationService>(serviceList.Navigation);
             SelectService<ComputerVisionService>(serviceList.ComputerVision);
 
-            BrainSpeechProxy.Setup(chatbotService, voiceRecognition, speechSynthesis);
+            WorldContext.Setup(chatbotService, voiceRecognition, speechSynthesis);
         }
 
         /// <summary>

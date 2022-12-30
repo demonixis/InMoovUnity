@@ -34,7 +34,7 @@ namespace Demonixis.InMoov.Chatbots
         {
         }
 
-        protected override async void SubmitResponseToBot(string inputSpeech)
+        public override async void SubmitResponse(string inputSpeech, bool noReply = false)
         {
             if (Paused) return;
 
@@ -45,7 +45,8 @@ namespace Demonixis.InMoov.Chatbots
 
             var result = await _openAIAPI.Completions.CreateCompletionAsync(request);
 
-            NotifyResponseReady(result.ToString());
+            if (!noReply)
+                NotifyResponseReady(result.ToString());
         }
     }
 }

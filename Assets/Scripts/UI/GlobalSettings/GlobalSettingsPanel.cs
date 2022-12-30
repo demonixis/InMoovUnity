@@ -27,7 +27,7 @@ namespace Demonixis.InMoov.UI
             {
                 var globalSettings = GlobalSettings.Get();
                 globalSettings.SetLanguageByIndex(i);
-                Robot.Instance.BrainSpeechProxy.SetLanguage(globalSettings.Language);
+                Robot.Instance.WorldContext.SetLanguage(globalSettings.Language);
             });
             
             _openAIKey.SetTextWithoutNotify(settings.OpenAIKey);

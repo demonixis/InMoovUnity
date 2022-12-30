@@ -8,7 +8,7 @@ namespace Demonixis.InMoov.ComputerVision.Filters
 {
     public sealed class YoloV4Visualizer : MLVisualizer
     {
-        private ChatbotService _chatbot;
+        private BrainWorldContext _worldContext;
         private ObjectDetector _detector;
         private readonly YoloV4Marker[] _markers = new YoloV4Marker[50];
         
@@ -18,7 +18,7 @@ namespace Demonixis.InMoov.ComputerVision.Filters
 
         private void OnEnable()
         {
-            _chatbot = Robot.Instance.GetService<ChatbotService>();
+            _worldContext = Robot.Instance.WorldContext;
             _detector = new ObjectDetector(_resources);
             
             for (var i = 0; i < _markers.Length; i++)
@@ -31,7 +31,7 @@ namespace Demonixis.InMoov.ComputerVision.Filters
         {
             StopAllCoroutines();
             _detector.Dispose();
-            _chatbot.DetectedObjects.Clear();
+            _worldContext.DetectedObjects.Clear();
             
             foreach (var marker in _markers)
                 Destroy(marker);
@@ -57,12 +57,12 @@ namespace Demonixis.InMoov.ComputerVision.Filters
         {
             while (true)
             {
-                _chatbot.DetectedObjects.Clear();
+                _worldContext.DetectedObjects.Clear();
 
                 foreach (var d in _detector.Detections)
                 {
                     var objName = YoloV4Marker._labels[(int) d.classIndex];
-                    _chatbot.DetectedObjects.Add($"A {objName}");
+                    _worldContext.DetectedObjects.Add($"A {objName}");
                 }
 
                 yield return CoroutineFactory.WaitForSeconds(1.0f);

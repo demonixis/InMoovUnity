@@ -1,7 +1,7 @@
 using Demonixis.InMoov.Servos;
 using UnityEngine;
 
-namespace Demonixis.InMoov.Utils
+namespace Demonixis.InMoov.Systems
 {
     public sealed class BoneSpaceToServo : MonoBehaviour
     {
