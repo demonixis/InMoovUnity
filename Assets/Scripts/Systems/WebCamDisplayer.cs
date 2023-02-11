@@ -11,12 +11,14 @@ namespace Demonixis.InMoov
 
         public void SetActive(bool active, int cameraIndex)
         {
-            if (_webCamTexture == null) return;
-
             if (!active)
             {
-                _webCamTexture.Stop();
-                _webCamTexture = null;
+                if (_webCamTexture != null)
+                {
+                    _webCamTexture.Stop();
+                    _webCamTexture = null;
+                }
+
                 _rawimage.enabled = false;
             }
             else

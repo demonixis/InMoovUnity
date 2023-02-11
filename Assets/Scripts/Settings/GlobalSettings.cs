@@ -94,6 +94,8 @@ namespace Demonixis.InMoov.Settings
                 VoiceRecognition = nameof(VoskVoiceRecognitionService),
 #if UNITY_STANDALONE_WIN || UNITY_WSA
                 SpeechSynthesis = nameof(WindowsSpeechSynthesisWS),
+#elif UNITY_STANDALONE_OSX
+                SpeechSynthesis = nameof(MacosSpeechSynthesis),
 #else
                 SpeechSynthesis = nameof(SAMSpeechSynthesis),
 #endif

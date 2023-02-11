@@ -23,7 +23,7 @@ namespace Demonixis.InMoov.Services.Speech
             RuntimePlatform.WindowsPlayer,
             RuntimePlatform.WSAPlayerX64
         };
-        
+
 #if MS_SPEECH_SYNTHESIS
 
         public override void Initialize()
@@ -56,7 +56,7 @@ namespace Demonixis.InMoov.Services.Speech
 
             NotifySpeechState(false);
 
-            yield return CoroutineFactory.WaitForSeconds(waitTime + 1.0f);
+            yield return CoroutineFactory.WaitForSeconds(waitTime + DelayAfterSpeak);
 
             NotifySpeechState(true);
         }

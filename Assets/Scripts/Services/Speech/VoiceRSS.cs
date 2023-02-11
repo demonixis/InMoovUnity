@@ -159,7 +159,7 @@ namespace Demonixis.InMoov.Services.Speech
 
                 NotifySpeechState(false);
 
-                yield return CoroutineFactory.WaitForSeconds(1.0f);
+                yield return CoroutineFactory.WaitForSeconds(DelayAfterSpeak);
 
                 NotifySpeechState(true);
             }

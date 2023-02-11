@@ -1,14 +1,39 @@
 ﻿using System;
+using UnityEngine;
 
 namespace Demonixis.InMoov.Services.Speech
 {
     public class SpeechSynthesisService : RobotService
     {
+        private const string DelayAfterKey = "WordTrigger";
         public override string SerializationFilename => "voice-synthesis";
+
+        [SerializeField] private float _delayAfterSpeak = 0.5f;
 
         public event Action<string> SpeechStarted;
         public event Action SpeechJustFinished;
         public event Action SpeechFinishedSafe;
+
+        public float DelayAfterSpeak
+        {
+            get => _delayAfterSpeak;
+            set
+            {
+                _delayAfterSpeak = value;
+                AddSetting(DelayAfterKey, _delayAfterSpeak.ToString());
+            }
+        }
+
+        public override void Initialize()
+        {
+            base.Initialize();
+
+            if (_customSettings.TryGetValue(DelayAfterKey, out string value))
+            {
+                if (float.TryParse(value, out float delay))
+                    _delayAfterSpeak = delay;
+            }
+        }
 
         public virtual void SetLanguage(string culture)
         {

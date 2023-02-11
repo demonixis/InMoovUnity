@@ -855,6 +855,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6c2423e367396141ad4bc7f73c6f368, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _minWordsInPhrase: 1
+  _minLettersInWord: 2
 --- !u!1 &539198332
 GameObject:
   m_ObjectHideFlags: 0
@@ -2372,6 +2374,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f50ec522ce8545439242c12b5696635, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _minWordsInPhrase: 1
+  _minLettersInWord: 2
   _maxToken: 100
 --- !u!1 &1665414420
 GameObject:
@@ -2764,6 +2768,7 @@ Transform:
   - {fileID: 1367671925}
   - {fileID: 1033768235}
   - {fileID: 348550591}
+  - {fileID: 2069823978}
   m_Father: {fileID: 996090396}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2809,6 +2814,50 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d9fe2080e4da4ad4f9610ac8461cbeb8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!1 &2069823977
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2069823978}
+  - component: {fileID: 2069823979}
+  m_Layer: 0
+  m_Name: MacosSpeech
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2069823978
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2069823977}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2011295491}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2069823979
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2069823977}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0cf685871bf64429f9ae1eb6010a982d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1001 &2138196702
