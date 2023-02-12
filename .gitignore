@@ -60,3 +60,5 @@ crashlytics-build.properties
 
 UserSettings
 .idea
+Assets/StreamingAssets/.DS_Store
+*.DS_Store

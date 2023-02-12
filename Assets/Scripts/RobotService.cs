@@ -30,6 +30,12 @@ namespace Demonixis.InMoov
         public bool Started { get; protected set; }
         public bool Paused { get; protected set; }
 
+        protected virtual void Awake()
+        {
+            if (Array.IndexOf(SupportedPlateforms, Application.platform) == -1)
+                Destroy(this);
+        }
+
         public virtual void Initialize()
         {
             if (!string.IsNullOrEmpty(SerializationFilename))

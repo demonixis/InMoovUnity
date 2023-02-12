@@ -18,6 +18,7 @@ public sealed class BrainPanel : MonoBehaviour
     [SerializeField] private TMP_InputField _wordTrigger;
     [SerializeField] private Image _canListen;
     [SerializeField] private Image _isSpeaking;
+    [SerializeField] private TMP_InputField _endSpeakDelay;
 
     private void Start()
     {
@@ -43,6 +44,15 @@ public sealed class BrainPanel : MonoBehaviour
         _speechSynthesis.SpeechStarted += m => _isSpeaking.color = Color.green;
         _speechSynthesis.SpeechJustFinished += () => _isSpeaking.color = Color.red;
         _speechSynthesis.SpeechFinishedSafe += () => _isSpeaking.color = Color.gray;
+
+        _endSpeakDelay.SetTextWithoutNotify(_speechSynthesis.DelayAfterSpeak.ToString());
+        _endSpeakDelay.onValueChanged.AddListener(s =>
+        {
+            if (float.TryParse(s, out float result))
+                _speechSynthesis.DelayAfterSpeak = result;
+            else
+                _endSpeakDelay.SetTextWithoutNotify(_speechSynthesis.DelayAfterSpeak.ToString());
+        });
 
         _chatbot = robot.GetService<ChatbotService>();
         _chatbot.ResponseReady += s => AppendTextTo(_botInputContainer, s, true);

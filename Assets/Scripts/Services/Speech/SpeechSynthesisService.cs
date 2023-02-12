@@ -6,7 +6,7 @@ namespace Demonixis.InMoov.Services.Speech
     public class SpeechSynthesisService : RobotService
     {
         private const string DelayAfterKey = "WordTrigger";
-        public override string SerializationFilename => "voice-synthesis";
+        public override string SerializationFilename => "voice-synthesis.json";
 
         [SerializeField] private float _delayAfterSpeak = 0.5f;
 

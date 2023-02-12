@@ -11,7 +11,7 @@ namespace Demonixis.InMoov.Services.Speech
         public bool IsLocked => _isLocked;
         public bool CanListen => !_isLocked && !Paused;
 
-        public override string SerializationFilename => "voice-recognition";
+        public override string SerializationFilename => "voice-recognition.json";
 
         [SerializeField] private string _wordTrigger = "Robot";
 
