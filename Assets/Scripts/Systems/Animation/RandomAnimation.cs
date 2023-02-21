@@ -35,7 +35,19 @@ namespace Demonixis.InMoov.Systems
                 get => _index;
             }
 
-            public byte NextValue => (byte) (Sequence != null ? Sequence[Cursor] : 0);
+            public static ServoAnimation New(ServoIdentifier id, byte min, byte max, float freq)
+            {
+                return new ServoAnimation
+                {
+                    Servo = id,
+                    RandomRange = true,
+                    Min = min,
+                    Max = max,
+                    Frequency = freq
+                };
+            }
+
+            public byte NextValue => (byte)(Sequence != null ? Sequence[Cursor] : 0);
         }
 
         private ServoMixerService _servoMixerService;
@@ -45,7 +57,7 @@ namespace Demonixis.InMoov.Systems
         public override void Initialize()
         {
             base.Initialize();
-            
+
             _servoMixerService = Robot.Instance.GetService<ServoMixerService>();
 
             foreach (var action in _servoActions)
@@ -63,7 +75,7 @@ namespace Demonixis.InMoov.Systems
             while (Started)
             {
                 var value = servoAnimation.RandomRange
-                    ? (byte) UnityRandom.Range(servoAnimation.Min, servoAnimation.Max)
+                    ? (byte)UnityRandom.Range(servoAnimation.Min, servoAnimation.Max)
                     : servoAnimation.NextValue;
 
                 _servoMixerService.SetServoValueInServo(servoAnimation.Servo, value);
@@ -73,6 +85,43 @@ namespace Demonixis.InMoov.Systems
         }
 
 #if UNITY_EDITOR
+
+        [ContextMenu("Set Default Values")]
+        public void SetupDefaultValues()
+        {
+            _servoActions = new[]
+            {
+                ServoAnimation.New(ServoIdentifier.EyeX, 0, 180, 3.0f),
+                ServoAnimation.New(ServoIdentifier.EyeY, 0, 180, 3.2f),
+                ServoAnimation.New(ServoIdentifier.HeadPitch, 80, 120, 5f),
+                ServoAnimation.New(ServoIdentifier.HeadYaw, 80, 120, 4f),
+                ServoAnimation.New(ServoIdentifier.LeftShoulderYaw, 80, 140, 5f),
+                ServoAnimation.New(ServoIdentifier.LeftShoulderPitch, 80, 140, 6f),
+                ServoAnimation.New(ServoIdentifier.LeftShoulderRoll, 80, 140, 5f),
+                ServoAnimation.New(ServoIdentifier.LeftElbowPitch, 50, 160, 3.5f),
+                ServoAnimation.New(ServoIdentifier.LeftWristRoll, 0, 180, 4f),
+                ServoAnimation.New(ServoIdentifier.RightShoulderYaw, 80, 140, 5f),
+                ServoAnimation.New(ServoIdentifier.RightShoulderPitch, 80, 140, 6f),
+                ServoAnimation.New(ServoIdentifier.RightShoulderRoll, 80, 140, 5f),
+                ServoAnimation.New(ServoIdentifier.RightElbowPitch, 50, 160, 3.5f),
+                ServoAnimation.New(ServoIdentifier.LeftWristRoll, 0, 180, 4f),
+                ServoAnimation.New(ServoIdentifier.PelvisPitchPrimary, 80, 120, 4.5f),
+                ServoAnimation.New(ServoIdentifier.LeftFingerThumb, 0, 180, 4),
+                ServoAnimation.New(ServoIdentifier.LeftFingerIndex, 0, 180, 4),
+                ServoAnimation.New(ServoIdentifier.LeftFingerMiddle, 0, 180, 4),
+                ServoAnimation.New(ServoIdentifier.LeftFingerRing, 0, 180, 4),
+                ServoAnimation.New(ServoIdentifier.LeftFingerPinky, 0, 180, 4),
+                ServoAnimation.New(ServoIdentifier.RightFingerThumb, 0, 180, 4),
+                ServoAnimation.New(ServoIdentifier.RightFingerIndex, 0, 180, 4),
+                ServoAnimation.New(ServoIdentifier.RightFingerMiddle, 0, 180, 4),
+                ServoAnimation.New(ServoIdentifier.RightFingerRing, 0, 180, 4),
+                ServoAnimation.New(ServoIdentifier.RightFingerPinky, 0, 180, 4),
+            };
+
+            foreach (var t in _servoActions)
+                t.Frequency = 2.5f;
+        }
+
         private void OnValidate()
         {
             if (!Started || !Application.isPlaying) return;

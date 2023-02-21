@@ -1821,64 +1821,154 @@ MonoBehaviour:
   _servoActions:
   - Servo: 0
     RandomRange: 1
-    Min: 75
-    Max: 135
+    Min: 0
+    Max: 180
     Sequence: 
-    Frequency: 3
+    Frequency: 2.5
   - Servo: 1
     RandomRange: 1
-    Min: 75
-    Max: 135
+    Min: 0
+    Max: 180
     Sequence: 
-    Frequency: 3
-  - Servo: 5
-    RandomRange: 1
-    Min: 75
-    Max: 115
-    Sequence: 
-    Frequency: 5
+    Frequency: 2.5
   - Servo: 6
     RandomRange: 1
-    Min: 75
-    Max: 115
-    Sequence: 
-    Frequency: 5
-  - Servo: 13
-    RandomRange: 1
-    Min: 70
+    Min: 80
     Max: 120
     Sequence: 
-    Frequency: 5
+    Frequency: 2.5
+  - Servo: 5
+    RandomRange: 1
+    Min: 80
+    Max: 120
+    Sequence: 
+    Frequency: 2.5
+  - Servo: 15
+    RandomRange: 1
+    Min: 80
+    Max: 140
+    Sequence: 
+    Frequency: 2.5
+  - Servo: 16
+    RandomRange: 1
+    Min: 80
+    Max: 140
+    Sequence: 
+    Frequency: 2.5
+  - Servo: 17
+    RandomRange: 1
+    Min: 80
+    Max: 140
+    Sequence: 
+    Frequency: 2.5
+  - Servo: 18
+    RandomRange: 1
+    Min: 50
+    Max: 160
+    Sequence: 
+    Frequency: 2.5
   - Servo: 19
     RandomRange: 1
     Min: 0
     Max: 180
     Sequence: 
-    Frequency: 5
-  - Servo: 18
+    Frequency: 2.5
+  - Servo: 25
+    RandomRange: 1
+    Min: 80
+    Max: 140
+    Sequence: 
+    Frequency: 2.5
+  - Servo: 26
+    RandomRange: 1
+    Min: 80
+    Max: 140
+    Sequence: 
+    Frequency: 2.5
+  - Servo: 27
+    RandomRange: 1
+    Min: 80
+    Max: 140
+    Sequence: 
+    Frequency: 2.5
+  - Servo: 28
+    RandomRange: 1
+    Min: 50
+    Max: 160
+    Sequence: 
+    Frequency: 2.5
+  - Servo: 19
     RandomRange: 1
     Min: 0
     Max: 180
     Sequence: 
-    Frequency: 5
-  - Servo: 15
+    Frequency: 2.5
+  - Servo: 11
     RandomRange: 1
     Min: 80
-    Max: 110
+    Max: 120
     Sequence: 
-    Frequency: 5
-  - Servo: 16
+    Frequency: 2.5
+  - Servo: 20
     RandomRange: 1
-    Min: 80
-    Max: 110
+    Min: 0
+    Max: 180
     Sequence: 
-    Frequency: 5
-  - Servo: 17
+    Frequency: 2.5
+  - Servo: 21
     RandomRange: 1
-    Min: 120
-    Max: 140
+    Min: 0
+    Max: 180
     Sequence: 
-    Frequency: 5
+    Frequency: 2.5
+  - Servo: 22
+    RandomRange: 1
+    Min: 0
+    Max: 180
+    Sequence: 
+    Frequency: 2.5
+  - Servo: 23
+    RandomRange: 1
+    Min: 0
+    Max: 180
+    Sequence: 
+    Frequency: 2.5
+  - Servo: 24
+    RandomRange: 1
+    Min: 0
+    Max: 180
+    Sequence: 
+    Frequency: 2.5
+  - Servo: 30
+    RandomRange: 1
+    Min: 0
+    Max: 180
+    Sequence: 
+    Frequency: 2.5
+  - Servo: 31
+    RandomRange: 1
+    Min: 0
+    Max: 180
+    Sequence: 
+    Frequency: 2.5
+  - Servo: 32
+    RandomRange: 1
+    Min: 0
+    Max: 180
+    Sequence: 
+    Frequency: 2.5
+  - Servo: 33
+    RandomRange: 1
+    Min: 0
+    Max: 180
+    Sequence: 
+    Frequency: 2.5
+  - Servo: 34
+    RandomRange: 1
+    Min: 0
+    Max: 180
+    Sequence: 
+    Frequency: 2.5
 --- !u!114 &1281199287
 MonoBehaviour:
   m_ObjectHideFlags: 0
