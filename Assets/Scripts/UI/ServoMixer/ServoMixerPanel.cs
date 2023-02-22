@@ -230,13 +230,33 @@ namespace Demonixis.InMoov.UI
 
         public void SetEveryoneToNeutral()
         {
+            SetServoValue(data => data.Neutral);
+        }
+
+        public void SetEveryoneToMin()
+        {
+            SetServoValue(data => data.Min);
+        }
+
+        public void SetEveryoneToMax()
+        {
+            SetServoValue(data => data.Max);
+        }
+
+        public void ComputeNeutrals()
+        {
+            SetServoValue(data => (byte)(data.Max - data.Min));
+        }
+
+        private void SetServoValue(Func<ServoData, byte> getValueCallback)
+        {
             var names = Enum.GetNames(typeof(ServoIdentifier));
 
             for (var i = 0; i < names.Length; i++)
             {
-                var data = _servoMixerService.GetServoData((ServoIdentifier) i);
-                data.Value = data.Neutral;
-                _servoMixerService.SetServoData((ServoIdentifier) i, ref data);
+                var data = _servoMixerService.GetServoData((ServoIdentifier)i);
+                data.Value = getValueCallback(data);
+                _servoMixerService.SetServoData((ServoIdentifier)i, ref data);
             }
         }
     }

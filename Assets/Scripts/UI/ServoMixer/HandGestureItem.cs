@@ -1,23 +1,38 @@
-using Demonixis.InMoov.UI;
+using Demonixis.InMoov.Data;
 using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class HandGestureItem : MonoBehaviour
+namespace Demonixis.InMoov.UI
 {
-    [SerializeField] private HandGestures _gesture = HandGestures.Rock;
-    
-    public event Action<HandGestures> Clicked;
-
-    public void Setup(HandGestures item)
+    public class UIGestureItem : MonoBehaviour
     {
-        _gesture = item;
+        private int _gesture;
 
-        var text = GetComponentInChildren<TextMeshProUGUI>();
-        text.text = item.ToString();
+        public event Action<int> Clicked;
 
-        var button = GetComponent<Button>();
-        button.onClick.AddListener(() => Clicked?.Invoke(_gesture));
+        public void SetupHandGesture(int item)
+        {
+            _gesture = item;
+            var gesture = (HandGestures)item;
+            BaseSetup(gesture.ToString());
+        }
+
+        public void SetupArmGesture(int item)
+        {
+            _gesture = (int)item;
+            var gesture = (ArmGestures)item;
+            BaseSetup(gesture.ToString());
+        }
+
+        private void BaseSetup(string gesture)
+        {
+            var text = GetComponentInChildren<TextMeshProUGUI>();
+            text.text = gesture;
+
+            var button = GetComponent<Button>();
+            button.onClick.AddListener(() => Clicked?.Invoke(_gesture));
+        }
     }
 }
