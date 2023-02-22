@@ -1,4 +1,6 @@
-﻿using Demonixis.InMoov.Servos;
+﻿using Demonixis.InMoov.Data;
+using Demonixis.InMoov.Servos;
+using Demonixis.InMoov.Systems.Animations;
 using Demonixis.InMoov.Utils;
 using System;
 using System.Collections;
@@ -7,61 +9,32 @@ using UnityRandom = UnityEngine.Random;
 
 namespace Demonixis.InMoov.Systems
 {
-    public class RandomAnimation : RobotSystem
+    public partial class RandomAnimation : RobotSystem
     {
-        [Serializable]
-        public class ServoAnimation
-        {
-            private int _index;
-
-            public ServoIdentifier Servo;
-            public bool RandomRange;
-            public byte Min;
-            public byte Max;
-            public byte[] Sequence;
-            public float Frequency;
-
-            public int Cursor
-            {
-                set
-                {
-                    _index = value;
-
-                    if (_index < 0)
-                        _index = Sequence.Length - 1;
-                    else if (_index > Sequence.Length)
-                        _index = 0;
-                }
-                get => _index;
-            }
-
-            public static ServoAnimation New(ServoIdentifier id, byte min, byte max, float freq)
-            {
-                return new ServoAnimation
-                {
-                    Servo = id,
-                    RandomRange = true,
-                    Min = min,
-                    Max = max,
-                    Frequency = freq
-                };
-            }
-
-            public byte NextValue => (byte)(Sequence != null ? Sequence[Cursor] : 0);
-        }
-
         private ServoMixerService _servoMixerService;
+        private GesturePlayer _gesturePlayer;
 
         [SerializeField] private ServoAnimation[] _servoActions;
+        [SerializeField] private bool _randomHandGestures = true;
+        [SerializeField] private Vector2 _handGestureFrequency = new Vector2(1.5f, 6.5f);
+        [SerializeField] private bool _randomArmGestures = true;
+        [SerializeField] private Vector2 _armGestureFrequency = new Vector2(2.5f, 6.5f);
 
         public override void Initialize()
         {
             base.Initialize();
 
             _servoMixerService = Robot.Instance.GetService<ServoMixerService>();
+            _gesturePlayer = new GesturePlayer(_servoMixerService);
 
             foreach (var action in _servoActions)
                 StartCoroutine(PlayAnimationAction(action));
+
+           if (_randomHandGestures)
+                StartCoroutine(PlayHandGesture());
+
+            if (_randomArmGestures)
+                StartCoroutine(PlayArmGesture());
         }
 
         public override void Dispose()
@@ -84,6 +57,54 @@ namespace Demonixis.InMoov.Systems
             }
         }
 
+        private IEnumerator PlayHandGesture()
+        {
+            var names = Enum.GetNames(typeof(HandGestures));
+
+            while (Started)
+            {
+                var side = UnityRandom.Range(0, 100) % 3;
+                var gestureId = UnityRandom.Range(0, 100) % names.Length;
+                var gesture = (HandGestures)gestureId;
+
+                if (side == 2)
+                {
+                    _gesturePlayer.ApplyHandGesture(true, gesture);
+                    _gesturePlayer.ApplyHandGesture(false, gesture);
+                }
+                else
+                {
+                    _gesturePlayer.ApplyHandGesture(side == 0, gesture);
+                }
+
+                yield return CoroutineFactory.WaitForSeconds(UnityRandom.Range(_handGestureFrequency.x, _handGestureFrequency.y));
+            }
+        }
+
+        private IEnumerator PlayArmGesture()
+        {
+            var names = Enum.GetNames(typeof(ArmGestures));
+
+            while (Started)
+            {
+                var side = UnityRandom.Range(0, 100) % 3;
+                var gestureId = UnityRandom.Range(0, 100) % names.Length;
+                var gesture = (ArmGestures)gestureId;
+
+                if (side == 2)
+                {
+                    _gesturePlayer.ApplyArmGesture(true, gesture);
+                    _gesturePlayer.ApplyArmGesture(false, gesture);
+                }
+                else
+                {
+                    _gesturePlayer.ApplyArmGesture(side == 0, gesture);
+                }
+
+                yield return CoroutineFactory.WaitForSeconds(UnityRandom.Range(_armGestureFrequency.x, _armGestureFrequency.y));
+            }
+        }
+
 #if UNITY_EDITOR
 
         [ContextMenu("Set Default Values")]
@@ -95,31 +116,8 @@ namespace Demonixis.InMoov.Systems
                 ServoAnimation.New(ServoIdentifier.EyeY, 0, 180, 3.2f),
                 ServoAnimation.New(ServoIdentifier.HeadPitch, 80, 120, 5f),
                 ServoAnimation.New(ServoIdentifier.HeadYaw, 80, 120, 4f),
-                ServoAnimation.New(ServoIdentifier.LeftShoulderYaw, 80, 140, 5f),
-                ServoAnimation.New(ServoIdentifier.LeftShoulderPitch, 80, 140, 6f),
-                ServoAnimation.New(ServoIdentifier.LeftShoulderRoll, 80, 140, 5f),
-                ServoAnimation.New(ServoIdentifier.LeftElbowPitch, 50, 160, 3.5f),
-                ServoAnimation.New(ServoIdentifier.LeftWristRoll, 0, 180, 4f),
-                ServoAnimation.New(ServoIdentifier.RightShoulderYaw, 80, 140, 5f),
-                ServoAnimation.New(ServoIdentifier.RightShoulderPitch, 80, 140, 6f),
-                ServoAnimation.New(ServoIdentifier.RightShoulderRoll, 80, 140, 5f),
-                ServoAnimation.New(ServoIdentifier.RightElbowPitch, 50, 160, 3.5f),
-                ServoAnimation.New(ServoIdentifier.LeftWristRoll, 0, 180, 4f),
                 ServoAnimation.New(ServoIdentifier.PelvisPitchPrimary, 80, 120, 4.5f),
-                ServoAnimation.New(ServoIdentifier.LeftFingerThumb, 0, 180, 4),
-                ServoAnimation.New(ServoIdentifier.LeftFingerIndex, 0, 180, 4),
-                ServoAnimation.New(ServoIdentifier.LeftFingerMiddle, 0, 180, 4),
-                ServoAnimation.New(ServoIdentifier.LeftFingerRing, 0, 180, 4),
-                ServoAnimation.New(ServoIdentifier.LeftFingerPinky, 0, 180, 4),
-                ServoAnimation.New(ServoIdentifier.RightFingerThumb, 0, 180, 4),
-                ServoAnimation.New(ServoIdentifier.RightFingerIndex, 0, 180, 4),
-                ServoAnimation.New(ServoIdentifier.RightFingerMiddle, 0, 180, 4),
-                ServoAnimation.New(ServoIdentifier.RightFingerRing, 0, 180, 4),
-                ServoAnimation.New(ServoIdentifier.RightFingerPinky, 0, 180, 4),
             };
-
-            foreach (var t in _servoActions)
-                t.Frequency = 2.5f;
         }
 
         private void OnValidate()
