@@ -1,6 +1,6 @@
 # InMoov Unity
 
-InMoov Unity is an application to manage the [InMoov Robot](https://www.inmoov.fr). It's an alternative of My Robot Lab.
+InMoov Unity is an application to manage the [InMoov Robot](https://www.inmoov.fr). It's an alternative to My Robot Lab.
 
 The idea is to use the power and tools of the Unity Engine to make the robot alive.
 The robot is treated like a "standard NPC" (Non Playable Character). That way, animations, behaviours, etc. are converted and sent to the robot.
