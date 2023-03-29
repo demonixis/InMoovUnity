@@ -130,7 +130,12 @@ namespace Demonixis.InMoov.Servos
             try
             {
                 serialPort = new SerialPort(serialName, DefaultBaudRate);
-                serialPort.Open();
+
+                serialPort.DtrEnable = true;
+                serialPort.ReadTimeout = 500;
+
+                if (!serialPort.IsOpen)
+                    serialPort.Open();
 
                 if (serialPort.IsOpen)
                 {
