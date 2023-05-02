@@ -69,10 +69,10 @@ namespace Demonixis.InMoov.Services.Speech
 
         public event Action<string> VoiceRecognized;
         public event Action<string[]> VoicesReceived;
-        
+
 #if MS_SPEECH_SYNTHESIS
 
-#region Unity Pattern
+        #region Unity Pattern
 
         private void Awake()
         {
@@ -86,7 +86,7 @@ namespace Demonixis.InMoov.Services.Speech
         public void Initialize()
         {
             if (_messageQueue != null) return;
-            
+
             _messageQueue = new List<MessageData>();
             StartCoroutine(TryJoinWebSocketServerCoroutine());
             StartCoroutine(CheckMessageQueue());
@@ -101,9 +101,9 @@ namespace Demonixis.InMoov.Services.Speech
             StopWebSocketConnection();
         }
 
-#endregion
+        #endregion
 
-#region Public API
+        #region Public API
 
         public void SetVoice(string voice)
         {
@@ -130,9 +130,9 @@ namespace Demonixis.InMoov.Services.Speech
             SendMessage(MessageType.Speak, words);
         }
 
-#endregion
+        #endregion
 
-#region Messages Management
+        #region Messages Management
 
         private IEnumerator CheckMessageQueue()
         {
@@ -206,9 +206,9 @@ namespace Demonixis.InMoov.Services.Speech
                 _websocket.Send(json);
         }
 
-#endregion
+        #endregion
 
-#region WebSocket Management
+        #region WebSocket Management
 
         private void StartWebSocketConnection()
         {
@@ -222,7 +222,7 @@ namespace Demonixis.InMoov.Services.Speech
 
         private void StopWebSocketConnection()
         {
-            if (_websocket is {IsAlive: true})
+            if (_websocket is { IsAlive: true })
                 _websocket.Close();
         }
 
@@ -263,9 +263,9 @@ namespace Demonixis.InMoov.Services.Speech
             TryJoinWebSocketServer();
         }
 
-#endregion
+        #endregion
 
-#region Process Management
+        #region Process Management
 
         private bool IsSpeechLinkStarted()
         {
@@ -279,9 +279,9 @@ namespace Demonixis.InMoov.Services.Speech
             return false;
         }
 
-#endregion
+        #endregion
 
-#region Event Handlers
+        #region Event Handlers
 
         private void _websocket_OnError(object sender, WebSocketSharp.ErrorEventArgs e)
         {
@@ -316,7 +316,7 @@ namespace Demonixis.InMoov.Services.Speech
             _checkMessages = true;
         }
 
-#endregion
+        #endregion
 
 #endif
     }

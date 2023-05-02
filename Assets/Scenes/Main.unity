@@ -1804,8 +1804,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _jawOpenTime: 0.15
   _jawCloseTime: 0.1
-  _jawAmplitude: 20
-  _jawNeutralOffset: 10
+  _jawAmplitude: 45
+  _jawNeutralOffset: 5
 --- !u!114 &1281199286
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1849,9 +1849,39 @@ MonoBehaviour:
     Max: 120
     Sequence: 
     Frequency: 4.5
+  - Servo: 25
+    RandomRange: 1
+    Min: 45
+    Max: 145
+    Sequence: 
+    Frequency: 4.5
+  - Servo: 26
+    RandomRange: 1
+    Min: 70
+    Max: 130
+    Sequence: 
+    Frequency: 4.5
+  - Servo: 27
+    RandomRange: 1
+    Min: 70
+    Max: 130
+    Sequence: 
+    Frequency: 4.5
+  - Servo: 28
+    RandomRange: 1
+    Min: 0
+    Max: 180
+    Sequence: 
+    Frequency: 4.5
+  - Servo: 29
+    RandomRange: 1
+    Min: 0
+    Max: 180
+    Sequence: 
+    Frequency: 4.5
   _randomHandGestures: 1
   _handGestureFrequency: {x: 1.5, y: 6.5}
-  _randomArmGestures: 1
+  _randomArmGestures: 0
   _armGestureFrequency: {x: 2.5, y: 6.5}
 --- !u!114 &1281199287
 MonoBehaviour:
