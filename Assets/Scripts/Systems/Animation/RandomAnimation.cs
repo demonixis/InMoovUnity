@@ -117,6 +117,16 @@ namespace Demonixis.InMoov.Systems
                 ServoAnimation.New(ServoIdentifier.HeadPitch, 80, 120, 5f),
                 ServoAnimation.New(ServoIdentifier.HeadYaw, 80, 120, 4f),
                 ServoAnimation.New(ServoIdentifier.PelvisPitchPrimary, 80, 120, 4.5f),
+                ServoAnimation.New(ServoIdentifier.LeftShoulderYaw, 45, 165, 4.5f),
+                ServoAnimation.New(ServoIdentifier.LeftShoulderPitch, 85, 165, 4.5f),
+                ServoAnimation.New(ServoIdentifier.LeftShoulderRoll, 0, 165, 4.5f),
+                ServoAnimation.New(ServoIdentifier.LeftElbowPitch, 0, 180, 4.5f),
+                ServoAnimation.New(ServoIdentifier.LeftWristRoll, 0, 180, 4.5f),
+                ServoAnimation.New(ServoIdentifier.RightShoulderYaw, 45, 165, 4.5f),
+                ServoAnimation.New(ServoIdentifier.RightShoulderPitch, 85, 165, 4.5f),
+                ServoAnimation.New(ServoIdentifier.RightShoulderRoll, 0, 180, 4.5f),
+                ServoAnimation.New(ServoIdentifier.RightElbowPitch, 0, 180, 4.5f),
+                ServoAnimation.New(ServoIdentifier.RightWristRoll, 0, 180, 4.5f),
             };
         }
 

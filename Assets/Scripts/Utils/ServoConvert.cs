@@ -1,7 +1,4 @@
-﻿using System;
-using static UnityEditor.PlayerSettings;
-
-namespace Demonixis.InMoov
+﻿namespace Demonixis.InMoov
 {
     public static class ServoConverter
     {
