@@ -1,10 +1,10 @@
 #!/bin/bash
-rm -Rf *.sln
-rm -Rf *.csproj
-rm -Rf .vsconfig
-rm -Rf .vs
-rm -Rf Logs
-rm -Rf obj
-rm -Rf UserSettings
-rm -Rf Temp
-rm -Rf Library
+sudo rm -Rf *.sln
+sudo rm -Rf *.csproj
+sudo rm -Rf .vsconfig
+sudo rm -Rf .vs
+sudo rm -Rf Logs
+sudo rm -Rf obj
+sudo rm -Rf UserSettings
+sudo rm -Rf Temp
+sudo rm -Rf Library
