@@ -1,4 +1,5 @@
-﻿using Demonixis.InMoov.Servos;
+﻿using Demonixis.InMoovSharp.Services;
+using Demonixis.InMoovUnity;
 using System;
 using TMPro;
 using UnityEngine;
@@ -35,14 +36,15 @@ namespace Demonixis.InMoov.UI
 
         private void Start()
         {
-            Robot.Instance.WhenStarted(Initialize);
+            UnityRobotProxy.Instance.OnRobotReady(Initialize);
         }
 
-        private void Initialize()
+        private void Initialize(UnityRobotProxy unityRobot)
         {
+            var robot = unityRobot.Robot;
             _sliderTextValues = GetComponentsInChildren<SliderTextValue>();
             _currentData = ServoData.New(ServoIdentifier.None);
-            _servoMixerService = FindObjectOfType<ServoMixerService>();
+            _servoMixerService = robot.GetService<ServoMixerService>();
 
             foreach (Transform child in _servoList)
                 Destroy(child.gameObject);

@@ -1,6 +1,5 @@
-using Demonixis.InMoov;
-using Demonixis.InMoov.Chatbots;
-using Demonixis.InMoov.Services.Speech;
+using Demonixis.InMoovSharp.Services;
+using Demonixis.InMoovUnity;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -22,14 +21,14 @@ public sealed class BrainPanel : MonoBehaviour
 
     private void Start()
     {
-        Robot.Instance.WhenStarted(Initialize);
+        UnityRobotProxy.Instance.OnRobotReady(Initialize);
     }
 
-    public void Initialize()
+    public void Initialize(UnityRobotProxy unityRobot)
     {
         if (_chatbot != null) return;
 
-        var robot = Robot.Instance;
+        var robot = unityRobot.Robot;
         _voiceRecognition = robot.GetService<VoiceRecognitionService>();
         _voiceRecognition.PhraseDetected += s => AppendTextTo(_botInputContainer, s, false);
         _voiceRecognition.ListenChanged += b => _canListen.color = b ? Color.green : Color.red;

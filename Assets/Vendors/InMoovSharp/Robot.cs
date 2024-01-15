@@ -38,6 +38,7 @@ namespace Demonixis.InMoovSharp
         /// Retrieve an array of active services.
         /// </summary>
         public RobotService[] Services => _currentServices?.ToArray() ?? Array.Empty<RobotService>();
+        public RobotSystem[] Systems => _registeredSystems?.ToArray() ?? Array.Empty<RobotSystem>();
 
         public BrainWorldContext WorldContext { get; private set; }
         public bool Started { get; private set; }
@@ -316,9 +317,9 @@ namespace Demonixis.InMoovSharp
         /// </summary>
         /// <typeparam name="T">The type of service</typeparam>
         /// <param name="serviceName">The new service name</param>
-        public void ReplaceService<T>(string serviceName, T newService) where T : RobotService
+        public void ReplaceService<T>(string serviceName) where T : RobotService
         {
-            if (TryFindServiceByName(serviceName, out newService))
+            if (TryFindServiceByName(serviceName, out T newService))
             {
                 var oldService = GetService<T>();
                 oldService.Dispose();

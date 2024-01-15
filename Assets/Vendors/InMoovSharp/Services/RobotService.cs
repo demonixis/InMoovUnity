@@ -20,8 +20,11 @@ namespace Demonixis.InMoovSharp.Services
             RuntimePlatform.Android,
             RuntimePlatform.IPhonePlayer,
             RuntimePlatform.LinuxPlayer,
+            RuntimePlatform.LinuxEditor,
             RuntimePlatform.WindowsPlayer,
-            RuntimePlatform.OSXPlayer
+            RuntimePlatform.WindowsEditor,
+            RuntimePlatform.OSXPlayer,
+            RuntimePlatform.OSXEditor
         };
 
         protected Dictionary<string, string> _customSettings;

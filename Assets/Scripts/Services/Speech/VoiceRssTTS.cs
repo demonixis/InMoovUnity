@@ -35,7 +35,7 @@ namespace Demonixis.InMoovUnity.Services
         {
             base.SafeInitialize();
 
-            _audioSource = UnityRobot.Instance.GetComponent<AudioSource>();
+            _audioSource = UnityRobotProxy.Instance.GetComponent<AudioSource>();
             _ttsManager = new TextToSpeechManager();
 
             var settings = GlobalSettings.Get();

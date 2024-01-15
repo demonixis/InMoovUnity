@@ -1,4 +1,5 @@
-﻿using Demonixis.InMoov.Settings;
+﻿using Demonixis.InMoovSharp.Settings;
+using Demonixis.InMoovUnity;
 using TMPro;
 using UnityEngine;
 
@@ -27,7 +28,9 @@ namespace Demonixis.InMoov.UI
             {
                 var globalSettings = GlobalSettings.Get();
                 globalSettings.SetLanguageByIndex(i);
-                Robot.Instance.WorldContext.SetLanguage(globalSettings.Language);
+
+                var robot = UnityRobotProxy.Instance.Robot;
+                robot.WorldContext.SetLanguage(globalSettings.Language);
             });
             
             _openAIKey.SetTextWithoutNotify(settings.OpenAIKey);

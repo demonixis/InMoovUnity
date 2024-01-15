@@ -1,4 +1,5 @@
-﻿using Demonixis.InMoov.Servos;
+﻿using Demonixis.InMoovSharp.Services;
+using Demonixis.InMoovUnity;
 using System;
 using System.Collections;
 using System.IO.Ports;
@@ -20,12 +21,14 @@ namespace Demonixis.InMoov.UI
 
         private void Start()
         {
-            Robot.Instance.WhenStarted(Initialize);
+            UnityRobotProxy.Instance.OnRobotReady(Initialize);
         }
 
-        private void Initialize()
+        private void Initialize(UnityRobotProxy unityRobot)
         {
-            _serialPort = FindObjectOfType<SerialPortManager>();
+            var robot = unityRobot.Robot;
+            var mixer = robot.GetService<ServoMixerService>();
+            _serialPort = mixer.SerialPortManager;
             _cardList.options.Clear();
 
             var names = Enum.GetNames(typeof(ArduinoIdentifiers));

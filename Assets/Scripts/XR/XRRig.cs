@@ -1,5 +1,6 @@
-using Demonixis.InMoov.Servos;
-using Demonixis.InMoov.Utils;
+using Demonixis.InMoovSharp.Services;
+using Demonixis.InMoovSharp.Utils;
+using Demonixis.InMoovUnity;
 using Demonixis.ToolboxV2.XR;
 using System.Collections;
 using UnityEngine;
@@ -47,7 +48,8 @@ namespace Demonixis.InMoov
                     offset.localEulerAngles = new Vector3(60, 0, 0);
             }
 
-            _servoMixerService = Robot.Instance.GetService<ServoMixerService>();
+            var robot = UnityRobotProxy.Instance.Robot;
+            _servoMixerService = robot.GetService<ServoMixerService>();
         }
 
         private IEnumerator PawnControllerOverride()

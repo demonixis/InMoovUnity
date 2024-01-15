@@ -1,3 +1,4 @@
+using Demonixis.InMoovUnity;
 using UnityEngine;
 
 namespace Demonixis.InMoov.UI
@@ -9,15 +10,17 @@ namespace Demonixis.InMoov.UI
 
         private void Start()
         {
-            Robot.Instance.WhenStarted(Initialize);
+            UnityRobotProxy.Instance.OnRobotReady(Initialize);
         }
 
-        private void Initialize()
+        private void Initialize(UnityRobotProxy unityRobot)
         {
             foreach (Transform target in _container)
                 Destroy(target.gameObject);
 
-            var systems = FindObjectsOfType<RobotSystem>(true);
+            var robot = unityRobot.Robot;
+
+            var systems = robot.Systems;
             foreach (var system in systems)
             {
                 var item = Instantiate(_itemPrefab, _container);

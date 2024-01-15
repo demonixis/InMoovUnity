@@ -1,10 +1,6 @@
-using Demonixis.InMoov;
-using Demonixis.InMoov.Chatbots;
-using Demonixis.InMoov.ComputerVision;
-using Demonixis.InMoov.Navigation;
-using Demonixis.InMoov.Services.Speech;
-using Demonixis.InMoov.Servos;
+using Demonixis.InMoovSharp.Services;
 using Demonixis.InMoovUnity;
+using Demonixis.InMoovUnity.Services;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -31,10 +27,10 @@ public sealed class ServicePanel : MonoBehaviour
 
     private void Start()
     {
-        Robot.Instance.WhenStarted(InternalInitialize);
+        UnityRobotProxy.Instance.OnRobotReady(InternalInitialize);
     }
 
-    private void InternalInitialize()
+    private void InternalInitialize(UnityRobotProxy unityRobot)
     {
         SetupService<ChatbotService>(_botServiceList, _botServiceStatus);
         SetupService<SpeechSynthesisService>(_speechSynthesisServiceList, _speechSynthesisServiceStatus);
@@ -48,14 +44,15 @@ public sealed class ServicePanel : MonoBehaviour
 
     private void SetupSpeechVoices()
     {
-        var speechSynthesis = Robot.Instance.GetService<SpeechSynthesisService>();
+        var robot = UnityRobotProxy.Instance.Robot;
+        var speechSynthesis = robot.GetService<SpeechSynthesisService>();
         var voices = speechSynthesis.GetVoices();
 
         _speechSynthesisVoiceList.options.Clear();
 
         if (voices == null || voices.Length == 0)
         {
-            if (speechSynthesis is WindowsSpeechSynthesisWS)
+            if (speechSynthesis is MicrosoftTTS)
             {
                 SpeechLink.Instance.VoicesReceived += _ =>
                 {
@@ -77,14 +74,15 @@ public sealed class ServicePanel : MonoBehaviour
 
         _speechSynthesisVoiceList.onValueChanged.AddListener(i =>
         {
-            var service = Robot.Instance.GetService<SpeechSynthesisService>();
+            var service = robot.GetService<SpeechSynthesisService>();
             service.SetVoice(i);
         });
     }
 
     private void SetupService<T>(TMP_Dropdown dropdown, Toggle toggle) where T : RobotService
     {
-        var services = FindObjectsOfType<T>(true);
+        var robot = UnityRobotProxy.Instance.Robot;
+        var services = robot.Services;
         var activatedIndex = 0;
 
         dropdown.options.Clear();
@@ -102,10 +100,10 @@ public sealed class ServicePanel : MonoBehaviour
         dropdown.onValueChanged.AddListener(i =>
         {
             var serviceName = dropdown.options[dropdown.value].text;
-            Robot.Instance.ReplaceService<T>(serviceName);
+            robot.ReplaceService<T>(serviceName);
         });
 
         toggle.SetIsOnWithoutNotify(services[activatedIndex].Started);
-        toggle.onValueChanged.AddListener(b => { Robot.Instance.SetServicePaused<T>(!b); });
+        toggle.onValueChanged.AddListener(b => { robot.SetServicePaused<T>(!b); });
     }
 }

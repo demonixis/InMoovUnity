@@ -1,7 +1,7 @@
+using Demonixis.InMoovSharp.Utils;
+using Demonixis.InMoovUnity;
+using Demonixis.InMoovUnity.Services;
 using System.Collections;
-using Demonixis.InMoov.ComputerVision;
-using Demonixis.InMoov.ComputerVision.Filters;
-using Demonixis.InMoov.Utils;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -25,18 +25,14 @@ namespace Demonixis.InMoov
 
         private void Start()
         {
-            _yoloObjectDetector.SetIsOnWithoutNotify(false);
-            _yoloObjectDetector.onValueChanged.AddListener(SetVisualizerEnabled<YoloV4Visualizer>);
-            _blazeFaceDetector.SetIsOnWithoutNotify(false);
-            _blazeFaceDetector.onValueChanged.AddListener(SetVisualizerEnabled<BlazeFaceVisualizer>);
-
             _leftEyeList.onValueChanged.AddListener(i => UpdateRawImage(true, _leftEyeList.value - 1));
             _rightEyeList.onValueChanged.AddListener(i => UpdateRawImage(false, _leftEyeList.value - 1));
         }
 
         private void UpdateRawImage(bool left, int index)
         {
-            var cv = Robot.Instance.GetService<ComputerVisionService>();
+            var robot = UnityRobotProxy.Instance.Robot;
+            var cv = robot.GetService<UnityComputerVision>();
             var rawImage = left ? _leftRawImage : _rightRawImage;
 
             if (index < 0)
@@ -56,7 +52,8 @@ namespace Demonixis.InMoov
 
         public void PlayTexture(bool left)
         {
-            var cv = Robot.Instance.GetService<ComputerVisionService>();
+            var robot = UnityRobotProxy.Instance.Robot;
+            var cv = robot.GetService<UnityComputerVision>();
             cv.ToggleWebCamTexturePlayer(left);
         }
 
@@ -93,26 +90,6 @@ namespace Demonixis.InMoov
 
                 yield return CoroutineFactory.WaitForSeconds(1.5f);
             }
-        }
-
-        private void SetVisualizerEnabled<T>(bool active) where T : MLVisualizer
-        {
-            var visualizer = GetComponentInChildren<T>(true);
-
-            if (!active)
-            {
-                visualizer.enabled = false;
-                return;
-            }
-
-            if (visualizer.enabled) return;
-
-            var cv = Robot.Instance.GetService<ComputerVisionService>();
-            var texture = cv.GetWebCamTexture(true);
-            if (texture == null) return;
-
-            visualizer.Setup(texture, _leftRawImage);
-            visualizer.enabled = true;
         }
     }
 }

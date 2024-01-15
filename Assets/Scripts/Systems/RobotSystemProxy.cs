@@ -6,10 +6,10 @@ namespace Demonixis.InMoovUnity.Systems
     {
         private void Start()
         {
-            UnityRobot.Instance.OnRobotReady(Initialize);
+            UnityRobotProxy.Instance.OnRobotReady(Initialize);
         }
 
-        protected abstract void Initialize(UnityRobot robot);
+        protected abstract void Initialize(UnityRobotProxy robot);
 
         protected abstract void UpdateValues();
 

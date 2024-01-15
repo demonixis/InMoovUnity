@@ -1,6 +1,6 @@
-﻿using Demonixis.InMoov.Data;
-using Demonixis.InMoov.Servos;
-using Demonixis.InMoov.Systems.Animations;
+﻿using Demonixis.InMoovSharp.Services;
+using Demonixis.InMoovSharp.Systems;
+using Demonixis.InMoovUnity;
 using System;
 using UnityEngine;
 
@@ -17,12 +17,13 @@ namespace Demonixis.InMoov.UI
 
         private void Start()
         {
-            Robot.Instance.WhenStarted(Initialize);
+            UnityRobotProxy.Instance.OnRobotReady(Initialize);
         }
 
-        private void Initialize()
+        private void Initialize(UnityRobotProxy unityRobot)
         {
-            _servoMixerService = FindObjectOfType<ServoMixerService>();
+            var robot = unityRobot.Robot;
+            _servoMixerService = robot.GetService<ServoMixerService>();
             _gesturePlayer = new GesturePlayer(_servoMixerService);
 
             PopulateContainer(_leftHandGesturesContainer, _gesturePrefab, true);

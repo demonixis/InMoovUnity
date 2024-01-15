@@ -12,9 +12,9 @@ namespace Demonixis.InMoovUnity.Systems
         [SerializeField] private byte _jawAmplitude = 40;
         [SerializeField] private byte _jawNeutralOffset = 10;
 
-        protected override void Initialize(UnityRobot robot)
+        protected override void Initialize(UnityRobotProxy robot)
         {
-            if (!robot.NativeRobot.TryGetSystem(out _jawMechanism))
+            if (!robot.Robot.TryGetSystem(out _jawMechanism))
             {
                 Debug.LogWarning($"Wasn't able to find the JawMechanism system");
                 enabled = false;

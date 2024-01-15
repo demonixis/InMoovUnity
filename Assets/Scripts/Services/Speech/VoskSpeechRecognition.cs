@@ -18,7 +18,7 @@ namespace Demonixis.InMoovUnity.Services
             if (_voskListener == null)
             {
                 Debug.LogError("VoskListener doesn't exists! Creating it");
-                UnityRobot.Instance.gameObject.AddComponent<VoskListener>();
+                UnityRobotProxy.Instance.gameObject.AddComponent<VoskListener>();
             }
 
             _voskListener.LoadModel();

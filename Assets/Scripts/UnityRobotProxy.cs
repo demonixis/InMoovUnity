@@ -9,48 +9,40 @@ using UnityEngine;
 namespace Demonixis.InMoovUnity
 {
     [RequireComponent(typeof(AudioSource))]
-    public class UnityRobot : MonoBehaviour
+    public class UnityRobotProxy : MonoBehaviour
     {
-        private static Robot _nativeRobot;
-        private static UnityRobot _unityRobot;
+        private static Robot _robot;
+        private static UnityRobotProxy _robotProxy;
         private static bool Running;
 
-        public static UnityRobot Instance
+        public static UnityRobotProxy Instance
         {
             get
             {
-                if (_unityRobot == null)
+                if (_robotProxy == null)
                 {
-                    _unityRobot = FindFirstObjectByType<UnityRobot>();
+                    _robotProxy = FindFirstObjectByType<UnityRobotProxy>();
 
-                    if (_unityRobot == null)
+                    if (_robotProxy == null)
                         throw new UnityException("The Robot Instance doesn't exists!");
                 }
 
-                return _unityRobot;
+                return _robotProxy;
             }
         }
 
-        public Robot NativeRobot => _nativeRobot;
+        public Robot Robot => _robot;
 
         [SerializeField] private bool _autoStart = true;
         [SerializeField] private int _frameRate = 30;
         [SerializeField] private float _refreshRate = 30.0f;
 
-        private event Action<UnityRobot> UnityRobotReady = null;
+        private event Action<UnityRobotProxy> UnityRobotReady = null;
 
         private void Awake()
         {
-            _nativeRobot = new Robot();
-            _nativeRobot.LogEnabled = false;
-        }
-
-        public void OnRobotReady(Action<UnityRobot> robot)
-        {
-            if (Running)
-                robot?.Invoke(this);
-            else
-                UnityRobotReady += robot;
+            _robot = new Robot();
+            _robot.LogEnabled = false;
         }
 
         private void Start()
@@ -63,19 +55,19 @@ namespace Demonixis.InMoovUnity
 
         private void InitializeRobot()
         {
-            _nativeRobot.InitializeRobot();
-            _nativeRobot.AddService(new UnityComputerVision());
+            _robot.InitializeRobot();
+            _robot.AddService(new UnityComputerVision());
 
             var voiceRSS = new VoiceRssTTS();
-            _nativeRobot.AddService(voiceRSS);
+            _robot.AddService(voiceRSS);
 
             var vosk = new VoskSpeechRecognition();
-            _nativeRobot.AddService(vosk);
-            _nativeRobot.SwapServices<VoiceRecognitionService>(vosk);
+            _robot.AddService(vosk);
+            _robot.SwapServices<VoiceRecognitionService>(vosk);
 
 #if UNITY_STANDALONE_WIN
             var msTTS = new MicrosoftTTS();
-            _nativeRobot.SwapServices<SpeechSynthesisService>(msTTS);
+            _robot.SwapServices<SpeechSynthesisService>(msTTS);
 #elif UNITY_STANDALONE_MAC
             var macTTS = new MacosTTS();
             _nativeRobot.AddService(macTTS);
@@ -84,7 +76,7 @@ namespace Demonixis.InMoovUnity
             _nativeRobot.SwapServices<SpeechSynthesisService>(voiceRSS);
 #endif
 
-            _nativeRobot.LogEnabled = true;
+            _robot.LogEnabled = true;
 
             StartCoroutine(RobotLoop());
         }
@@ -96,12 +88,21 @@ namespace Demonixis.InMoovUnity
             Running  = true;
 
             UnityRobotReady?.Invoke(this);
+            UnityRobotReady = null;
 
             while (Running)
             {
-                _nativeRobot.UpdateRobot();
+                _robot.UpdateRobot();
                 yield return CoroutineFactory.WaitForSeconds(refreshRate);
             }
+        }
+
+        public void OnRobotReady(Action<UnityRobotProxy> robot)
+        {
+            if (Running)
+                robot?.Invoke(this);
+            else
+                UnityRobotReady += robot;
         }
     }
 }

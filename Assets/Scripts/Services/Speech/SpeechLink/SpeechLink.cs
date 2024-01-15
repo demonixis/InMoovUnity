@@ -1,6 +1,7 @@
 #if UNITY_STANDALONE_WIN || UNITY_EDITOR_WIN
 #define MS_SPEECH_SYNTHESIS
 #endif
+using Demonixis.InMoovSharp.Utils;
 using MSSpeechLink;
 using Newtonsoft.Json;
 using System;
@@ -9,7 +10,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
-using Demonixis.InMoov.Utils;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
 
@@ -37,7 +37,7 @@ namespace Demonixis.InMoovUnity
             {
                 if (_instance == null)
                 {
-                    _instance = FindObjectOfType<SpeechLink>();
+                    _instance = FindFirstObjectByType<SpeechLink>();
                     if (_instance == null)
                     {
                         var go = new GameObject("WindowsSpeechWebSocket");

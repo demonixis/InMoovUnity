@@ -5,8 +5,11 @@
     {
         Android,
         LinuxPlayer,
+        LinuxEditor,
         WindowsPlayer,
+        WindowsEditor,
         OSXPlayer,
+        OSXEditor,
         IPhonePlayer,
         tvOS
     }

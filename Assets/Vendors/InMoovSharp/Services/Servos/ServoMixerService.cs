@@ -16,6 +16,8 @@ namespace Demonixis.InMoovSharp.Services
         public bool Running { get; protected set; }
         public float UpdateInterval { get; set; } = 1.0f / 30.0f;
 
+        public SerialPortManager SerialPortManager => _serialPortManager;
+
         public ServoMixerService()
         {
             _serialPortManager = new SerialPortManager();

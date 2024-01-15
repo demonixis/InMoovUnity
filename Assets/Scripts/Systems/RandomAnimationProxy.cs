@@ -14,9 +14,9 @@ namespace Demonixis.InMoovUnity.Systems
         [SerializeField] private bool _randomArmGestures = true;
         [SerializeField] private float[] _armGestureFrequency = new[] { 2.5f, 6.5f };
 
-        protected override void Initialize(UnityRobot robot)
+        protected override void Initialize(UnityRobotProxy robot)
         {
-            if (!robot.NativeRobot.TryGetSystem(out _randomAnimation))
+            if (!robot.Robot.TryGetSystem(out _randomAnimation))
             {
                 Debug.LogWarning($"Wasn't able to find the RandomAnimation system");
                 enabled = false;
