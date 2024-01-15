@@ -10,18 +10,14 @@ namespace Demonixis.InMoov
 {
     public class ComputerVisionPanel : MonoBehaviour
     {
-        [Header("Webcams")] [SerializeField] private TMP_Dropdown _leftEyeList;
+        [Header("Webcams")]
+        [SerializeField] private TMP_Dropdown _leftEyeList;
         [SerializeField] private TMP_Dropdown _rightEyeList;
 
-        [Header("Webcam previews")] [SerializeField]
-        private RawImage _leftRawImage;
+        [Header("Webcam previews")]
+        [SerializeField] private RawImage _leftRawImage;
 
         [SerializeField] private RawImage _rightRawImage;
-
-        [Header("ML Filters")] [SerializeField]
-        private Toggle _yoloObjectDetector;
-
-        [SerializeField] private Toggle _blazeFaceDetector;
 
         private void Start()
         {

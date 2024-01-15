@@ -30,6 +30,7 @@ namespace Demonixis.InMoov.UI
             var mixer = robot.GetService<ServoMixerService>();
             _serialPort = mixer.SerialPortManager;
             _cardList.options.Clear();
+            _portList.options.Clear();
 
             var names = Enum.GetNames(typeof(ArduinoIdentifiers));
             foreach (var id in names)
