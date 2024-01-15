@@ -487,7 +487,7 @@ namespace Demonixis.ToolboxV2.XR
         public static void Recenter()
         {
             var subsystems = new List<XRInputSubsystem>();
-            SubsystemManager.GetInstances(subsystems);
+            SubsystemManager.GetSubsystems(subsystems);
 
             foreach (var subsystem in subsystems)
             {
