@@ -9,8 +9,8 @@ namespace Demonixis.InMoovSharp
 {
     public class Robot : IDisposable
     {
-        private const string ServiceListFilename = "services.json";
-        private const string SystemListFilename = "systems.json";
+        public const string ServiceListFilename = "services.json";
+        public const string SystemListFilename = "systems.json";
         private static Robot? _instance;
 
         private List<RobotService> _currentServices;
@@ -50,8 +50,8 @@ namespace Demonixis.InMoovSharp
         public static void Log(string message)
         {
             if (!Instance.LogEnabled) return;
-#if UNITY_ENGINE
-            Debug.Log(message);
+#if INMOOV_UNITY
+            UnityEngine.Debug.Log(message);
 #else
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine(message);
@@ -415,6 +415,21 @@ namespace Demonixis.InMoovSharp
                 }
             }
 
+            return false;
+        }
+
+        public bool TryGetSystem<T>(out T robotSystem) where T : RobotSystem
+        {
+            foreach (var system in _registeredSystems)
+            {
+                if (system is T)
+                {
+                    robotSystem = (T)system;
+                    return true;
+                }
+            }
+
+            robotSystem = null;
             return false;
         }
 

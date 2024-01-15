@@ -4,6 +4,7 @@ using Demonixis.InMoov.ComputerVision;
 using Demonixis.InMoov.Navigation;
 using Demonixis.InMoov.Services.Speech;
 using Demonixis.InMoov.Servos;
+using Demonixis.InMoovUnity;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -55,11 +56,12 @@ public sealed class ServicePanel : MonoBehaviour
         if (voices == null || voices.Length == 0)
         {
             if (speechSynthesis is WindowsSpeechSynthesisWS)
+            {
                 SpeechLink.Instance.VoicesReceived += _ =>
                 {
                     SetupSpeechVoices();
                 };
-
+            }
             return;
         }
 

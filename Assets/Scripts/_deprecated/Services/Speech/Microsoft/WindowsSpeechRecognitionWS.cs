@@ -2,6 +2,7 @@
 #define MS_SPEECH_SYNTHESIS
 #endif
 
+using Demonixis.InMoovUnity;
 using UnityEngine;
 
 namespace Demonixis.InMoov.Services.Speech

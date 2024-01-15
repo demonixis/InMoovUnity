@@ -9,7 +9,7 @@ using UnityEngine.Windows.Speech;
 
 namespace Demonixis.InMoov.Services.Speech
 {
-    public class WindowsSpeechRecognition : VoiceRecognitionService
+    public class UMSSpeechRecognitionService : VoiceRecognitionService
     {
         public override RuntimePlatform[] SupportedPlateforms => new[]
         {

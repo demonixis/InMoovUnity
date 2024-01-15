@@ -18,6 +18,7 @@ namespace Demonixis.InMoovSharp.Services
         public virtual RuntimePlatform[] SupportedPlateforms => new[]
         {
             RuntimePlatform.Android,
+            RuntimePlatform.IPhonePlayer,
             RuntimePlatform.LinuxPlayer,
             RuntimePlatform.WindowsPlayer,
             RuntimePlatform.OSXPlayer

@@ -13,7 +13,7 @@ using Demonixis.InMoov.Utils;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
 
-namespace Demonixis.InMoov.Services.Speech
+namespace Demonixis.InMoovUnity
 {
     public class SpeechLink : MonoBehaviour
     {

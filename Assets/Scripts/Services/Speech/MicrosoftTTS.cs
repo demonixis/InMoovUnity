@@ -2,15 +2,14 @@
 #define MS_SPEECH_SYNTHESIS
 #endif
 
-#if MS_SPEECH_SYNTHESIS
+using Demonixis.InMoovSharp.Services;
+using Demonixis.InMoovSharp.Utils;
 using System.Collections;
-using Demonixis.InMoov.Utils;
-#endif
 using UnityEngine;
 
-namespace Demonixis.InMoov.Services.Speech
+namespace Demonixis.InMoovUnity.Services
 {
-    public class WindowsSpeechSynthesisWS : SpeechSynthesisService
+    public class MicrosoftTTS : SpeechSynthesisService
     {
 #if MS_SPEECH_SYNTHESIS
         private SpeechLink _speechLink;
