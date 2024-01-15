@@ -56,6 +56,7 @@ namespace Demonixis.InMoovUnity.Services
 			}
 
 			_webCamTextures[index] = texture;
+			_webCamTextures[index].Play();
 
 			return texture;
 		}

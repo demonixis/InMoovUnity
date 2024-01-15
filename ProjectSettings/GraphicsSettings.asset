@@ -47,7 +47,7 @@ GraphicsSettings:
   m_InstancingStripping: 1
   m_BrgStripping: 1
   m_LightmapKeepPlain: 0
-  m_LightmapKeepDirCombined: 0
+  m_LightmapKeepDirCombined: 1
   m_LightmapKeepDynamicPlain: 0
   m_LightmapKeepDynamicDirCombined: 0
   m_LightmapKeepShadowMask: 0

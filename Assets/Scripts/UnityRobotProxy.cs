@@ -56,7 +56,10 @@ namespace Demonixis.InMoovUnity
         private void InitializeRobot()
         {
             _robot.InitializeRobot();
-            _robot.AddService(new UnityComputerVision());
+
+            var cv = new UnityComputerVision();
+            _robot.AddService(cv);
+            _robot.SwapServices<ComputerVisionService>(cv);
 
             var voiceRSS = new VoiceRssTTS();
             _robot.AddService(voiceRSS);
@@ -67,13 +70,12 @@ namespace Demonixis.InMoovUnity
 
 #if UNITY_STANDALONE_WIN
             var msTTS = new MicrosoftTTS();
+            _robot.AddService(msTTS);
             _robot.SwapServices<SpeechSynthesisService>(msTTS);
 #elif UNITY_STANDALONE_MAC
             var macTTS = new MacosTTS();
             _nativeRobot.AddService(macTTS);
             _nativeRobot.SwapServices<SpeechSynthesisService>(macTTS);
-#else
-            _nativeRobot.SwapServices<SpeechSynthesisService>(voiceRSS);
 #endif
 
             _robot.LogEnabled = true;

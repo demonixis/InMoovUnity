@@ -82,7 +82,7 @@ public sealed class ServicePanel : MonoBehaviour
     private void SetupService<T>(TMP_Dropdown dropdown, Toggle toggle) where T : RobotService
     {
         var robot = UnityRobotProxy.Instance.Robot;
-        var services = robot.Services;
+        var services = robot.GetServicesOfType<T>();
         var activatedIndex = 0;
 
         dropdown.options.Clear();
