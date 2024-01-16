@@ -43,10 +43,12 @@ namespace Demonixis.InMoovSharp
         public BrainWorldContext WorldContext { get; private set; }
         public bool Started { get; private set; }
         public bool LogEnabled { get; set; } = true;
-
-        public event Action<Robot> RobotInitialized;
+        
         public event Action<RobotService, RobotService> ServiceChanged;
         public event Action<RobotService, bool> ServicePaused;
+
+        public event Action<Robot> ServicePreInit;
+        public event Action<Robot> SystemPreInit;
 
         public static void Log(string message)
         {
@@ -109,11 +111,12 @@ namespace Demonixis.InMoovSharp
             RegisterSystems();
 
             // TODO in prevision of deferred load.
+            ServicePreInit?.Invoke(this);
             InitializeServices();
 
             Started = true;
-            RobotInitialized?.Invoke(this);
 
+            SystemPreInit?.Invoke(this);
             InitializeSystems();
 
             if (_waitingStartCallbacks.Count <= 0) return;
@@ -122,7 +125,7 @@ namespace Demonixis.InMoovSharp
 
             _waitingStartCallbacks.Clear();
         }
-
+        
         public void WhenStarted(Action callback)
         {
             if (Started)
@@ -215,7 +218,7 @@ namespace Demonixis.InMoovSharp
             SelectService<NavigationService>(serviceList.Navigation);
             SelectService<ComputerVisionService>(serviceList.ComputerVision);
 
-            WorldContext.Setup(chatbotService, voiceRecognition, speechSynthesis);
+            WorldContext.Setup(this, chatbotService, voiceRecognition, speechSynthesis);
         }
 
         /// <summary>

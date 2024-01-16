@@ -12,14 +12,50 @@ namespace Demonixis.InMoovSharp.Services
         private SpeechSynthesisService _speechSynthesis;
         private VoiceRecognitionService _voiceRecognition;
 
-        [NonSerialized]
-        public List<string> DetectedObjects = new();
-        [NonSerialized]
-        public List<string> DetectedPersons = new();
+        [NonSerialized] public List<string> DetectedObjects = new();
+        [NonSerialized] public List<string> DetectedPersons = new();
+
+        private string CurrentLanguage
+        {
+            get
+            {
+                var settings = GlobalSettings.Get();
+                return settings.Language;
+            }
+        }
 
         public event Action<int, Vector3> NewPersonDetected;
 
-        public void Setup(ChatbotService chatbotService, VoiceRecognitionService voiceRecognition,
+        public void SetSpeechSynthesis(SpeechSynthesisService speechSynthesis)
+        {
+            _speechSynthesis = speechSynthesis;
+            _speechSynthesis.SetLanguage(CurrentLanguage);
+        }
+
+        public void SetVoiceRecognition(VoiceRecognitionService voiceRecognition)
+        {
+            if (_voiceRecognition != null)
+                _voiceRecognition.PhraseDetected -= OnVoiceRecognized;
+
+            _voiceRecognition = voiceRecognition;
+            _voiceRecognition.SetLanguage(CurrentLanguage);
+            voiceRecognition.PhraseDetected += OnVoiceRecognized;
+        }
+
+        public void SetChatbot(ChatbotService chatBot)
+        {
+            if (_chatbot != null)
+                _chatbot.ResponseReady -= OnChatbotResponse;
+
+            _chatbot = chatBot;
+            _chatbot.SetLanguage(CurrentLanguage);
+            _chatbot.ResponseReady += OnChatbotResponse;
+        }
+
+        public void Setup(
+            Robot robot,
+            ChatbotService chatbotService,
+            VoiceRecognitionService voiceRecognition,
             SpeechSynthesisService speechSynthesis)
         {
             _chatbot = chatbotService;
@@ -31,6 +67,18 @@ namespace Demonixis.InMoovSharp.Services
 
             var settings = GlobalSettings.Get();
             SetLanguage(settings.Language);
+
+            robot.ServiceChanged += RobotOnServiceChanged;
+        }
+
+        private void RobotOnServiceChanged(RobotService previousService, RobotService newService)
+        {
+            if (newService is ChatbotService chatBotService)
+                SetChatbot(chatBotService);
+            else if (newService is SpeechSynthesisService speechService)
+                SetSpeechSynthesis(speechService);
+            else if (newService is VoiceRecognitionService voiceRecognition)
+                SetVoiceRecognition(voiceRecognition);
         }
 
         public void SetLanguage(string language)
@@ -47,40 +95,13 @@ namespace Demonixis.InMoovSharp.Services
 
         private void OnVoiceRecognized(string phrase)
         {
-            if (DetectedObjects.Count > 0 && CheckIfWhatDoYouSee(phrase))
-            {
-                var message = new StringBuilder();
-                message.Append($"I can see {DetectedObjects.Count} objects. ");
-
-                foreach (var item in DetectedObjects)
-                    message.Append($"{item}. ");
-
-                _chatbot.SubmitResponse(phrase, true);
-                _chatbot.NotifyResponseReady(message.ToString());
-            }
-            else
-                _chatbot.SubmitResponse(phrase);
+            _chatbot.SubmitResponse(phrase);
         }
 
         public void Dispose()
         {
             _chatbot.ResponseReady -= OnChatbotResponse;
             _voiceRecognition.PhraseDetected -= OnVoiceRecognized;
-        }
-
-        // FIXME: Hardcoded
-        private bool CheckIfWhatDoYouSee(string phrase)
-        {
-            if (GlobalSettings.Get().Language == "fr-FR")
-            {
-                return (phrase.Contains("que") || phrase.Contains("ce que"))
-                    && (phrase.Contains("vois") || phrase.Contains("voyez"))
-                    && (phrase.Contains("tu") || phrase.Contains("vous"));
-            }
-
-            return phrase.Contains("what") &&
-                   phrase.Contains("you") &&
-                   phrase.Contains("see");
         }
     }
 }

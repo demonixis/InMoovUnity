@@ -53,34 +53,53 @@ namespace Demonixis.InMoovUnity
                 InitializeRobot();
         }
 
+        private void OnApplicationQuit()
+        {
+            _robot?.Dispose();
+        }
+
         private void InitializeRobot()
         {
+            _robot.ServicePreInit += RegisterServices;
+            _robot.SystemPreInit += RegisterSystems;
             _robot.InitializeRobot();
+            _robot.LogEnabled = true;
 
+            StartCoroutine(RobotLoop());
+        }
+
+        private void RegisterServices(Robot robot)
+        {
             var cv = new UnityComputerVision();
             _robot.AddService(cv);
             _robot.SwapServices<ComputerVisionService>(cv);
 
-            var voiceRSS = new VoiceRssTTS();
-            _robot.AddService(voiceRSS);
+            var samTts = new SamTTS();
+            _robot.AddService(samTts);
+            _robot.SwapServices<SpeechSynthesisService>(samTts);
 
+            var voiceRss = new VoiceRssTTS();
+            _robot.AddService(voiceRss);
+
+#if UNITY_STANDALONE || UNITY_ANDROID
             var vosk = new VoskSpeechRecognition();
             _robot.AddService(vosk);
             _robot.SwapServices<VoiceRecognitionService>(vosk);
-
+#endif
 #if UNITY_STANDALONE_WIN
-            var msTTS = new MicrosoftTTS();
-            _robot.AddService(msTTS);
-            _robot.SwapServices<SpeechSynthesisService>(msTTS);
+            var msTts = new MicrosoftTTS();
+            _robot.AddService(msTts);
+            _robot.SwapServices<SpeechSynthesisService>(msTts);
 #elif UNITY_STANDALONE_MAC
             var macTTS = new MacosTTS();
             _nativeRobot.AddService(macTTS);
             _nativeRobot.SwapServices<SpeechSynthesisService>(macTTS);
 #endif
+        }
 
-            _robot.LogEnabled = true;
-
-            StartCoroutine(RobotLoop());
+        private void RegisterSystems(Robot robot)
+        {
+            // Nothing for now
         }
 
         private IEnumerator RobotLoop()

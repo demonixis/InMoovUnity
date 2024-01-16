@@ -8,22 +8,45 @@ namespace Demonixis.InMoovUnity.Services
     public class VoskSpeechRecognition : VoiceRecognitionService
     {
         private VoskListener _voskListener;
+        private string _pendingLanguage;
+        
+        public override RuntimePlatform[] SupportedPlateforms => new[]
+        {
+            RuntimePlatform.Android,
+            RuntimePlatform.LinuxPlayer,
+            RuntimePlatform.LinuxEditor,
+            RuntimePlatform.WindowsPlayer,
+            RuntimePlatform.WindowsEditor,
+            RuntimePlatform.OSXPlayer,
+            RuntimePlatform.OSXEditor
+        };
 
         protected override void SafeInitialize()
         {
             base.SafeInitialize();
 
-            _voskListener = Object.FindAnyObjectByType<VoskListener>();
-
-            if (_voskListener == null)
-            {
-                Debug.LogError("VoskListener doesn't exists! Creating it");
-                UnityRobotProxy.Instance.gameObject.AddComponent<VoskListener>();
-            }
+            GetVoskListener();
 
             _voskListener.LoadModel();
             _voskListener.StartListening();
             _voskListener.ResultFound += Vosk_ResultFound;
+
+            if (string.IsNullOrEmpty(_pendingLanguage))
+                return;
+
+            SetLanguage(_pendingLanguage);
+            _pendingLanguage = null;
+        }
+
+        private void GetVoskListener()
+        {
+            _voskListener = Object.FindAnyObjectByType<VoskListener>();
+
+            if (_voskListener != null)
+                return;
+            
+            Debug.LogError("VoskListener doesn't exists! Creating it");
+            UnityRobotProxy.Instance.gameObject.AddComponent<VoskListener>();
         }
 
         public override void SetLanguage(string culture)
@@ -36,6 +59,13 @@ namespace Demonixis.InMoovUnity.Services
 
         private void TryLoadModel(string langPattern)
         {
+            // If not yet ready
+            if (_voskListener == null)
+            {
+                _pendingLanguage = langPattern;
+                return;
+            }
+
             var model = FindVoskModel(langPattern);
             if (model == null) return;
             _voskListener.ReloadModel(model);
